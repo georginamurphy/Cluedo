@@ -4,9 +4,11 @@ public class Game {
 
 	private Board board;
 	private Solution solution;
+	private ArrayList<Player> players;
 	
-	public Game(Board board){
+	public Game(Board board, ArrayList<Player> players){
 		this.board = board;
+		this.players = players;
 	}
 	
 	/**

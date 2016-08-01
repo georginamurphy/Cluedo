@@ -1,24 +1,25 @@
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Main {
 	private static ArrayList<Character> characters = new ArrayList<Character>();
 	private static ArrayList<Weapon> weapons = new ArrayList<Weapon>();
 	private static ArrayList<Room> rooms = new ArrayList<Room>();
-	private static Board board; 
+	private static Board board;
 	private static Game game;
 	private static ArrayList<Player> players = new ArrayList<Player>();
 
-	public static void main(String [] args){
+	public static void main(String[] args) {
 		makeCharacters();
 		makeWeapons();
 		makeRooms();
 		makePlayers();
 		board = new Board();
-		game = new Game(board);
+		game = new Game(board, players);
 		game.createSolution(characters, weapons, rooms);
-	}   
-	
+	}
+
 	private static void makeCharacters() {
 		characters.add(new Character("Miss Scarlett", Character.Colour.RED, 5, 0));
 		characters.add(new Character("Professor Pulm", Character.Colour.PURPLE, 0, 8));
@@ -48,15 +49,24 @@ public class Main {
 		weapons.add(new Weapon(Weapon.Type.ROPE));
 		weapons.add(new Weapon(Weapon.Type.SPANNER));
 	}
-	
-	private static void makePlayers(){
+
+	private static void makePlayers() {
+		int numberOfPlayers = 0;
 		Scanner input = new Scanner(System.in);
+
+		System.out.println("There must be between 3 and 8 players");
 		System.out.println("Please enter the number of players: ");
-		int numberOfPlayers = input.nextInt();
-		
-		for(int i = 1; i <= numberOfPlayers; i++){
-			int characterIndex = (int) Math.random() * characters.size();
-			
+		try {
+			numberOfPlayers = input.nextInt();
+		} catch (InputMismatchException e) {
+			System.out.println("Value entered was not a number");
 		}
+		
+		for (int i = 1; i <= numberOfPlayers; i++) {
+			int characterIndex = (int) Math.random() * characters.size();
+		}
+
+		input.close();
 	}
+
 }
