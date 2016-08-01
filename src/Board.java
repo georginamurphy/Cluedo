@@ -1,11 +1,10 @@
-// A board is 23 wide by 20 
+/**
+ * The board class represents the Cluedo Board.  Has a 2D Array of BoardPieces which will be the board
+ * 
+ */
 public class Board {
 	private Location[][] board;
-	// TESTING COMMENT
-	//Phone broke ROFL
-	//INERTIA ROLF
-	// PUSHING HELLO
 	public Board(){
-		this.board = new Location[23][20];
+		this.board = new Location[25][25];
 	}
 }
