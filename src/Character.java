@@ -1,8 +1,6 @@
 public class Character {
 	public String name;
 	public Colour colour;
-	public Location startPos;
-	
 	
 	public enum Colour{
 		RED,
