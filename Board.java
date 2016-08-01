@@ -4,6 +4,7 @@ package Hi;
 public class Board {
 	private Location[][] board;
 	// TESTING COMMENT
+	//Phone broke ROFL
 	public Board(){
 		this.board = new Location[23][20];
 	}
