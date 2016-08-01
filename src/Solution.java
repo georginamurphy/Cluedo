@@ -11,9 +11,9 @@ public class Solution {
 	}
 	
 	public boolean checkSolution(Weapon weapon, Character character, Room room){
-		if(!this.weapon.equals(weapon) ){}
-		if(!this.weapon.equals(weapon) ){}
-		if(!this.weapon.equals(weapon) ){}
+		if(!this.weapon.equals(weapon) ){return false;}
+		if(!this.character.equals(character) ){return false;}
+		if(!this.room.equals(room) ){return false;}
 		return true;
 	}
 
