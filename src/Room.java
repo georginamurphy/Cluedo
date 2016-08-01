@@ -1,6 +1,6 @@
 import java.util.List;
 
-public class Room implements BoardPiece {
+public class Room implements BoardPiece, Card {
 	public Name name;
 	
 	public enum Name{ 
