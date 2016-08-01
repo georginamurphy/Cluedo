@@ -19,5 +19,10 @@ public class Character implements Card{
 		this.name = name;
 		this.colour = colour;
 	}
+	
+	public boolean equals(Character character){
+		if(this.name == character.name){return true;}
+		return false;
+	}
 
 }

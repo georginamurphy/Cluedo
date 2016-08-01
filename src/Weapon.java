@@ -16,4 +16,9 @@ public class Weapon implements Card{
 	public Weapon(Type name) {
 		this.name = name;
 	}
+	
+	public boolean equals(Weapon weapon){
+		if(this.name == weapon.name){return true;}
+		return false;
+	}
 }

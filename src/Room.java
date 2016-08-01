@@ -25,7 +25,11 @@ public class Room implements BoardPiece, Card {
 	public Room(Name name, boolean door){
 		this.name = name;
 		this.door = door;
-		
+	}
+	
+	public boolean equals(Room room){
+		if(this.name == room.name){return true;}
+		return false;
 	}
 
 	public String toString(){

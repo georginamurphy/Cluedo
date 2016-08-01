@@ -1,19 +1,24 @@
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.Scanner;
 
 public class Main {
-	private static Set<Character> characters = new HashSet<Character>();
-	private static Set<Weapon> weapons = new HashSet<Weapon>();
-	private static Set<Room> rooms = new HashSet<Room>();
+	private static ArrayList<Character> characters = new ArrayList<Character>();
+	private static ArrayList<Weapon> weapons = new ArrayList<Weapon>();
+	private static ArrayList<Room> rooms = new ArrayList<Room>();
 	private static Board board; 
+	private static Game game;
+	private static ArrayList<Player> players = new ArrayList<Player>();
 
-public static void main(String [] args){
-	makeCharacters();
-	makeWeapons();
-	makeRooms();
-	board = new Board();
-	new Game(board);
-}   
+	public static void main(String [] args){
+		makeCharacters();
+		makeWeapons();
+		makeRooms();
+		makePlayers();
+		board = new Board();
+		game = new Game(board);
+		game.createSolution(characters, weapons, rooms);
+	}   
+	
 	private static void makeCharacters() {
 		characters.add(new Character("Miss Scarlett", Character.Colour.RED, 5, 0));
 		characters.add(new Character("Professor Pulm", Character.Colour.PURPLE, 0, 8));
@@ -35,13 +40,23 @@ public static void main(String [] args){
 		rooms.add(new Room(Room.Name.STUDY));
 	}
 
-private static void makeWeapons() {
-	weapons.add(new Weapon(Weapon.Type.CANDLESTICK));
-	weapons.add(new Weapon(Weapon.Type.DAGGER));
-	weapons.add(new Weapon(Weapon.Type.LEADPIPE));
-	weapons.add(new Weapon(Weapon.Type.REVOLVER));
-	weapons.add(new Weapon(Weapon.Type.ROPE));
-	weapons.add(new Weapon(Weapon.Type.SPANNER));
-
-}
+	private static void makeWeapons() {
+		weapons.add(new Weapon(Weapon.Type.CANDLESTICK));
+		weapons.add(new Weapon(Weapon.Type.DAGGER));
+		weapons.add(new Weapon(Weapon.Type.LEADPIPE));
+		weapons.add(new Weapon(Weapon.Type.REVOLVER));
+		weapons.add(new Weapon(Weapon.Type.ROPE));
+		weapons.add(new Weapon(Weapon.Type.SPANNER));
+	}
+	
+	private static void makePlayers(){
+		Scanner input = new Scanner(System.in);
+		System.out.println("Please enter the number of players: ");
+		int numberOfPlayers = input.nextInt();
+		
+		for(int i = 1; i <= numberOfPlayers; i++){
+			int characterIndex = (int) Math.random() * characters.size();
+			
+		}
+	}
 }
