@@ -17,59 +17,80 @@ public class Board {
 	}
 
 	private void readBoard() {
-		int col = 0;
+		int row = 0;
 		try{
 		Scanner scan = new Scanner(new File ("startBoard"));
 
 		while (scan.hasNext()) {
 			String tokens[] = scan.nextLine().split(" ");
-			for (int row = 0; row < 24; row++) {
-				switch (tokens[row].trim()) {
+			for (int col = 0; col <= 24; col++) {
+				switch (tokens[col].trim()) {
 				case "X":
 					board[row][col] = null;
+					break;
 				case "K":
 					board[row][col] = new Room(Room.Name.KITCHEN);
+					break;
 				case "b":
 					board[row][col] = new Room(Room.Name.BALLROOM);
+					break;
 				case "B":
 					board[row][col] = new Room(Room.Name.BILLIARD);
+					break;
 				case "D":
 					board[row][col] = new Room(Room.Name.DININGROOM);
+					break;
 				case "C":
 					board[row][col] = new Room(Room.Name.CONSEVERTORY);
+					break;
 				case "S":
 					board[row][col] = new Room(Room.Name.STUDY);
+					break;
 				case "L":
 					board[row][col] = new Room(Room.Name.LIBRARY);
+					break;
 				case "l":
 					board[row][col] = new Room(Room.Name.LOUNGE);
+					break;
 				case "H":
 					board[row][col] = new Room(Room.Name.HALL);
+					break;
 				case "s":
 					board[row][col] = new Hallway(true);
+					break;
 				case "#":
 					board[row][col] = new Hallway();
+					break;
 				case "@k":
 					board[row][col] = new Room(Room.Name.KITCHEN, true);
-				case "@d":
+					break;
+				case "@D":
 					board[row][col] = new Room(Room.Name.DININGROOM, true);
+					break;
 				case "@L":
 					board[row][col] = new Room(Room.Name.LIBRARY, true);
+					break;
 				case "@l":
 					board[row][col] = new Room(Room.Name.LOUNGE, true);
+					break;
 				case "@H":
 					board[row][col] = new Room(Room.Name.HALL, true);
+					break;
 				case "@S":
 					board[row][col] = new Room(Room.Name.STUDY, true);
+					break;
 				case "@C":
 					board[row][col] = new Room(Room.Name.CONSEVERTORY, true);
+					break;
 				case "@b":
 					board[row][col] = new Room(Room.Name.BALLROOM, true);
+					break;
 				case "@B":
 					board[row][col] = new Room(Room.Name.BILLIARD, true);
+					break;
 				}
 			}
-			col++;
+			row++;
 		}
 		}
 		catch(FileNotFoundException e){
@@ -79,8 +100,8 @@ public class Board {
 	
 	public String toString(){
 		String boardStr = "";
-		for (int row = 0; row < 24; row++) {
-			for (int col = 0; col < 24; col++) {
+		for (int row = 0; row <= 24; row++) {
+			for (int col = 0; col <= 24; col++) {
 				if(board[row][col] == null)
 					boardStr += "X ";
 				else
