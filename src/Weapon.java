@@ -1,4 +1,4 @@
-public class Weapon {
+public class Weapon implements Card{
 	public Type name;
 	
 	public enum Type{ 

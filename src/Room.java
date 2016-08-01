@@ -1,4 +1,6 @@
-public class Room implements BoardPiece {
+import java.util.List;
+
+public class Room implements BoardPiece, Card {
 	public Name name;
 	public boolean door;
 	

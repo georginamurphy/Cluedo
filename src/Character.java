@@ -1,4 +1,4 @@
-public class Character {
+public class Character implements Card{
 	public String name;
 	public Colour colour;
 	
