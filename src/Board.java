@@ -2,8 +2,7 @@
  * The board class represents the Cluedo Board.  Has a 2D Array of BoardPieces which will be the board
  * 
  */
-// LOL
-// HEY THERE
+// OH MY GOD
 public class Board {
 	private Location[][] board;
 	public Board(){
