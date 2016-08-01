@@ -15,6 +15,27 @@ public class Board {
 		readBoard();
 		System.out.println(this.toString());
 	}
+	
+	/**
+	 * Read the initial board from a .txt file and fills the BoardPiece 2D array
+	 * Catches file not found exception
+	 * 
+	 * Key:
+	 * 
+	 * # -Hallway
+	 * X -Out of Bounds
+	 * s -Start Position
+	 * K -Kitchen
+	 * B -Billiard Room
+	 * b -Ballroom
+	 * D -Dining room
+	 * C -Consevertory
+	 * S -Study
+	 * L -Library
+	 * l -Lounge
+	 * H -Hall
+	 * @(followed by a letter) - door to a room specified by a the letter
+	 */
 
 	private void readBoard() {
 		int row = 0;

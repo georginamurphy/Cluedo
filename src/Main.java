@@ -20,6 +20,9 @@ public class Main {
 		game.createSolution(characters, weapons, rooms);
 	}
 
+	/**
+	 * Declares and Initializes all of the Character cards
+	 */
 	private static void makeCharacters() {
 		characters.add(new Character("Miss Scarlett", Character.Colour.RED, 5, 0));
 		characters.add(new Character("Professor Pulm", Character.Colour.PURPLE, 0, 8));
@@ -29,6 +32,9 @@ public class Main {
 		characters.add(new Character("Mrs White", Character.Colour.WHITE, 16, 19));
 	}
 
+	/**
+	 * Declares and Initializes all of the Room cards
+	 */
 	private static void makeRooms() {
 		rooms.add(new Room(Room.Name.BALLROOM));
 		rooms.add(new Room(Room.Name.BILLIARD));
@@ -40,7 +46,10 @@ public class Main {
 		rooms.add(new Room(Room.Name.LOUNGE));
 		rooms.add(new Room(Room.Name.STUDY));
 	}
-
+	
+	/**
+	 * Declares and Initializes all of the Weapon cards
+	 */
 	private static void makeWeapons() {
 		weapons.add(new Weapon(Weapon.Type.CANDLESTICK));
 		weapons.add(new Weapon(Weapon.Type.DAGGER));
@@ -50,19 +59,23 @@ public class Main {
 		weapons.add(new Weapon(Weapon.Type.SPANNER));
 	}
 
+	/**
+	 * Asks the user for the number of players. Checks the input is valid and constructs an 
+	 * arraylist with the desired number of players
+	 */
 	private static void makePlayers() {
-		int numberOfPlayers = 0;
+		int numPlayers = 0;
 		Scanner input = new Scanner(System.in);
 
 		System.out.println("There must be between 3 and 8 players");
 		System.out.println("Please enter the number of players: ");
 		try {
-			numberOfPlayers = input.nextInt();
+			numPlayers = input.nextInt();
 		} catch (InputMismatchException e) {
 			System.out.println("Value entered was not a number");
 		}
 		
-		for (int i = 1; i <= numberOfPlayers; i++) {
+		for (int i = 1; i <= numPlayers; i++) {
 			int characterIndex = (int) Math.random() * characters.size();
 		}
 
