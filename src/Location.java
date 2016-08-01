@@ -7,7 +7,7 @@ public class Location {
 	 * @param x
 	 * @param y
 	 */
-	public Location(int x, int y, BoardPiece type) {
+	public Location(int x, int y) {
 		this.x = x;
 		this.y = y;
 	}

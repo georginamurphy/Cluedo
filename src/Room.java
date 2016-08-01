@@ -19,12 +19,4 @@ public class Room implements BoardPiece {
 		this.name = name;
 		
 	}
-	
-	private void createLocList(List<Integer> coords){
-		for(int i = 0; i < coords.size() - 1; i++){
-			int x = coords.get(i);
-			int y = coords.get(i + 1);
-			//locs.add(new Location(x, y, this) );
-		}
-	}
 }
