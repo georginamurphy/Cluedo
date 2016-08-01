@@ -18,8 +18,4 @@ public class Weapon {
 	public Weapon(Type name) {
 		this.name = name;
 	}
-	
-	
-	
-
 }

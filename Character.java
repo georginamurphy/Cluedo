@@ -6,7 +6,7 @@ public class Character {
 	public Location startPos;
 	
 	
-	public enum Colour{ 
+	public enum Colour{
 		RED,
 		PURPLE,
 		BLUE,
