@@ -5,5 +5,4 @@ public class Game {
 		this.board = board;
 	}
 
-	
 }
