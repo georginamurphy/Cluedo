@@ -4,6 +4,7 @@
  */
 public class Board {
 	private Location[][] board;
+	
 	public Board(){
 		this.board = new Location[25][25];
 	}

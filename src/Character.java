@@ -20,7 +20,6 @@ public class Character {
 	public Character(String name, Colour colour, int x, int y) {
 		this.name = name;
 		this.colour = colour;
-		//this.startPos = new Location(x, y, Hallway);
 	}
 
 }
