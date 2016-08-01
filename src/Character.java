@@ -1,5 +1,3 @@
-package Hi;
-
 public class Character {
 	public String name;
 	public Colour colour;

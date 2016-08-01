@@ -1,5 +1,3 @@
-package Hi;
-
 public class Weapon {
 	public Type name;
 	

@@ -1,5 +1,3 @@
-package Hi;
-
 import java.util.List;
 
 public class Room implements BoardPiece {
