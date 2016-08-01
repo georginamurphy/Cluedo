@@ -1,7 +1,6 @@
-import java.util.List;
-
 public class Room implements BoardPiece {
 	public Name name;
+	public boolean door;
 	
 	public enum Name{ 
 		KITCHEN,
@@ -17,6 +16,13 @@ public class Room implements BoardPiece {
 	
 	public Room(Name name){
 		this.name = name;
+		this.door = false;
+		
+	}
+	
+	public Room(Name name, boolean door){
+		this.name = name;
+		this.door = door;
 		
 	}
 }

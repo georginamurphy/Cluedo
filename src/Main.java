@@ -14,6 +14,7 @@ public static void main(String [] args){
 	makeWeapons();
 	makeRooms();
 	board = new Board();
+	new Game(board);
 }   
 
 private static void makeWeapons() {

@@ -31,6 +31,18 @@ public class Board {
 				board[row][col] = new Room(Room.Name.BILLIARD);
 			case "#":
 				board[row][col] = new Hallway();
+			case "D":
+				board[row][col] = new Room(Room.Name.DININGROOM);
+			case "C":
+				board[row][col] = new Room(Room.Name.CONSEVERTORY);
+			case "S":
+				board[row][col] = new Room(Room.Name.STUDY);
+			case "L":
+				board[row][col] = new Room(Room.Name.LIBRARY);
+			case "l":
+				board[row][col] = new Room(Room.Name.LOUNGE);
+			case "H":
+				board[row][col] = new Room(Room.Name.HALL);
 			}
 		}
 	}
