@@ -5,6 +5,7 @@ public class Board {
 	private Location[][] board;
 	// TESTING COMMENT
 	//Phone broke ROFL
+	//INERTIA ROLF
 	public Board(){
 		this.board = new Location[23][20];
 	}
