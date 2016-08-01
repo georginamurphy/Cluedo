@@ -1,3 +1,5 @@
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 /**
@@ -11,11 +13,13 @@ public class Board {
 	public Board() {
 		this.board = new BoardPiece[25][25];
 		readBoard();
+		System.out.println(this.toString());
 	}
 
 	private void readBoard() {
 		int col = 0;
-		Scanner scan = new Scanner("startBoard.txt");
+		try{
+		Scanner scan = new Scanner(new File ("startBoard"));
 
 		while (scan.hasNext()) {
 			String tokens[] = scan.nextLine().split(" ");
@@ -42,7 +46,7 @@ public class Board {
 				case "H":
 					board[row][col] = new Room(Room.Name.HALL);
 				case "s":
-					board[row][col] = new Hallway();
+					board[row][col] = new Hallway(true);
 				case "#":
 					board[row][col] = new Hallway();
 				case "@k":
@@ -67,5 +71,23 @@ public class Board {
 			}
 			col++;
 		}
+		}
+		catch(FileNotFoundException e){
+			System.out.println("File not found");
+		}
+	}
+	
+	public String toString(){
+		String boardStr = "";
+		for (int row = 0; row < 24; row++) {
+			for (int col = 0; col < 24; col++) {
+				if(board[row][col] == null)
+					boardStr += "X ";
+				else
+				boardStr += board[row][col].toString() + " ";
+			}
+			boardStr += "\n";
+		}
+		return boardStr;
 	}
 }
