@@ -52,31 +52,31 @@ public class Board {
 					board[row][col] = null;
 					break;
 				case "K":
-					board[row][col] = new Room(Room.Name.KITCHEN);
+					board[row][col] = new RoomTile(Room.Name.KITCHEN, false);
 					break;
 				case "b":
-					board[row][col] = new Room(Room.Name.BALLROOM);
+					board[row][col] = new RoomTile(Room.Name.BALLROOM, false);
 					break;
 				case "B":
-					board[row][col] = new Room(Room.Name.BILLIARD);
+					board[row][col] = new RoomTile(Room.Name.BILLIARD, false);
 					break;
 				case "D":
-					board[row][col] = new Room(Room.Name.DININGROOM);
+					board[row][col] = new RoomTile(Room.Name.DININGROOM, false);
 					break;
 				case "C":
-					board[row][col] = new Room(Room.Name.CONSEVERTORY);
+					board[row][col] = new RoomTile(Room.Name.CONSEVERTORY, false);
 					break;
 				case "S":
-					board[row][col] = new Room(Room.Name.STUDY);
+					board[row][col] = new RoomTile(Room.Name.STUDY, false);
 					break;
 				case "L":
-					board[row][col] = new Room(Room.Name.LIBRARY);
+					board[row][col] = new RoomTile(Room.Name.LIBRARY, false);
 					break;
 				case "l":
-					board[row][col] = new Room(Room.Name.LOUNGE);
+					board[row][col] = new RoomTile(Room.Name.LOUNGE, false);
 					break;
 				case "H":
-					board[row][col] = new Room(Room.Name.HALL);
+					board[row][col] = new RoomTile(Room.Name.HALL, false);
 					break;
 				case "s":
 					board[row][col] = new Hallway(true);
@@ -85,31 +85,31 @@ public class Board {
 					board[row][col] = new Hallway();
 					break;
 				case "@k":
-					board[row][col] = new Room(Room.Name.KITCHEN, true);
+					board[row][col] = new RoomTile(Room.Name.KITCHEN, true);
 					break;
 				case "@D":
-					board[row][col] = new Room(Room.Name.DININGROOM, true);
+					board[row][col] = new RoomTile(Room.Name.DININGROOM, true);
 					break;
 				case "@L":
-					board[row][col] = new Room(Room.Name.LIBRARY, true);
+					board[row][col] = new RoomTile(Room.Name.LIBRARY, true);
 					break;
 				case "@l":
-					board[row][col] = new Room(Room.Name.LOUNGE, true);
+					board[row][col] = new RoomTile(Room.Name.LOUNGE, true);
 					break;
 				case "@H":
-					board[row][col] = new Room(Room.Name.HALL, true);
+					board[row][col] = new RoomTile(Room.Name.HALL, true);
 					break;
 				case "@S":
-					board[row][col] = new Room(Room.Name.STUDY, true);
+					board[row][col] = new RoomTile(Room.Name.STUDY, true);
 					break;
 				case "@C":
-					board[row][col] = new Room(Room.Name.CONSEVERTORY, true);
+					board[row][col] = new RoomTile(Room.Name.CONSEVERTORY, true);
 					break;
 				case "@b":
-					board[row][col] = new Room(Room.Name.BALLROOM, true);
+					board[row][col] = new RoomTile(Room.Name.BALLROOM, true);
 					break;
 				case "@B":
-					board[row][col] = new Room(Room.Name.BILLIARD, true);
+					board[row][col] = new RoomTile(Room.Name.BILLIARD, true);
 					break;
 				}
 			}

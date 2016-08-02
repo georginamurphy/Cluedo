@@ -22,11 +22,6 @@ public class Room implements BoardPiece, Card {
 		
 	}
 	
-	public Room(Name name, boolean door){
-		this.name = name;
-		this.door = door;
-	}
-	
 	public boolean equals(Room room){
 		if(this.name == room.name){return true;}
 		return false;
@@ -35,23 +30,23 @@ public class Room implements BoardPiece, Card {
 	public String toString(){
 		switch(this.name){
 		case KITCHEN:
-			return "K";
+			return "Kitchen";
 		case BALLROOM:
-			return "b";
+			return "Ball Room";
 		case BILLIARD:
-			return "B";
+			return "Billiard Room";
 		case DININGROOM:
-			return "D";
+			return "Dining Room";
 		case CONSEVERTORY:
-			return "C";
+			return "Consevertory";
 		case STUDY:
-			return "S";
+			return "Study";
 		case LIBRARY:
-			return "L";
+			return "Library";
 		case LOUNGE:
-			return "l";
+			return "Lounge";
 		case HALL:
-			return "H";
+			return "Hall";
 		}
 		return "";
 	}
