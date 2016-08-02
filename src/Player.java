@@ -86,6 +86,7 @@ public class Player implements BoardPiece {
 	 * 
 	 */
 	public void startTurn(){
+		this.game.printBoard(); 
 		printCards();
 		int roll = rollDice();
 		System.out.println("You rolled a " + roll + "!"); 
@@ -121,7 +122,9 @@ public class Player implements BoardPiece {
 				validMove = this.game.checkValidMove(this, direction);
 			}
 			else if(direction.equals("down") ){
+				System.out.println("hello");
 				validMove = this.game.checkValidMove(this, direction);
+				System.out.println(validMove);
 			}
 			else if(direction.equals("left") ){
 				validMove = this.game.checkValidMove(this, direction);
@@ -134,7 +137,7 @@ public class Player implements BoardPiece {
 				continue;
 			}
 			
-			// IF the move was invalid, continue to the next iteration of the while loop
+			// If the move was invalid, continue to the next iteration of the while loop
 			// Otherwise, apply the move and increment movesMade
 			if(!validMove){continue;}
 			else{

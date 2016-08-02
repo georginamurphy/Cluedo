@@ -30,12 +30,12 @@ public class Board {
 	 * B -Billiard Room
 	 * b -Ballroom
 	 * D -Dining room
-	 * C -Consevertory
+	 * C -Conservatory
 	 * S -Study
 	 * L -Library
 	 * l -Lounge
 	 * H -Hall
-	 * @(followed by a letter) - door to a room specified by a the letter
+	 * @(followed by a letter) - door to a room specified by the letter
 	 */
 
 	private void readBoard() {
@@ -127,6 +127,10 @@ public class Board {
 			board[p.getLocation().getY()][p.getLocation().getX()] = p ;
 		}
 		
+	}
+	
+	public BoardPiece[][] getBoard(){
+		return this.board;
 	}
 	
 	public String toString(){

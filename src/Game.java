@@ -100,10 +100,53 @@ public class Game {
 	}
 	
 	public boolean checkValidMove(Player player, String direction){
+		BoardPiece[][] gameBoard = this.board.getBoard();
+		
+		// Get the x and y indexes for the Player on the board
+		int playerX = player.getLocation().x;
+		int playerY = player.getLocation().y;
+		
+		// Depending on the direction the player wants to move, check if it is valid
+		if(direction.equals("up") ){
+			if(playerY == 0){return false;} // Player can't move off the board
+			BoardPiece piece = gameBoard[playerY + 1][playerX];
+			
+			if(piece instanceof Hallway){return hallwayCheck(piece);}
+		}
+		else if(direction.equals("down") ){
+			if(playerY == 24){return false;} // Player can't move off the board
+			BoardPiece piece = gameBoard[playerY - 1][playerX];
+			
+			if(piece instanceof Hallway){return hallwayCheck(piece);}
+			
+		}
+		else if(direction.equals("left") ){
+			if(playerX == 0){return false;} // Player can't move off the board
+			BoardPiece piece = gameBoard[playerY][playerX - 1];
+			
+			if(piece instanceof Hallway){return hallwayCheck(piece);}
+			
+		}
+		else if(direction.equals("right") ){
+			if(playerX == 24){return false;} // Player can't move off the board
+			BoardPiece piece = gameBoard[playerY][playerX + 1];
+			
+			if(piece instanceof Hallway){return hallwayCheck(piece);}
+	
+		}
 		return false;
 	}
 	
 	public void applyMove(Player player, String direction){
 		
+	}
+	
+	public boolean hallwayCheck(BoardPiece piece){
+		Hallway hallway = (Hallway) piece;
+		return hallway.isFull();
+	} 
+	
+	public void printBoard(){
+		System.out.println(this.board.toString());
 	}
 }
