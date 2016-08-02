@@ -22,4 +22,7 @@ public class Weapon implements Card{
 		return false;
 	}
 	
+	public String toString(){
+		return this.name.toString();
+	}
 }

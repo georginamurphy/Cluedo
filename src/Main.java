@@ -21,6 +21,7 @@ public class Main {
 		board = new Board(players);
 		game = new Game(board, players);
 		game.createSolution(characters, weapons, rooms);
+		game.dealCards(characters, weapons, rooms);
 	}
 
 	/**

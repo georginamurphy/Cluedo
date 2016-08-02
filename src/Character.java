@@ -31,5 +31,7 @@ public class Character implements Card{
 		return startLoc;
 	}
 	
-	
+	public String toString(){
+		return this.name;
+	}
 }

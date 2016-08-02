@@ -4,8 +4,8 @@ public class Player implements BoardPiece {
 
 	private Location location;
 	private Character character;
-	private boolean used;
 	private ArrayList<Card> cards;
+	private boolean used;
 
 	public Player(Character character, boolean used) {
 		this.character = character;
@@ -30,10 +30,6 @@ public class Player implements BoardPiece {
 			return false;
 	}
 	
-	public void diplayPlayerInfo(){
-		System.out.println("Player: " + character.name);
-		System.out.println("Player: " + character.name);
-	}
 	
 	public String toString() {
 		switch (this.character.colour) {
@@ -51,5 +47,17 @@ public class Player implements BoardPiece {
 			return "6";
 		}
 		return "";
+	}
+	
+	public void dealCard(Card card){
+		this.cards.add(card);
+	}
+	
+	public void printCards(){
+		System.out.println(this.character.name + "'s cards are: \n");
+		for(Card c : cards){
+			System.out.println(c.toString() + "\n");
+		}
+		System.out.println("----------------------------");
 	}
 }
