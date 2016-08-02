@@ -8,6 +8,13 @@ public class Game {
 	private ArrayList<Player> players; // Consist of every player, both human and non-human
 	private ArrayList<Player> humanPlayers; // Consists of ONLY the human players
 	private boolean gameEnd;
+	
+	public enum Direction{
+		UP,
+		DOWN,
+		LEFT,
+		RIGHT
+	}
 
 	public Game(Board board, ArrayList<Player> players) {
 		this.board = board;
@@ -99,11 +106,15 @@ public class Game {
 		}
 	}
 	
-	public boolean checkValidMove(Player player, String direction){
+	public Board getBoard() {
+		return board;
+	}
+
+	public boolean checkValidMove(Player player, Game.Direction direction){
 		return false;
 	}
 	
-	public void applyMove(Player player, String direction){
+	public void applyMove(Player player, Game.Direction direction){
 		
 	}
 }

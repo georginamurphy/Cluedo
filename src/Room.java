@@ -5,7 +5,7 @@ public class Room implements Card {
 	public enum Name{ 
 		KITCHEN,
 		BALLROOM,
-		CONSEVERTORY,
+		CONSERVATORY,
 		BILLIARD,
 		LIBRARY,
 		STUDY,

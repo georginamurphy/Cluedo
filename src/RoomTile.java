@@ -9,6 +9,9 @@ public class RoomTile implements BoardPiece {
 	}
 
 	public String toString() {
+		if(this.door){
+			return "@";
+		}
 		switch (this.name) {
 		case KITCHEN:
 			return "K";
@@ -18,7 +21,7 @@ public class RoomTile implements BoardPiece {
 			return "B";
 		case DININGROOM:
 			return "D";
-		case CONSEVERTORY:
+		case CONSERVATORY:
 			return "C";
 		case STUDY:
 			return "S";

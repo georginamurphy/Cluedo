@@ -38,25 +38,6 @@ public class Player implements BoardPiece {
 		this.game = game;
 	}
 	
-	
-	public String toString() {
-		switch (this.character.colour) {
-		case WHITE:
-			return "1";
-		case GREEN:
-			return "2";
-		case BLUE:
-			return "3";
-		case PURPLE:
-			return "4";
-		case RED:
-			return "5";
-		case YELLOW:
-			return "6";
-		}
-		return "";
-	}
-	
 	public void dealCard(Card card){
 		this.cards.add(card);
 	}
@@ -86,6 +67,7 @@ public class Player implements BoardPiece {
 	 * 
 	 */
 	public void startTurn(){
+		System.out.println(game.getBoard().toString());
 		printCards();
 		int roll = rollDice();
 		System.out.println("You rolled a " + roll + "!"); 
@@ -103,34 +85,41 @@ public class Player implements BoardPiece {
 	public void makeMovementDecisions(int roll){
 		Scanner input = new Scanner(System.in);
 		System.out.println("It is time to move your character on the board.");
-		System.out.println("You will enter either up, down, left or right for each of your " + roll + " moves.");
+		System.out.println("You will four options for each of your " + roll + " moves.");
+		System.out.println("1. Up");
+		System.out.println("2. Down");
+		System.out.println("3. Left");
+		System.out.println("4. Right");
 		int movesRemaining = roll;
 		boolean enteredRoom = false;
 		
 		while(movesRemaining != 0 && !enteredRoom){
 			System.out.println("You have " + movesRemaining + " moves remaining.\n");
-			System.out.println("Where would you like to move? ");
+			System.out.println("Where would you like to move? (enter a number)");
 			
-			String direction = input.next();
-			
-			if(direction != null){direction.toLowerCase();}
+			int option = input.nextInt();
+			Game.Direction direction;
 			
 			// Check they have entered a valid direction
 			boolean validMove = false;
-			if(direction.equals("up") ){
+			if(option == 1 ){
+				direction = Game.Direction.UP;
 				validMove = this.game.checkValidMove(this, direction);
 			}
-			else if(direction.equals("down") ){
+			else if(option == 2 ){
+				direction = Game.Direction.DOWN;
 				validMove = this.game.checkValidMove(this, direction);
 			}
-			else if(direction.equals("left") ){
+			else if(option == 3 ){
+				direction = Game.Direction.LEFT;
 				validMove = this.game.checkValidMove(this, direction);
 			}
-			else if(direction.equals("right") ){
+			else if(option == 4 ){
+				direction = Game.Direction.RIGHT;
 				validMove = this.game.checkValidMove(this, direction);
 			}
 			else{
-				System.out.println("That was not a valid expression, please enter up, down, left or right.");
+				System.out.println("That was not a valid expression, please select an option from 1 to 4.");
 				continue;
 			}
 			
@@ -153,9 +142,29 @@ public class Player implements BoardPiece {
 	}
 	
 	/**
-	 * A simple method to update the Location fo this player
+	 * A simple method to update the Location for this player
 	 */
 	public void updateLocation(Location location){
 		this.location = location;
+	}
+	
+	
+	
+	public String toString() {
+		switch (this.character.colour) {
+		case WHITE:
+			return "1";
+		case GREEN:
+			return "2";
+		case BLUE:
+			return "3";
+		case PURPLE:
+			return "4";
+		case RED:
+			return "5";
+		case YELLOW:
+			return "6";
+		}
+		return "";
 	}
 }
