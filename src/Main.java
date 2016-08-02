@@ -28,7 +28,7 @@ public class Main {
 	 */
 	private static void makeCharacters() {
 		characters.add(new Character("Miss Scarlett", Character.Colour.RED, 7, 24));
-		characters.add(new Character("Professor Pulm", Character.Colour.PURPLE, 24, 19));
+		characters.add(new Character("Professor Plum", Character.Colour.PURPLE, 24, 19));
 		characters.add(new Character("Mrs Peacock", Character.Colour.BLUE, 24, 6));
 		characters.add(new Character("Reverend Green", Character.Colour.GREEN, 15, 0));
 		characters.add(new Character("Colonel Mustard", Character.Colour.YELLOW, 0, 17));
@@ -67,20 +67,23 @@ public class Main {
 	 * constructs an arrayList with the desired number of players
 	 */
 	private static void setPlayers() {
-		int numPlayers = 0;
 		Scanner input = new Scanner(System.in);
 
-		System.out.println("There must be between 3 and 7 players");
+		System.out.println("There must be between 3 and 6 players, inclusive.");
 		System.out.println("Please enter the number of players: ");
-		try {
-			numPlayers = Integer.parseInt(input.next() );
-		} catch (InputMismatchException e) {
-			System.out.println("Value entered was not a number");
+		String number = input.next();
+		// If the user has not entered a valid number of players, loop until they do
+		while(!validNumber(number) ){
+			System.out.println("You must have between 3 and 6 players, inclusive!");
+			System.out.println("Please enter the number of players: ");
+			number = input.next();
 		}
-		System.out.println("hello");
+		int numberOfPlayers = Integer.parseInt(number);
+		
+		// 
 		int count = 0;
 		for (Character c : characters) {
-			if (count < numPlayers) {
+			if (count < numberOfPlayers) {
 				players.add(new Player(c, true));
 				count++;
 			} else {
@@ -89,6 +92,15 @@ public class Main {
 			
 		}
 		input.close();
+	}
+	
+	private static boolean validNumber(String s){
+		s.trim();
+		if(s.equals("3") ){return true;}
+		if(s.equals("4") ){return true;}
+		if(s.equals("5") ){return true;}
+		if(s.equals("6") ){return true;}
+		return false;
 	}
 
 }
