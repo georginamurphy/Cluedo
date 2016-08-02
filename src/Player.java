@@ -1,14 +1,17 @@
+import java.util.ArrayList;
 
 public class Player implements BoardPiece {
 
 	private Location location;
 	private Character character;
+	private ArrayList<Card> cards;
 	private boolean used;
 
 	public Player(Character character, boolean used) {
 		this.character = character;
 		this.location = character.getStartLoc();
 		this.used = used;
+		this.cards = new ArrayList<Card>();
 	}
 	
 	public String toString(){
@@ -35,5 +38,17 @@ public class Player implements BoardPiece {
 
 	public boolean getUsed() {
 		return used;
+	}
+	
+	public void dealCard(Card card){
+		this.cards.add(card);
+	}
+	
+	public void printCards(){
+		System.out.println(this.character.name + "'s cards are: \n");
+		for(Card c : cards){
+			System.out.println(c.toString() + "\n");
+		}
+		System.out.println("----------------------------");
 	}
 }

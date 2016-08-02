@@ -21,4 +21,8 @@ public class Weapon implements Card{
 		if(this.name == weapon.name){return true;}
 		return false;
 	}
+	
+	public String toString(){
+		return this.name.toString();
+	}
 }

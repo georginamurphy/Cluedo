@@ -48,18 +48,32 @@ public class Game {
 	public void dealCards(ArrayList<Character> chars, ArrayList<Weapon> weapons, ArrayList<Room> rooms) {
 		ArrayList<Card> cards = new ArrayList<Card>();
 		ArrayList<Player> realPlayers = new ArrayList<Player>();
+		// Get the real players, and add them to an ArrayList
+		int numOfPlayers = 0;
 		for (Player p : players) {
-			if (p.getUsed())
+			if(p.getUsed() ){
 				realPlayers.add(p);
+				numOfPlayers++;
+			}
 		}
 		cards.addAll(chars);
 		cards.addAll(weapons);
 		cards.addAll(rooms);
 
 		Collections.shuffle(cards);
-
+		
+		int playerIndex = 0;
 		for (int i = 0; i < cards.size(); i++) {
-			cards.get(i);
+			Card card = cards.get(i);
+			realPlayers.get(playerIndex).dealCard(card);
+			playerIndex++;
+			if(!(playerIndex < numOfPlayers) ){
+				playerIndex = 0;
+			}
+		}
+		
+		for(Player p : realPlayers){
+			p.printCards();
 		}
 	}
 }
