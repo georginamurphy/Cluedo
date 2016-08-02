@@ -17,8 +17,8 @@ public class Main {
 		makeCharacters();
 		makeWeapons();
 		makeRooms();
-		makePlayers();
-		board = new Board(characters);
+		setPlayers();
+		board = new Board(players);
 		game = new Game(board, players);
 		game.createSolution(characters, weapons, rooms);
 	}
@@ -49,7 +49,7 @@ public class Main {
 		rooms.add(new Room(Room.Name.LOUNGE));
 		rooms.add(new Room(Room.Name.STUDY));
 	}
-	
+
 	/**
 	 * Declares and Initializes all of the Weapon cards
 	 */
@@ -63,10 +63,10 @@ public class Main {
 	}
 
 	/**
-	 * Asks the user for the number of players. Checks the input is valid and constructs an 
-	 * arrayList with the desired number of players
+	 * Asks the user for the number of players. Checks the input is valid and
+	 * constructs an arrayList with the desired number of players
 	 */
-	private static void makePlayers() {
+	private static void setPlayers() {
 		int numPlayers = 0;
 		Scanner input = new Scanner(System.in);
 
@@ -78,6 +78,16 @@ public class Main {
 			System.out.println("Value entered was not a number");
 		}
 		System.out.println("hello");
+		int count = 0;
+		for (Character c : characters) {
+			if (count < numPlayers) {
+				players.add(new Player(c, true));
+				count++;
+			} else {
+				players.add(new Player(c, false));
+			}
+			
+		}
 		input.close();
 	}
 

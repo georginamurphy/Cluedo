@@ -1,4 +1,4 @@
-public class Character implements Card, BoardPiece{
+public class Character implements Card{
 	public String name;
 	public Colour colour;
 	public Location startLoc;
@@ -31,21 +31,5 @@ public class Character implements Card, BoardPiece{
 		return startLoc;
 	}
 	
-	public String toString(){
-		switch(this.colour){
-		case WHITE:
-			return "1";
-		case GREEN:
-			return "2";
-		case BLUE:
-			return "3";
-		case PURPLE:
-			return "4";
-		case RED:
-			return "5";
-		case YELLOW:
-			return "6";
-		}
-		return "";
-	}
+	
 }
