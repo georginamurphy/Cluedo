@@ -80,7 +80,6 @@ public class Main {
 		}
 		int numberOfPlayers = Integer.parseInt(number);
 		
-		// 
 		int count = 0;
 		for (Character c : characters) {
 			if (count < numberOfPlayers) {
