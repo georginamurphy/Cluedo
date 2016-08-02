@@ -11,10 +11,10 @@ import java.util.Scanner;
 public class Board {
 	private static BoardPiece[][] board;
 
-	public Board(ArrayList<Character> characters) {
+	public Board(ArrayList<Player> players) {
 		this.board = new BoardPiece[25][25];
 		readBoard();
-		setCharacters(characters);
+		setCharacters(players);
 		System.out.println(this.toString());
 	}
 	
@@ -125,15 +125,15 @@ public class Board {
 	 * puts all the characters into the board 2D array at their starting position
 	 * @param characters 
 	 */
-	private static void setCharacters(ArrayList<Character> characters) {
-		for(Character c: characters){
-			board[c.startLoc.y][c.startLoc.x] = c;
+	private static void setCharacters(ArrayList<Player> players) {
+		for(Player p: players){
+			board[p.getLocation().getY()][p.getLocation().getX()] = p ;
 		}
 		
 	}
 	
 	public String toString(){
-		String boardStr = "";
+		String boardStr = "\n***************** Cluedo Board ******************\n\n";
 		for (int row = 0; row <= 24; row++) {
 			for (int col = 0; col <= 24; col++) {
 				if(board[row][col] == null)

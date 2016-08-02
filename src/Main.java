@@ -18,7 +18,7 @@ public class Main {
 		makeWeapons();
 		makeRooms();
 		makePlayers();
-		board = new Board(characters);
+		board = new Board(players);
 		game = new Game(board, players);
 		game.createSolution(characters, weapons, rooms);
 	}
