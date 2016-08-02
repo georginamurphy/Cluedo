@@ -5,11 +5,14 @@ public class Game {
 
 	private Board board;
 	private Solution solution;
-	private ArrayList<Player> players;
+	private ArrayList<Player> players; // Consist of every player, both human and non-human
+	private ArrayList<Player> humanPlayers; // Consists of ONLY the human players
+	private boolean gameEnd;
 
 	public Game(Board board, ArrayList<Player> players) {
 		this.board = board;
 		this.players = players;
+		this.gameEnd = false;
 	}
 
 	/**
@@ -56,12 +59,22 @@ public class Game {
 				numOfPlayers++;
 			}
 		}
+		// Set the field that holds all the human players to be the array we just calculated
+		this.humanPlayers = realPlayers;
+		// Also, intitalize the game field for each player to be this game object
+		for(Player p : players){
+			p.setGame(this);
+		}
+		
 		cards.addAll(chars);
 		cards.addAll(weapons);
 		cards.addAll(rooms);
 
+		// Shuffle the cards
 		Collections.shuffle(cards);
 		
+		// Now deal them out to the players, some players WILL have more cards than others if 
+		// the cards dont split amongst the players evenly.
 		int playerIndex = 0;
 		for (int i = 0; i < cards.size(); i++) {
 			Card card = cards.get(i);
@@ -72,8 +85,21 @@ public class Game {
 			}
 		}
 		
+		// For testing
 		for(Player p : realPlayers){
 			p.printCards();
 		}
+	}
+	
+	public void run(){
+		while(!gameEnd){
+			for(Player p : humanPlayers){
+				p.startTurn();
+			}
+		}
+	}
+	
+	public boolean checkValidMove(Location loc, String direction){
+		return false;
 	}
 }

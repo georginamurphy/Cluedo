@@ -21,6 +21,7 @@ public class Main {
 		game = new Game(board, players);
 		game.createSolution(characters, weapons, rooms);
 		game.dealCards(characters, weapons, rooms);
+		game.run();
 	}
 
 	/**
@@ -92,6 +93,7 @@ public class Main {
 		}
 		input.close();
 	}
+	
 	
 	private static boolean validNumber(String s){
 		s.trim();
