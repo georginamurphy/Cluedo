@@ -9,7 +9,7 @@ import java.util.Scanner;
  * 
  */
 public class Board {
-	private static BoardPiece[][] board;
+	private BoardPiece[][] board;
 
 	public Board(ArrayList<Player> players) {
 		this.board = new BoardPiece[25][25];
@@ -115,6 +115,7 @@ public class Board {
 			}
 			row++;
 		}
+		scan.close();
 		}
 		catch(FileNotFoundException e){
 			System.out.println("File not found");
@@ -125,7 +126,7 @@ public class Board {
 	 * puts all the characters into the board 2D array at their starting position
 	 * @param characters 
 	 */
-	private static void setCharacters(ArrayList<Player> players) {
+	private void setCharacters(ArrayList<Player> players) {
 		for(Player p: players){
 			board[p.getLocation().getY()][p.getLocation().getX()] = p ;
 		}
