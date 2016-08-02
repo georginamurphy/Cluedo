@@ -1,4 +1,4 @@
-public class Room implements BoardPiece, Card {
+public class Room implements Card {
 	public Name name;
 	public boolean door;
 	
