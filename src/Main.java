@@ -11,6 +11,9 @@ public class Main {
 	private static ArrayList<Player> players = new ArrayList<Player>();
 
 	public static void main(String[] args) {
+		System.out.println("*******************************************************");
+		System.out.println("                  Welcome to CUEDO");
+		System.out.println("*******************************************************");
 		makeCharacters();
 		makeWeapons();
 		makeRooms();
@@ -19,8 +22,6 @@ public class Main {
 		game = new Game(board, players);
 		game.createSolution(characters, weapons, rooms);
 	}
-
-	
 
 	/**
 	 * Declares and Initializes all of the Character cards
@@ -63,13 +64,13 @@ public class Main {
 
 	/**
 	 * Asks the user for the number of players. Checks the input is valid and constructs an 
-	 * arraylist with the desired number of players
+	 * arrayList with the desired number of players
 	 */
 	private static void makePlayers() {
 		int numPlayers = 0;
 		Scanner input = new Scanner(System.in);
 
-		System.out.println("There must be between 3 and 8 players");
+		System.out.println("There must be between 3 and 7 players");
 		System.out.println("Please enter the number of players: ");
 		try {
 			numPlayers = input.nextInt();
