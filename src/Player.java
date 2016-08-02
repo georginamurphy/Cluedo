@@ -1,3 +1,6 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -60,9 +63,9 @@ public class Player implements BoardPiece {
 	
 	public void printCards(){
 		System.out.println("----------------------------");
-		System.out.println(this.character.name + "'s cards are: \n");
+		System.out.println(this.character.name + "'s cards are: ");
 		for(Card c : cards){
-			System.out.println(c.toString() + "\n");
+			System.out.println(c.toString() );
 		}
 		System.out.println("----------------------------");
 	}
@@ -83,7 +86,6 @@ public class Player implements BoardPiece {
 	 * 
 	 */
 	public void startTurn(){
-		System.out.println("These are your cards " + this.character.name + "\n");
 		printCards();
 		int roll = rollDice();
 		System.out.println("You rolled a " + roll + "!"); 
@@ -102,36 +104,58 @@ public class Player implements BoardPiece {
 		Scanner input = new Scanner(System.in);
 		System.out.println("It is time to move your character on the board.");
 		System.out.println("You will enter either up, down, left or right for each of your " + roll + " moves.");
-		int movesMade = 0;
 		int movesRemaining = roll;
 		boolean enteredRoom = false;
+		
 		while(movesRemaining != 0 && !enteredRoom){
 			System.out.println("You have " + movesRemaining + " moves remaining.\n");
 			System.out.println("Where would you like to move? ");
+			
 			String direction = input.next();
-			direction.toLowerCase();
+			
+			if(direction != null){direction.toLowerCase();}
 			
 			// Check they have entered a valid direction
 			boolean validMove = false;
 			if(direction.equals("up") ){
-				validMove = this.game.checkValidMove(this.location, direction);
+				validMove = this.game.checkValidMove(this, direction);
 			}
 			else if(direction.equals("down") ){
-				validMove = this.game.checkValidMove(this.location, direction);
+				validMove = this.game.checkValidMove(this, direction);
 			}
 			else if(direction.equals("left") ){
-				validMove = this.game.checkValidMove(this.location, direction);
+				validMove = this.game.checkValidMove(this, direction);
 			}
 			else if(direction.equals("right") ){
-				validMove = this.game.checkValidMove(this.location, direction);
+				validMove = this.game.checkValidMove(this, direction);
 			}
 			else{
 				System.out.println("That was not a valid expression, please enter up, down, left or right.");
 				continue;
 			}
 			
+			// IF the move was invalid, continue to the next iteration of the while loop
+			// Otherwise, apply the move and increment movesMade
 			if(!validMove){continue;}
+			else{
+				this.game.applyMove(this, direction);
+				movesRemaining--;
+			}	
 		}
 		
+		//try {
+		//	input.close();
+		//} catch (IOException e) {
+		//	// TODO Auto-generated catch block
+		//	e.printStackTrace();
+		//}
+		
+	}
+	
+	/**
+	 * A simple method to update the Location fo this player
+	 */
+	public void updateLocation(Location location){
+		this.location = location;
 	}
 }

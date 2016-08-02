@@ -86,9 +86,9 @@ public class Game {
 		}
 		
 		// For testing
-		for(Player p : realPlayers){
-			p.printCards();
-		}
+		//for(Player p : realPlayers){
+		//	p.printCards();
+		//}
 	}
 	
 	public void run(){
@@ -99,7 +99,11 @@ public class Game {
 		}
 	}
 	
-	public boolean checkValidMove(Location loc, String direction){
+	public boolean checkValidMove(Player player, String direction){
 		return false;
+	}
+	
+	public void applyMove(Player player, String direction){
+		
 	}
 }

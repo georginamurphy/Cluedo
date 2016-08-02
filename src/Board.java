@@ -15,7 +15,7 @@ public class Board {
 		this.board = new BoardPiece[25][25];
 		readBoard();
 		setCharacters(players);
-		System.out.println(this.toString());
+		//System.out.println(this.toString());
 	}
 	
 	/**
