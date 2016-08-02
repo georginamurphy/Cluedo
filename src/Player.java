@@ -32,4 +32,8 @@ public class Player implements BoardPiece {
 	public Location getLocation() {
 		return location;
 	}
+
+	public boolean getUsed() {
+		return used;
+	}
 }
