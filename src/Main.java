@@ -73,10 +73,11 @@ public class Main {
 		System.out.println("There must be between 3 and 7 players");
 		System.out.println("Please enter the number of players: ");
 		try {
-			numPlayers = input.nextInt();
+			numPlayers = Integer.parseInt(input.next() );
 		} catch (InputMismatchException e) {
 			System.out.println("Value entered was not a number");
 		}
+		System.out.println("hello");
 		input.close();
 	}
 
