@@ -12,7 +12,7 @@ public class Main {
 
 	public static void main(String[] args) {
 		System.out.println("*******************************************************");
-		System.out.println("                  Welcome to CUEDO");
+		System.out.println("                  Welcome to CLUEDO");
 		System.out.println("*******************************************************");
 		makeCharacters();
 		makeWeapons();
@@ -77,11 +77,6 @@ public class Main {
 		} catch (InputMismatchException e) {
 			System.out.println("Value entered was not a number");
 		}
-		
-		for (int i = 1; i <= numPlayers; i++) {
-			int characterIndex = (int) Math.random() * characters.size();
-		}
-
 		input.close();
 	}
 
