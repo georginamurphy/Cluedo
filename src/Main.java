@@ -77,11 +77,6 @@ public class Main {
 		} catch (InputMismatchException e) {
 			System.out.println("Value entered was not a number");
 		}
-		
-		for (int i = 1; i <= numPlayers; i++) {
-			int characterIndex = (int) Math.random() * characters.size();
-		}
-
 		input.close();
 	}
 
