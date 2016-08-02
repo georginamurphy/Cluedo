@@ -26,7 +26,6 @@ public class Board {
 	 * 
 	 * # -Hallway
 	 * X -Out of Bounds
-	 * s -Start Position
 	 * K -Kitchen
 	 * B -Billiard Room
 	 * b -Ballroom
@@ -77,9 +76,6 @@ public class Board {
 					break;
 				case "H":
 					board[row][col] = new RoomTile(Room.Name.HALL, false);
-					break;
-				case "s":
-					board[row][col] = new Hallway(true);
 					break;
 				case "#":
 					board[row][col] = new Hallway();
