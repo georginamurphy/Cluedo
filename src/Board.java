@@ -1,5 +1,6 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
@@ -8,11 +9,12 @@ import java.util.Scanner;
  * 
  */
 public class Board {
-	private BoardPiece[][] board;
+	private static BoardPiece[][] board;
 
-	public Board() {
+	public Board(ArrayList<Character> characters) {
 		this.board = new BoardPiece[25][25];
 		readBoard();
+		setCharacters(characters);
 		System.out.println(this.toString());
 	}
 	
@@ -117,6 +119,17 @@ public class Board {
 		catch(FileNotFoundException e){
 			System.out.println("File not found");
 		}
+	}
+	
+	/**
+	 * puts all the characters into the board 2D array at their starting position
+	 * @param characters 
+	 */
+	private static void setCharacters(ArrayList<Character> characters) {
+		for(Character c: characters){
+			board[c.startLoc.y][c.startLoc.x] = c;
+		}
+		
 	}
 	
 	public String toString(){

@@ -15,21 +15,23 @@ public class Main {
 		makeWeapons();
 		makeRooms();
 		makePlayers();
-		board = new Board();
+		board = new Board(characters);
 		game = new Game(board, players);
 		game.createSolution(characters, weapons, rooms);
 	}
+
+	
 
 	/**
 	 * Declares and Initializes all of the Character cards
 	 */
 	private static void makeCharacters() {
-		characters.add(new Character("Miss Scarlett", Character.Colour.RED, 5, 0));
-		characters.add(new Character("Professor Pulm", Character.Colour.PURPLE, 0, 8));
-		characters.add(new Character("Mrs Peacock", Character.Colour.BLUE, 6, 19));
-		characters.add(new Character("Reverend Green", Character.Colour.GREEN, 18, 0));
-		characters.add(new Character("Colonel Mustard", Character.Colour.YELLOW, 22, 13));
-		characters.add(new Character("Mrs White", Character.Colour.WHITE, 16, 19));
+		characters.add(new Character("Miss Scarlett", Character.Colour.RED, 7, 24));
+		characters.add(new Character("Professor Pulm", Character.Colour.PURPLE, 24, 19));
+		characters.add(new Character("Mrs Peacock", Character.Colour.BLUE, 24, 6));
+		characters.add(new Character("Reverend Green", Character.Colour.GREEN, 15, 0));
+		characters.add(new Character("Colonel Mustard", Character.Colour.YELLOW, 0, 17));
+		characters.add(new Character("Mrs White", Character.Colour.WHITE, 9, 0));
 	}
 
 	/**
