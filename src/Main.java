@@ -12,7 +12,7 @@ public class Main {
 
 	public static void main(String[] args) {
 		System.out.println("*******************************************************");
-		System.out.println("                  Welcome to CUEDO");
+		System.out.println("                  Welcome to CLUEDO");
 		System.out.println("*******************************************************");
 		makeCharacters();
 		makeWeapons();
