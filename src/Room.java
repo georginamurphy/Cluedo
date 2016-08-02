@@ -1,5 +1,3 @@
-import java.util.List;
-
 public class Room implements BoardPiece, Card {
 	public Name name;
 	public boolean door;
@@ -28,26 +26,6 @@ public class Room implements BoardPiece, Card {
 	}
 
 	public String toString(){
-		switch(this.name){
-		case KITCHEN:
-			return "Kitchen";
-		case BALLROOM:
-			return "Ball Room";
-		case BILLIARD:
-			return "Billiard Room";
-		case DININGROOM:
-			return "Dining Room";
-		case CONSEVERTORY:
-			return "Consevertory";
-		case STUDY:
-			return "Study";
-		case LIBRARY:
-			return "Library";
-		case LOUNGE:
-			return "Lounge";
-		case HALL:
-			return "Hall";
-		}
-		return "";
+		return this.name.toString();
 	}
 }

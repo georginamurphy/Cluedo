@@ -54,6 +54,7 @@ public class Player implements BoardPiece {
 	}
 	
 	public void printCards(){
+		System.out.println("----------------------------");
 		System.out.println(this.character.name + "'s cards are: \n");
 		for(Card c : cards){
 			System.out.println(c.toString() + "\n");
