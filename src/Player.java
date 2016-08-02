@@ -3,10 +3,12 @@ public class Player implements BoardPiece {
 
 	private Location location;
 	private Character character;
+	private boolean used;
 
-	public Player(Character character) {
+	public Player(Character character, boolean used) {
 		this.character = character;
 		this.location = character.getStartLoc();
+		this.used = used;
 	}
 	
 	public String toString(){
