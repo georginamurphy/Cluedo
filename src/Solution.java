@@ -29,6 +29,10 @@ public class Solution {
 		return weapon;
 	}
 	
-	
+	public String toString(){
+		return "Room: " + this.room.toString() 
+		+ "\nCharacter: " + this.character.toString()
+		+ "\nWeapon: " + this.weapon.toString();
+	}
 
 }

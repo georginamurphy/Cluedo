@@ -145,6 +145,10 @@ public class Player implements BoardPiece {
 	public void updateLocation(Location location) {
 		this.location = location;
 	}
+	
+	public Character getCharacter(){
+		return character;
+	}
 
 	public String toString() {
 		switch (this.character.colour) {

@@ -1,5 +1,7 @@
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.InputMismatchException;
+import java.util.Scanner;
 
 public class Game {
 
@@ -121,6 +123,9 @@ public class Game {
 				p.startTurn();
 			}
 		}
+		
+		System.out.println("The game has been won. The solution was:");
+		System.out.println(solution.toString());
 	}
 
 	/**
@@ -418,32 +423,118 @@ public class Game {
 	}
 
 	public Room.Name inRoom(Player p) {
-		if(kitchenTiles.contains(p))
+		if (kitchenTiles.contains(p))
 			return Room.Name.KITCHEN;
-		if(ballRoomTiles.contains(p))
+		if (ballRoomTiles.contains(p))
 			return Room.Name.BALLROOM;
-		if(conservatoryTiles.contains(p))
+		if (conservatoryTiles.contains(p))
 			return Room.Name.CONSERVATORY;
-		if(billiardTiles.contains(p))
+		if (billiardTiles.contains(p))
 			return Room.Name.BILLIARD;
-		if(libraryTiles.contains(p))
+		if (libraryTiles.contains(p))
 			return Room.Name.LIBRARY;
-		if(studyTiles.contains(p))
+		if (studyTiles.contains(p))
 			return Room.Name.STUDY;
-		if(hallTiles.contains(p))
+		if (hallTiles.contains(p))
 			return Room.Name.HALL;
-		if(loungeTiles.contains(p))
+		if (loungeTiles.contains(p))
 			return Room.Name.LOUNGE;
-		if(diningRoomTiles.contains(p))
+		if (diningRoomTiles.contains(p))
 			return Room.Name.DININGROOM;
 
 		System.out.println("SOMETHING WENT HORRIBLY WRONG");
 		return null;
 	}
+	
+	public Character.Colour getCharacterColour(int num) {
+		switch (num) {
+		case 1:
+			return Character.Colour.WHITE;
+		case 2:
+			return Character.Colour.GREEN;
+		case 3:
+			return Character.Colour.BLUE;
+		case 4:
+			return Character.Colour.PURPLE;
+		case 5:
+			return Character.Colour.RED;
+		case 6:
+			return Character.Colour.YELLOW;
+		}
+		return null;
+	}
+	
+	public Weapon.Type getWeaponName(int num) {
+		switch (num) {
+		case 1:
+			return Weapon.Type.CANDLESTICK;
+		case 2:
+			return Weapon.Type.DAGGER;
+		case 3:
+			return Weapon.Type.LEADPIPE;
+		case 4:
+			return Weapon.Type.ROPE;
+		case 5:
+			return Weapon.Type.SPANNER;
+		case 6:
+			return Weapon.Type.REVOLVER;
+		}
+		return null;
+	}
 
-	public boolean makeGuess() {
+	public void makeGuess(Player p) {
+		Scanner input = new Scanner(System.in);
+		int userInput;
+		
+		Room room = new Room(inRoom(p));
 
-		return false;
+		System.out.println("Room:" + room.toString());
+		System.out.println("Select a number for the character you are accusing");
+		System.out.println("Character:  1: Mrs White\n            2: Reverend Green\n"
+				+ "            3: Mrs Peacock\n            4: Professor Plum\n            5: Miss Scarlett\n"
+				+ "            6: Colonel Mustard\n");
+		
+		
+		
+		userInput = getUserInput(input);
+		Character character = new Character(getCharacterColour(userInput));
+		
+		System.out.println("Room:" + room.toString());
+		System.out.println("Character:" + character.toString());
+		System.out.println("Select a number for the weapon you are using");
+		System.out.println("Weapon:  1: Candlestick\n            2: Dagger\n"
+				+ "            3: Leadpipe\n            4: Rope\n            5: Spanner\n"
+				+ "            6: Revolver\n");
+		
+		userInput = getUserInput(input);
+		Weapon weapon = new Weapon(getWeaponName(userInput));
+		
+		Solution guess = new Solution(weapon, character, room);
+		if(guess.equals(solution)){
+			gameEnd = true;
+			System.out.println("Congratualtions " + p.getCharacter().name + " you solved the murder");
+		}else{
+			System.out.println("Your guess was incorrect, you have been removed from the game");
+		}
+	}
+	
+	
+	
+	public int getUserInput(Scanner input){
+		int userInput = 0;
+		boolean isValid = false;
+		
+		while (!isValid) {
+			try {
+				userInput = input.nextInt();
+				if(userInput >= 1 && userInput <= 6)
+					isValid = true;
+			} catch (InputMismatchException e) {
+				continue;
+			}
+			System.out.println("Please enter a number from 1 to 6");
+		}
+		return userInput;
 	}
 
 	/**
