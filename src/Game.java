@@ -353,7 +353,6 @@ public class Game {
 		roomTileLists.add(libraryTiles);
 		roomTileLists.add(studyTiles);
 		roomTileLists.add(hallTiles);
-		roomTileLists.add(ballRoomTiles);
 		roomTileLists.add(loungeTiles);
 		roomTileLists.add(diningRoomTiles);
 		
