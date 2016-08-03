@@ -80,6 +80,9 @@ public class Player implements BoardPiece {
 	 * 
 	 */
 	public void makeMovementDecisions(int roll) {
+		if(this.game.isInRoom(this) ){
+			
+		}
 		Scanner input = new Scanner(System.in);
 		System.out.println("It is time to move "+ this.character.name +" on the board.");
 		System.out.println("You will enter either up, down, left or right for each of your " + roll + " moves.");
