@@ -35,4 +35,13 @@ public class Location {
 	public void moveRight(){
 		x++;
 	}
+	
+	public boolean equals(Location location){
+		if(this.x == location.x){
+			if(this.y == location.y){
+				return true;
+			}
+		}
+		return false;
+	}
 }

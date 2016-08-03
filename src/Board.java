@@ -121,7 +121,6 @@ public class Board {
 		}
 	}
 
-
 	public BoardPiece[][] getBoard() {
 		return this.board;
 	}
