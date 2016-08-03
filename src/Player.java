@@ -155,7 +155,7 @@ public class Player implements BoardPiece {
 	
 
 	/**
-	 * A simple method to update the Location fo this player
+	 * A simple method to update the Location for this player
 	 */
 	public void updateLocation(Location location) {
 		this.location = location;
@@ -172,6 +172,10 @@ public class Player implements BoardPiece {
 	public void removeFromGame() {
 		this.game.getBoard().getBoard()[this.character.startLoc.getY()][this.character.startLoc.getX()] = this;
 		dead = true;
+	}
+	
+	public boolean getDead() {
+		return dead;
 	}
 	
 	public String toString() {
@@ -191,9 +195,4 @@ public class Player implements BoardPiece {
 		}
 		return "";
 	}
-
-	public boolean getDead() {
-		return dead;
-	}
-
 }
