@@ -109,6 +109,10 @@ public class Game {
 		//}
 	}
 	
+	/**
+	 * The looping method that keeps the game running, player.startTurn() starts a series of
+	 * methods that sequence the game.
+	 */
 	public void run(){
 		while(!gameEnd){
 			for(Player p : humanPlayers){
@@ -117,6 +121,13 @@ public class Game {
 		}
 	}
 	
+	/**
+	 * Checks if a move is valid on the board or not.
+	 * 
+	 * @param player - The player the move is being applied too
+	 * @param direction - The direction they need to move
+	 * @return
+	 */
 	public boolean checkValidMove(Player player, Direction direction){
 		BoardPiece[][] gameBoard = this.board.getBoard();
 		
@@ -159,6 +170,12 @@ public class Game {
 		return false;
 	}
 	
+	/**
+	 * Applies a given move to the board
+	 * 
+	 * @param player
+	 * @param direction
+	 */
 	public void applyMove(Player player, Direction direction){
 		int playerX = player.getLocation().x;
 		int playerY = player.getLocation().y;
@@ -202,6 +219,13 @@ public class Game {
 		board.updateBoard(players);
 	}
 	
+	/**
+	 * Checks if a given tile in the direction FROM the player is a room tile
+	 * 
+	 * @param player
+	 * @param direction
+	 * @return
+	 */
 	public boolean roomTileCheck(Player player, Direction direction){
 		int playerX = player.getLocation().getX();
 		int playerY = player.getLocation().getY();
@@ -234,6 +258,13 @@ public class Game {
 		return false;
 	}
 	
+	/**
+	 * Get's a tile from the given Room for the player to sit in while they 
+	 * are in the room
+	 * 
+	 * @param name
+	 * @return
+	 */
 	public Location getRoomTile(Room.Name name){
 		switch(name){
 		case KITCHEN:
@@ -313,6 +344,10 @@ public class Game {
 		return null; // SHOULD NEVER HAPPEN
 	}
 	
+	/**
+	 * Initializes the ArrayLists for the room tiles that players will sit in
+	 * if they are in a room
+	 */
 	public void initialiseRoomTileLists(){
 		this.kitchenTiles = new ArrayList<Location>();
 		this.kitchenTiles.add(new Location(2, 2) );
@@ -387,7 +422,9 @@ public class Game {
 		this.diningRoomTiles.add(new Location(5, 12) );
 	}
 	
-	
+	/**
+	 * Prints the board
+	 */
 	public void printBoard(){
 		System.out.println(this.board.toString());
 	}
