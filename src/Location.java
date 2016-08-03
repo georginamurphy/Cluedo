@@ -36,6 +36,10 @@ public class Location {
 		x++;
 	}
 	
+	public BoardPiece getType(){
+		return type;
+	}
+	
 	public boolean equals(Location location){
 		if(this.x == location.x){
 			if(this.y == location.y){

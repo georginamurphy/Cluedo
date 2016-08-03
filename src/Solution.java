@@ -10,11 +10,25 @@ public class Solution {
 		this.room = room;
 	}
 	
-	public boolean checkSolution(Weapon weapon, Character character, Room room){
-		if(!this.weapon.equals(weapon) ){return false;}
-		if(!this.character.equals(character) ){return false;}
-		if(!this.room.equals(room) ){return false;}
+	public boolean checkSolution(Solution guess){
+		if(!this.weapon.equals(guess.getWeapon()) ){return false;}
+		if(!this.character.equals(guess.getCharacter()) ){return false;}
+		if(!this.room.equals(guess.getRoom()) ){return false;}
 		return true;
 	}
+
+	private Room getRoom() {
+		return room;
+	}
+
+	private Character getCharacter() {
+		return character;
+	}
+
+	private Weapon getWeapon() {
+		return weapon;
+	}
+	
+	
 
 }
