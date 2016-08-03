@@ -121,6 +121,8 @@ public class Board {
 		}
 	}
 
+
+
 	public BoardPiece[][] getBoard() {
 		return this.board;
 	}
@@ -146,7 +148,8 @@ public class Board {
 		boardStr += "\n  1: Mrs White         4: Professor Plum\n" + "  2: Reverend Green    5: Miss Scarlett\n"
 				+ "  3: Mrs Peacock       6: Colonel Mustard\n\n" + "  #: Out of Bounds     D: Dining Room\n"
 				+ "  -: Hallway           B: Billiard Room\n" + "  K: Kitchen           l: Lounge\n"
-				+ "  b: Ball Room         H: Hall\n" + "  C: Conservatory      S: Study\n";
+				+ "  b: Ball Room         H: Hall\n" + "  C: Conservatory      S: Study\n"
+						+ "  L: Library\n";
 
 		return boardStr;
 	}
