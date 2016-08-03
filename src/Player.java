@@ -80,13 +80,24 @@ public class Player implements BoardPiece {
 	 * 
 	 */
 	public void makeMovementDecisions(int roll) {
+		/**
+		int deduction = 0;
 		if(this.game.isInRoom(this) ){
-			
+			Room.Name roomName = this.game.inRoom(this);
+			ArrayList<Location> doorLocations = this.game.getDoorLocations(roomName);
+			for(Location loc : doorLocations){
+				if(this.game.firstFreeLocation(loc) != null){
+					this.location = loc;
+					deduction = 1;
+					break;
+				}
+			}
 		}
+		**/
 		Scanner input = new Scanner(System.in);
 		System.out.println("It is time to move "+ this.character.name +" on the board.");
 		System.out.println("You will enter either up, down, left or right for each of your " + roll + " moves.");
-		int movesRemaining = roll;
+		int movesRemaining = roll;// - deduction;
 		boolean enteredRoom = false;
 
 		while (movesRemaining != 0 && !enteredRoom) {
@@ -138,12 +149,18 @@ public class Player implements BoardPiece {
 			start = input.next();
 		}
 	}
+	
 
 	/**
 	 * A simple method to update the Location fo this player
 	 */
 	public void updateLocation(Location location) {
 		this.location = location;
+	}
+	
+	public boolean equals(Player p){
+		if(this.character.equals(p.character) ){return true;}
+		return false;
 	}
 
 	public String toString() {

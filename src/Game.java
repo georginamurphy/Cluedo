@@ -11,6 +11,7 @@ public class Game {
 											// players
 	private boolean gameEnd;
 
+	// Array Lists of tiles where players sit for each room
 	private ArrayList<Location> kitchenTiles;
 	private ArrayList<Location> ballRoomTiles;
 	private ArrayList<Location> conservatoryTiles;
@@ -21,6 +22,17 @@ public class Game {
 	private ArrayList<Location> loungeTiles;
 	private ArrayList<Location> diningRoomTiles;
 
+	// ArrayLists for the doors in each room, left to right and clockwise
+	private ArrayList<Location> kitchenDoors;
+	private ArrayList<Location> ballRoomDoors;
+	private ArrayList<Location> conservatoryDoors;
+	private ArrayList<Location> billiardDoors;
+	private ArrayList<Location> libraryDoors;
+	private ArrayList<Location> studyDoors;
+	private ArrayList<Location> hallDoors;
+	private ArrayList<Location> loungeDoors;
+	private ArrayList<Location> diningRoomDoors;
+	
 	public enum Direction {
 		UP, DOWN, LEFT, RIGHT
 	}
@@ -30,6 +42,7 @@ public class Game {
 		this.players = players;
 		this.gameEnd = false;
 		initialiseRoomTileLists();
+		initialiseDoorLocations();
 	}
 
 	/**
@@ -411,9 +424,12 @@ public class Game {
 		roomTileLists.add(diningRoomTiles);
 
 		for (ArrayList<Location> list : roomTileLists) {
-			if (list.contains(p))
+			if (list.contains(p.getLocation() ) ){
+				//System.out.println("returned true");
 				return true;
+			}
 		}
+		//System.out.println("returned false");
 		return false;
 	}
 
@@ -438,6 +454,47 @@ public class Game {
 			return Room.Name.DININGROOM;
 
 		System.out.println("SOMETHING WENT HORRIBLY WRONG");
+		return null;
+	}
+	
+	public Location firstFreeLocation(Location doorLocation){
+		Location left = new Location(doorLocation.x - 1, doorLocation.y);
+		Location right = new Location(doorLocation.x + 1, doorLocation.y);
+		Location up = new Location(doorLocation.x, doorLocation.y + 1);
+		Location down = new Location(doorLocation.x, doorLocation.y - 1);
+		BoardPiece[][] gameBoard = this.board.getBoard();
+		
+		// If a door does not have a player in front of it, return the location of the hallway
+		// Otherwise, a player is standing in front of the door, so return null
+		if(gameBoard[left.y][left.x] instanceof Hallway){return left;}
+		if(gameBoard[right.y][right.x] instanceof Hallway){return right;}
+		if(gameBoard[up.y][up.x] instanceof Hallway){return up;}
+		if(gameBoard[down.y][down.x] instanceof Hallway){return down;}
+		return null;
+	}
+	
+	public ArrayList<Location> getDoorLocations(Room.Name name){
+		switch(name){
+			case KITCHEN:
+				return this.kitchenDoors;
+			case BALLROOM:
+				return this.ballRoomDoors;
+			case CONSERVATORY:
+				return this.conservatoryDoors;
+			case BILLIARD:
+				return this.billiardDoors;
+			case LIBRARY:
+				return this.libraryDoors;
+			case STUDY:
+				return this.studyDoors;
+			case HALL:
+				return this.hallDoors;
+			case LOUNGE:
+				return this.loungeDoors;
+			case DININGROOM:
+				return this.diningRoomDoors;
+		}
+		System.out.println("HOLY SOMEWTHING WENT REALLY WRONG");
 		return null;
 	}
 
@@ -522,6 +579,60 @@ public class Game {
 		this.diningRoomTiles.add(new Location(4, 12));
 		this.diningRoomTiles.add(new Location(5, 11));
 		this.diningRoomTiles.add(new Location(5, 12));
+	}
+	
+	/**
+	 * Initializes the arrays of doors for each room.
+	 * Doors will be listed from top to bottom, left to right
+	 */
+	public void initialiseDoorLocations(){
+		this.kitchenDoors = new ArrayList<Location>();
+		this.ballRoomDoors = new ArrayList<Location>();
+		this.conservatoryDoors = new ArrayList<Location>();
+		this.billiardDoors = new ArrayList<Location>();
+		this.libraryDoors = new ArrayList<Location>();
+		this.studyDoors = new ArrayList<Location>();
+		this.hallDoors = new ArrayList<Location>();
+		this.loungeDoors = new ArrayList<Location>();
+		this.diningRoomDoors = new ArrayList<Location>();
+		//Initialise some arrays to use in the method
+		BoardPiece[][] gameBoard = this.board.getBoard();
+		ArrayList<RoomTile> doors = new ArrayList<RoomTile>();
+		
+		// Loop through every position on the board, adding it to doors if it is a roomTile representing a door
+		for(int y = 0; y < gameBoard.length; y++){
+			for(int x = 0; x < gameBoard[0].length; x++){
+				//Get the piece at the [y][x] position
+				BoardPiece piece = gameBoard[y][x];
+				
+				// If it is a RoomTile and represents a door, add it's location to the respective array
+				if(piece instanceof RoomTile){
+					if(((RoomTile) piece).door){
+						Room.Name name = ((RoomTile) piece).name;
+						switch(name){
+							case KITCHEN:
+								kitchenDoors.add(new Location(x, y) );
+							case BALLROOM:
+								ballRoomDoors.add(new Location(x, y) );
+							case CONSERVATORY:
+								conservatoryDoors.add(new Location(x, y) );
+							case BILLIARD:
+								billiardDoors.add(new Location(x, y) );
+							case LIBRARY:
+								libraryDoors.add(new Location(x, y) );
+							case STUDY:
+								studyDoors.add(new Location(x, y) );
+							case HALL:
+								hallDoors.add(new Location(x, y) );
+							case LOUNGE:
+								loungeDoors.add(new Location(x, y) );
+							case DININGROOM:
+								diningRoomDoors.add(new Location(x, y) );
+						}
+					}
+				}
+			}
+		}
 	}
 
 	/**
