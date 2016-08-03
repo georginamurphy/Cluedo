@@ -24,6 +24,7 @@ public class Board {
 	 * 
 	 * Key:
 	 * 
+<<<<<<< HEAD
 	 * # -Hallway
 	 * X -Out of Bounds
 	 * K -Kitchen
@@ -36,6 +37,20 @@ public class Board {
 	 * l -Lounge
 	 * H -Hall
 	 * @(followed by a letter) - door to a room specified by the letter
+=======
+	 * -: Hallway
+	 * #: Out of Bounds
+	 * K: Kitchen
+	 * B: Billiard Room
+	 * b: Ballroom
+	 * D: Dining room
+	 * C: Consevertory
+	 * S: Study
+	 * L: Library
+	 * l: Lounge
+	 * H: Hall
+	 * @(followed by a letter) - door to a room specified by a the letter
+>>>>>>> branch 'master' of https://github.com/georginamurphy/Cluedo.git
 	 */
 
 	private void readBoard() {
@@ -47,7 +62,7 @@ public class Board {
 			String tokens[] = scan.nextLine().split(" ");
 			for (int col = 0; col <= 24; col++) {
 				switch (tokens[col].trim()) {
-				case "X":
+				case "#":
 					board[row][col] = null;
 					break;
 				case "K":
@@ -63,7 +78,7 @@ public class Board {
 					board[row][col] = new RoomTile(Room.Name.DININGROOM, false);
 					break;
 				case "C":
-					board[row][col] = new RoomTile(Room.Name.CONSEVERTORY, false);
+					board[row][col] = new RoomTile(Room.Name.CONSERVATORY, false);
 					break;
 				case "S":
 					board[row][col] = new RoomTile(Room.Name.STUDY, false);
@@ -77,7 +92,7 @@ public class Board {
 				case "H":
 					board[row][col] = new RoomTile(Room.Name.HALL, false);
 					break;
-				case "#":
+				case "-":
 					board[row][col] = new Hallway();
 					break;
 				case "@k":
@@ -99,7 +114,7 @@ public class Board {
 					board[row][col] = new RoomTile(Room.Name.STUDY, true);
 					break;
 				case "@C":
-					board[row][col] = new RoomTile(Room.Name.CONSEVERTORY, true);
+					board[row][col] = new RoomTile(Room.Name.CONSERVATORY, true);
 					break;
 				case "@b":
 					board[row][col] = new RoomTile(Room.Name.BALLROOM, true);
@@ -135,15 +150,26 @@ public class Board {
 	
 	public String toString(){
 		String boardStr = "\n***************** Cluedo Board ******************\n\n";
+		
 		for (int row = 0; row <= 24; row++) {
 			for (int col = 0; col <= 24; col++) {
 				if(board[row][col] == null)
-					boardStr += "X ";
+					boardStr += "# ";
 				else
 				boardStr += board[row][col].toString() + " ";
 			}
 			boardStr += "\n";
 		}
+		
+		boardStr += "\n  1: Mrs White         4: Professor Plum\n"
+				+ "  2: Reverend Green    5: Miss Scarlett\n"
+				+ "  3: Mrs Peacock       6: Colonel Mustard\n\n"
+				+ "  #: Out of Bounds     D: Dining Room\n"
+				+ "  -: Hallway           B: Billiard Room\n"
+				+ "  K: Kitchen           l: Lounge\n"
+				+ "  b: Ball Room         H: Hall\n"
+				+ "  C: Conservatory      S: Study\n";
+		
 		return boardStr;
 	}
 }

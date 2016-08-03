@@ -10,9 +10,15 @@ public class Main {
 	private static ArrayList<Player> players = new ArrayList<Player>();
 
 	public static void main(String[] args) {
-		System.out.println("*******************************************************");
-		System.out.println("                  Welcome to CLUEDO");
-		System.out.println("*******************************************************");
+		System.out.println(""
+				+ "**********************************************************\n"
+				+ "                    Welcome to CLUEDO\n"
+				+ "At different points in the game you will be given a menu.\n"
+				+ "To navigate around the game you will enter numbers into the\n"
+				+ "console that correspond to the provided menu.\n"
+				+ "      ONLY NUMBERS WILL BE ACCEPTED AS VALID INPUT\n"
+				+ "**********************************************************");
+		
 		makeCharacters();
 		makeWeapons();
 		makeRooms();
@@ -42,7 +48,7 @@ public class Main {
 	private static void makeRooms() {
 		rooms.add(new Room(Room.Name.BALLROOM));
 		rooms.add(new Room(Room.Name.BILLIARD));
-		rooms.add(new Room(Room.Name.CONSEVERTORY));
+		rooms.add(new Room(Room.Name.CONSERVATORY));
 		rooms.add(new Room(Room.Name.DININGROOM));
 		rooms.add(new Room(Room.Name.HALL));
 		rooms.add(new Room(Room.Name.KITCHEN));

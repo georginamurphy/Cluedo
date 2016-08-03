@@ -112,24 +112,26 @@ public class Player implements BoardPiece {
 			System.out.println("You have " + movesRemaining + " moves remaining.\n");
 			System.out.println("Where would you like to move? ");
 			
-			String direction = input.next();
-			
-			if(direction != null){direction.toLowerCase();}
+			String userInput = input.next();
+			userInput = userInput.toUpperCase();
+			Game.Direction direction = null;
 			
 			// Check they have entered a valid direction
 			boolean validMove = false;
-			if(direction.equals("up") ){
+			if(userInput.equals(Game.Direction.UP.toString() ) ){
+				direction = Game.Direction.UP;
 				validMove = this.game.checkValidMove(this, direction);
 			}
-			else if(direction.equals("down") ){
-				System.out.println("hello");
-				validMove = this.game.checkValidMove(this, direction);
-				System.out.println(validMove);
-			}
-			else if(direction.equals("left") ){
+			else if(userInput.equals(Game.Direction.DOWN.toString() ) ){
+				direction = Game.Direction.UP;
 				validMove = this.game.checkValidMove(this, direction);
 			}
-			else if(direction.equals("right") ){
+			else if(userInput.equals(Game.Direction.LEFT.toString() ) ){
+				direction = Game.Direction.UP;
+				validMove = this.game.checkValidMove(this, direction);
+			}
+			else if(userInput.equals(Game.Direction.RIGHT.toString() ) ){
+				direction = Game.Direction.UP;
 				validMove = this.game.checkValidMove(this, direction);
 			}
 			else{
@@ -141,7 +143,9 @@ public class Player implements BoardPiece {
 			// Otherwise, apply the move and increment movesMade
 			if(!validMove){continue;}
 			else{
-				this.game.applyMove(this, direction);
+				if(direction != null){
+					this.game.applyMove(this, direction);
+				}
 				movesRemaining--;
 			}	
 		}

@@ -8,6 +8,13 @@ public class Game {
 	private ArrayList<Player> players; // Consist of every player, both human and non-human
 	private ArrayList<Player> humanPlayers; // Consists of ONLY the human players
 	private boolean gameEnd;
+	
+	public enum Direction{
+		UP,
+		DOWN,
+		LEFT,
+		RIGHT
+	}
 
 	public Game(Board board, ArrayList<Player> players) {
 		this.board = board;
@@ -99,7 +106,7 @@ public class Game {
 		}
 	}
 	
-	public boolean checkValidMove(Player player, String direction){
+	public boolean checkValidMove(Player player, Direction up){
 		BoardPiece[][] gameBoard = this.board.getBoard();
 		
 		// Get the x and y indexes for the Player on the board
@@ -107,27 +114,27 @@ public class Game {
 		int playerY = player.getLocation().y;
 		
 		// Depending on the direction the player wants to move, check if it is valid
-		if(direction.equals("up") ){
+		if(up == Direction.UP ){
 			if(playerY == 0){return false;} // Player can't move off the board
 			BoardPiece piece = gameBoard[playerY + 1][playerX];
 			
 			if(piece instanceof Hallway){return hallwayCheck(piece);}
 		}
-		else if(direction.equals("down") ){
+		else if(up == Direction.DOWN){
 			if(playerY == 24){return false;} // Player can't move off the board
 			BoardPiece piece = gameBoard[playerY - 1][playerX];
 			
 			if(piece instanceof Hallway){return hallwayCheck(piece);}
 			
 		}
-		else if(direction.equals("left") ){
+		else if(up == Direction.LEFT){
 			if(playerX == 0){return false;} // Player can't move off the board
 			BoardPiece piece = gameBoard[playerY][playerX - 1];
 			
 			if(piece instanceof Hallway){return hallwayCheck(piece);}
 			
 		}
-		else if(direction.equals("right") ){
+		else if(up == Direction.RIGHT){
 			if(playerX == 24){return false;} // Player can't move off the board
 			BoardPiece piece = gameBoard[playerY][playerX + 1];
 			
@@ -137,8 +144,12 @@ public class Game {
 		return false;
 	}
 	
-	public void applyMove(Player player, String direction){
+	public void applyMove(Player player, Direction direction){
 		
+	}
+	
+	public Board getBoard() {
+		return board;
 	}
 	
 	public boolean hallwayCheck(BoardPiece piece){
