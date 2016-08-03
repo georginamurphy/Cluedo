@@ -9,7 +9,7 @@ public class Game {
 	private Solution solution;
 	private ArrayList<Player> players; // Consist of every player, both human
 										// and non-human
-	private ArrayList<Player> humanPlayers; // Consists of ONLY the human
+	public ArrayList<Player> humanPlayers; // Consists of ONLY the human
 											// players
 	private boolean gameEnd;
 
@@ -320,90 +320,72 @@ public class Game {
 		case KITCHEN:
 			for (int i = 0; i < this.kitchenTiles.size(); i++) {
 				Location loc = this.kitchenTiles.get(i);
-				for (Player p : this.players) {
-					if (!p.getLocation().equals(loc)) {
-						return loc;
-					}
+				if(!(this.board.getBoard()[loc.y][loc.x] instanceof Player) ){
+					return loc;
 				}
 			}
 			break;
 		case BALLROOM:
 			for (int i = 0; i < this.ballRoomTiles.size(); i++) {
 				Location loc = this.ballRoomTiles.get(i);
-				for (Player p : this.players) {
-					if (!p.getLocation().equals(loc)) {
-						return loc;
-					}
+				if(!(this.board.getBoard()[loc.y][loc.x] instanceof Player) ){
+					return loc;
 				}
 			}
 			break;
 		case CONSERVATORY:
 			for (int i = 0; i < this.conservatoryTiles.size(); i++) {
 				Location loc = this.conservatoryTiles.get(i);
-				for (Player p : this.players) {
-					if (!p.getLocation().equals(loc)) {
-						return loc;
-					}
+				if(!(this.board.getBoard()[loc.y][loc.x] instanceof Player) ){
+					return loc;
 				}
 			}
 			break;
 		case BILLIARD:
 			for (int i = 0; i < this.billiardTiles.size(); i++) {
 				Location loc = this.billiardTiles.get(i);
-				for (Player p : this.players) {
-					if (!p.getLocation().equals(loc)) {
-						return loc;
-					}
+				if(!(this.board.getBoard()[loc.y][loc.x] instanceof Player) ){
+					return loc;
 				}
 			}
 			break;
 		case LIBRARY:
 			for (int i = 0; i < this.libraryTiles.size(); i++) {
 				Location loc = this.libraryTiles.get(i);
-				for (Player p : this.players) {
-					if (!p.getLocation().equals(loc)) {
-						return loc;
-					}
+				if(!(this.board.getBoard()[loc.y][loc.x] instanceof Player) ){
+					return loc;
 				}
 			}
 			break;
 		case STUDY:
 			for (int i = 0; i < this.studyTiles.size(); i++) {
 				Location loc = this.studyTiles.get(i);
-				for (Player p : this.players) {
-					if (!p.getLocation().equals(loc)) {
-						return loc;
-					}
+				if(!(this.board.getBoard()[loc.y][loc.x] instanceof Player) ){
+					return loc;
 				}
 			}
 			break;
 		case HALL:
 			for (int i = 0; i < this.hallTiles.size(); i++) {
 				Location loc = this.hallTiles.get(i);
-				for (Player p : this.players) {
-					if (!p.getLocation().equals(loc)) {
-						return loc;
-					}
+				if(!(this.board.getBoard()[loc.y][loc.x] instanceof Player) ){
+					return loc;
 				}
 			}
 			break;
 		case LOUNGE:
 			for (int i = 0; i < this.loungeTiles.size(); i++) {
 				Location loc = this.loungeTiles.get(i);
-				for (Player p : this.players) {
-					if (!p.getLocation().equals(loc)) {
-						return loc;
-					}
+				if(!(this.board.getBoard()[loc.y][loc.x] instanceof Player) ){
+					return loc;
 				}
 			}
 			break;
 		case DININGROOM:
 			for (int i = 0; i < this.diningRoomTiles.size(); i++) {
 				Location loc = this.diningRoomTiles.get(i);
-				for (Player p : this.players) {
-					if (!p.getLocation().equals(loc)) {
-						return loc;
-					}
+				if(!(this.board.getBoard()[loc.y][loc.x] instanceof Player) ){
+					return loc;
 				}
 			}
 			break;
@@ -421,6 +403,7 @@ public class Game {
 	public boolean isInRoom(Player p) {
 		ArrayList<ArrayList<Location>> roomTileLists = new ArrayList<ArrayList<Location>>();
 		roomTileLists.add(kitchenTiles);
+		roomTileLists.add(ballRoomTiles);
 		roomTileLists.add(conservatoryTiles);
 		roomTileLists.add(billiardTiles);
 		roomTileLists.add(libraryTiles);
@@ -431,32 +414,32 @@ public class Game {
 
 		for (ArrayList<Location> list : roomTileLists) {
 			if (list.contains(p.getLocation() ) ){
-				//System.out.println("returned true");
+				System.out.println("returned true");
 				return true;
 			}
 		}
-		//System.out.println("returned false");
+		System.out.println("returned false");
 		return false;
 	}
 
 	public Room.Name inRoom(Player p) {
-		if (kitchenTiles.contains(p))
+		if (kitchenTiles.contains(p.getLocation()))
 			return Room.Name.KITCHEN;
-		if (ballRoomTiles.contains(p))
+		if (ballRoomTiles.contains(p.getLocation()))
 			return Room.Name.BALLROOM;
-		if (conservatoryTiles.contains(p))
+		if (conservatoryTiles.contains(p.getLocation()))
 			return Room.Name.CONSERVATORY;
-		if (billiardTiles.contains(p))
+		if (billiardTiles.contains(p.getLocation()))
 			return Room.Name.BILLIARD;
-		if (libraryTiles.contains(p))
+		if (libraryTiles.contains(p.getLocation()))
 			return Room.Name.LIBRARY;
-		if (studyTiles.contains(p))
+		if (studyTiles.contains(p.getLocation()))
 			return Room.Name.STUDY;
-		if (hallTiles.contains(p))
+		if (hallTiles.contains(p.getLocation()))
 			return Room.Name.HALL;
-		if (loungeTiles.contains(p))
+		if (loungeTiles.contains(p.getLocation()))
 			return Room.Name.LOUNGE;
-		if (diningRoomTiles.contains(p))
+		if (diningRoomTiles.contains(p.getLocation()))
 			return Room.Name.DININGROOM;
 
 		System.out.println("SOMETHING WENT HORRIBLY WRONG");
@@ -690,7 +673,7 @@ public class Game {
 		this.diningRoomDoors = new ArrayList<Location>();
 		//Initialise some arrays to use in the method
 		BoardPiece[][] gameBoard = this.board.getBoard();
-		ArrayList<RoomTile> doors = new ArrayList<RoomTile>();
+		//ArrayList<RoomTile> doors = new ArrayList<RoomTile>();
 		
 		// Loop through every position on the board, adding it to doors if it is a roomTile representing a door
 		for(int y = 0; y < gameBoard.length; y++){
@@ -726,6 +709,10 @@ public class Game {
 				}
 			}
 		}
+	}
+	
+	public Board getBoard(){
+		return this.board;
 	}
 
 	/**
