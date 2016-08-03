@@ -191,5 +191,4 @@ public class Player implements BoardPiece {
 		}
 		return "";
 	}
-
 }
