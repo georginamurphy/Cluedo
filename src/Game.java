@@ -43,6 +43,7 @@ public class Game {
 		this.board = board;
 		this.players = players;
 		this.gameEnd = false;
+		
 		initialiseRoomTileLists();
 		initialiseDoorLocations();
 	}
@@ -572,6 +573,7 @@ public class Game {
 			System.out.println("Congratualtions " + p.getCharacter().name + " you solved the murder");
 		}else{
 			System.out.println("Your guess was incorrect, you have been removed from the game");
+			p.removeFromGame();
 		}
 	}
 	
@@ -731,5 +733,14 @@ public class Game {
 	 */
 	public void printBoard() {
 		System.out.println(this.board.toString());
+	}
+
+	public void mockGame(ArrayList<Character> characters, ArrayList<Weapon> weapons, ArrayList<Room> rooms) {
+		solution = new Solution(new Weapon(Weapon.Type.ROPE), new Character(Character.Colour.BLUE), new Room(Room.Name.BALLROOM) );
+		
+	}
+
+	public Board getBoard() {
+		return board;
 	}
 }

@@ -8,12 +8,14 @@ public class Player implements BoardPiece {
 	private Character character;
 	private ArrayList<Card> cards;
 	private boolean used;
+	private boolean dead;
 
 	public Player(Character character, boolean used) {
 		this.character = character;
 		this.location = character.getStartLoc();
 		this.used = used;
 		this.cards = new ArrayList<Card>();
+		dead = false;
 	}
 
 	public Location getLocation() {
@@ -166,6 +168,11 @@ public class Player implements BoardPiece {
 		return false;
 	}
 
+	public void removeFromGame() {
+		this.game.getBoard().getBoard()[this.character.startLoc.getY()][this.character.startLoc.getX()] = this;
+		dead = true;
+	}
+	
 	public String toString() {
 		switch (this.character.colour) {
 		case WHITE:
