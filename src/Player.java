@@ -89,7 +89,7 @@ public class Player implements BoardPiece {
 
 		while (movesRemaining != 0 && !enteredRoom) {
 			game.printBoard();
-			System.out.println("You have " + movesRemaining + " moves remaining.\n");
+			System.out.println("You have " + movesRemaining + " moves remaining " + this.character.name + ".\n");
 			System.out.println("Where would you like to move? ");
 
 			String userInput = input.next();

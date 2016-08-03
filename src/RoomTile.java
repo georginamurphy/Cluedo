@@ -21,7 +21,7 @@ public class RoomTile implements BoardPiece {
 		case BALLROOM:
 			return "b";
 		case BILLIARD:
-			return "B";
+			return "B"; 
 		case DININGROOM:
 			return "D";
 		case CONSERVATORY:

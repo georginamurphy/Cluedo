@@ -118,27 +118,31 @@ public class Game {
 			if(playerY == 0){return false;} // Player can't move off the board
 			BoardPiece piece = gameBoard[playerY - 1][playerX];
 			
-			if(piece instanceof Hallway){return hallwayCheck(piece);}
+			if(piece instanceof Hallway){return true ;}
+			if(piece instanceof RoomTile){return roomTileCheck(player, direction);}
 		}
 		else if(direction == Direction.DOWN){
 			if(playerY == 24){return false;} // Player can't move off the board
 			BoardPiece piece = gameBoard[playerY + 1][playerX];
 			
-			if(piece instanceof Hallway){return hallwayCheck(piece);}
+			if(piece instanceof Hallway){return true;}
+			if(piece instanceof RoomTile){return roomTileCheck(player, direction);}
 			
 		}
 		else if(direction == Direction.LEFT){
 			if(playerX == 0){return false;} // Player can't move off the board
 			BoardPiece piece = gameBoard[playerY][playerX - 1];
 			
-			if(piece instanceof Hallway){return hallwayCheck(piece);}
+			if(piece instanceof Hallway){return true;}
+			if(piece instanceof RoomTile){return roomTileCheck(player, direction);}
 			
 		}
 		else if(direction == Direction.RIGHT){
 			if(playerX == 24){return false;} // Player can't move off the board
 			BoardPiece piece = gameBoard[playerY][playerX + 1];
 			
-			if(piece instanceof Hallway){return hallwayCheck(piece);}
+			if(piece instanceof Hallway){return true;}
+			if(piece instanceof RoomTile){return roomTileCheck(player, direction);}
 	
 		}
 		return false;
@@ -163,11 +167,37 @@ public class Game {
 		board.updateBoard(players);
 	}
 	
-	public boolean hallwayCheck(BoardPiece piece){
-		Hallway hallway = (Hallway) piece;
-		if(hallway.isFull() ){return false;}
-		else return true;
-	} 
+	public boolean roomTileCheck(Player player, Direction direction){
+		int playerX = player.getLocation().getX();
+		int playerY = player.getLocation().getY();
+		
+		BoardPiece tile = null;
+		if(direction == Direction.UP){
+			tile = this.board.getBoard()[playerY - 1][playerX];
+			if(tile instanceof RoomTile){
+				if( ( (RoomTile) tile).door){return true;}
+			}
+		}
+		else if(direction == Direction.DOWN){
+			tile = this.board.getBoard()[playerY + 1][playerX];
+			if(tile instanceof RoomTile){
+				if( ( (RoomTile) tile).door){return true;}
+			}
+		}
+		else if(direction == Direction.LEFT){
+			tile = this.board.getBoard()[playerY][playerX - 1];
+			if(tile instanceof RoomTile){
+				if( ( (RoomTile) tile).door){return true;}
+			}
+		}
+		else if(direction == Direction.RIGHT){
+			tile = this.board.getBoard()[playerY][playerX + 1];
+			if(tile instanceof RoomTile){
+				if( ( (RoomTile) tile).door){return true;}
+			}
+		}
+		return false;
+	}
 	
 	public void printBoard(){
 		System.out.println(this.board.toString());
