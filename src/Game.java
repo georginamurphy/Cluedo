@@ -9,6 +9,16 @@ public class Game {
 	private ArrayList<Player> humanPlayers; // Consists of ONLY the human players
 	private boolean gameEnd;
 	
+	private ArrayList<Location> kitchenTiles;
+	private ArrayList<Location> ballRoomTiles;
+	private ArrayList<Location> conservatoryTiles;
+	private ArrayList<Location> billiardTiles;
+	private ArrayList<Location> libraryTiles;
+	private ArrayList<Location> studyTiles;
+	private ArrayList<Location> hallTiles;
+	private ArrayList<Location> loungeTiles;
+	private ArrayList<Location> diningRoomTiles;
+	
 	public enum Direction{
 		UP,
 		DOWN,
@@ -20,6 +30,7 @@ public class Game {
 		this.board = board;
 		this.players = players;
 		this.gameEnd = false;
+		initialiseRoomTileLists();
 	}
 
 	/**
@@ -149,18 +160,42 @@ public class Game {
 	}
 	
 	public void applyMove(Player player, Direction direction){
+		int playerX = player.getLocation().x;
+		int playerY = player.getLocation().y;
+		BoardPiece piece;
+		
 		switch(direction){
 			case UP:
 				player.getLocation().moveUp();
+				piece = this.board.getBoard()[playerY - 1][playerX];
+				if(piece instanceof RoomTile){
+					Room.Name name = ((RoomTile) piece).name;
+					player.updateLocation(getRoomTile(name) );
+				}
 				break;
 			case DOWN:
 				player.getLocation().moveDown();
+				piece = this.board.getBoard()[playerY + 1][playerX];
+				if(piece instanceof RoomTile){
+					Room.Name name = ((RoomTile) piece).name;
+					player.updateLocation(getRoomTile(name) );
+				}
 				break;
 			case RIGHT:
 				player.getLocation().moveRight();
+				piece = this.board.getBoard()[playerY][playerX + 1];
+				if(piece instanceof RoomTile){
+					Room.Name name = ((RoomTile) piece).name;
+					player.updateLocation(getRoomTile(name) );
+				}
 				break;
 			case LEFT:
 				player.getLocation().moveLeft();
+				piece = this.board.getBoard()[playerY][playerX - 1];
+				if(piece instanceof RoomTile){
+					Room.Name name = ((RoomTile) piece).name;
+					player.updateLocation(getRoomTile(name) );
+				}
 				break;
 		}
 
@@ -198,6 +233,160 @@ public class Game {
 		}
 		return false;
 	}
+	
+	public Location getRoomTile(Room.Name name){
+		switch(name){
+		case KITCHEN:
+			for(int i = 0; i < this.kitchenTiles.size(); i++){
+				Location loc = this.kitchenTiles.get(i);
+				for(Player p : this.players){
+					if(!p.getLocation().equals(loc) ){return loc;}
+				}
+			}
+			break;
+		case BALLROOM:
+			for(int i = 0; i < this.ballRoomTiles.size(); i++){
+				Location loc = this.ballRoomTiles.get(i);
+				for(Player p : this.players){
+					if(!p.getLocation().equals(loc) ){return loc;}
+				}
+			}
+			break;
+		case CONSERVATORY:
+			for(int i = 0; i < this.conservatoryTiles.size(); i++){
+				Location loc = this.conservatoryTiles.get(i);
+				for(Player p : this.players){
+					if(!p.getLocation().equals(loc) ){return loc;}
+				}
+			}
+			break;
+		case BILLIARD:
+			for(int i = 0; i < this.billiardTiles.size(); i++){
+				Location loc = this.billiardTiles.get(i);
+				for(Player p : this.players){
+					if(!p.getLocation().equals(loc) ){return loc;}
+				}
+			}
+			break;
+		case LIBRARY:
+			for(int i = 0; i < this.libraryTiles.size(); i++){
+				Location loc = this.libraryTiles.get(i);
+				for(Player p : this.players){
+					if(!p.getLocation().equals(loc) ){return loc;}
+				}
+			}
+			break;
+		case STUDY:
+			for(int i = 0; i < this.studyTiles.size(); i++){
+				Location loc = this.studyTiles.get(i);
+				for(Player p : this.players){
+					if(!p.getLocation().equals(loc) ){return loc;}
+				}
+			}
+			break;
+		case HALL:
+			for(int i = 0; i < this.hallTiles.size(); i++){
+				Location loc = this.hallTiles.get(i);
+				for(Player p : this.players){
+					if(!p.getLocation().equals(loc) ){return loc;}
+				}
+			}
+			break;
+		case LOUNGE:
+			for(int i = 0; i < this.loungeTiles.size(); i++){
+				Location loc = this.loungeTiles.get(i);
+				for(Player p : this.players){
+					if(!p.getLocation().equals(loc) ){return loc;}
+				}
+			}
+			break;
+		case DININGROOM:
+			for(int i = 0; i < this.diningRoomTiles.size(); i++){
+				Location loc = this.diningRoomTiles.get(i);
+				for(Player p : this.players){
+					if(!p.getLocation().equals(loc) ){return loc;}
+				}
+			}
+			break;
+		}
+		System.out.println("SOMETHING WENT VERY BAD");
+		return null; // SHOULD NEVER HAPPEN
+	}
+	
+	public void initialiseRoomTileLists(){
+		this.kitchenTiles = new ArrayList<Location>();
+		this.kitchenTiles.add(new Location(2, 2) );
+		this.kitchenTiles.add(new Location(3, 2) );
+		this.kitchenTiles.add(new Location(2, 3) );
+		this.kitchenTiles.add(new Location(3, 3) );
+		this.kitchenTiles.add(new Location(4, 2) );
+		this.kitchenTiles.add(new Location(4, 3) );
+		
+		this.ballRoomTiles = new ArrayList<Location>();
+		this.ballRoomTiles.add(new Location(11, 3) );
+		this.ballRoomTiles.add(new Location(12, 3) );
+		this.ballRoomTiles.add(new Location(13, 3) );
+		this.ballRoomTiles.add(new Location(11, 4) );
+		this.ballRoomTiles.add(new Location(12, 4) );
+		this.ballRoomTiles.add(new Location(13, 4) );
+		
+		this.conservatoryTiles = new ArrayList<Location>();
+		this.conservatoryTiles.add(new Location(21, 2) );
+		this.conservatoryTiles.add(new Location(22, 2) );
+		this.conservatoryTiles.add(new Location(21, 3) );
+		this.conservatoryTiles.add(new Location(22, 3) );
+		this.conservatoryTiles.add(new Location(21, 4) );
+		this.conservatoryTiles.add(new Location(22, 4) );
+		
+		this.billiardTiles = new ArrayList<Location>();
+		this.billiardTiles.add(new Location(21, 9) );
+		this.billiardTiles.add(new Location(22, 9) );
+		this.billiardTiles.add(new Location(21, 10) );
+		this.billiardTiles.add(new Location(22, 10) );
+		this.billiardTiles.add(new Location(21, 11) );
+		this.billiardTiles.add(new Location(22, 11) );
+		
+		this.libraryTiles = new ArrayList<Location>();
+		this.libraryTiles.add(new Location(19, 16) );
+		this.libraryTiles.add(new Location(20, 16) );
+		this.libraryTiles.add(new Location(21, 16) );
+		this.libraryTiles.add(new Location(19, 17) );
+		this.libraryTiles.add(new Location(20, 17) );
+		this.libraryTiles.add(new Location(21, 17) );
+		
+		this.studyTiles = new ArrayList<Location>();
+		this.studyTiles.add(new Location(19, 22) );
+		this.studyTiles.add(new Location(20, 22) );
+		this.studyTiles.add(new Location(21, 22) );
+		this.studyTiles.add(new Location(19, 23) );
+		this.studyTiles.add(new Location(20, 23) );
+		this.studyTiles.add(new Location(21, 23) );
+		
+		this.hallTiles = new ArrayList<Location>();
+		this.hallTiles.add(new Location(10, 20) );
+		this.hallTiles.add(new Location(11, 20) );
+		this.hallTiles.add(new Location(12, 20) );
+		this.hallTiles.add(new Location(10, 21) );
+		this.hallTiles.add(new Location(11, 21) );
+		this.hallTiles.add(new Location(12, 21) );
+		
+		this.loungeTiles = new ArrayList<Location>();
+		this.loungeTiles.add(new Location(2, 21) );
+		this.loungeTiles.add(new Location(3, 21) );
+		this.loungeTiles.add(new Location(4, 21) );
+		this.loungeTiles.add(new Location(2, 22) );
+		this.loungeTiles.add(new Location(3, 22) );
+		this.loungeTiles.add(new Location(4, 22) );
+		
+		this.diningRoomTiles = new ArrayList<Location>();
+		this.diningRoomTiles.add(new Location(3, 11) );
+		this.diningRoomTiles.add(new Location(4, 11) );
+		this.diningRoomTiles.add(new Location(3, 12) );
+		this.diningRoomTiles.add(new Location(4, 12) );
+		this.diningRoomTiles.add(new Location(5, 11) );
+		this.diningRoomTiles.add(new Location(5, 12) );
+	}
+	
 	
 	public void printBoard(){
 		System.out.println(this.board.toString());

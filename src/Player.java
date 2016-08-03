@@ -117,7 +117,7 @@ public class Player implements BoardPiece {
 
 			// If the move was invalid, continue to the next iteration of the
 			// while loop
-			// Otherwise, apply the move and increment movesMade
+			// Otherwise, apply the move and decrement movesRemaining
 			if (validMove) {
 				if (direction != null) {
 					this.game.applyMove(this, direction);
