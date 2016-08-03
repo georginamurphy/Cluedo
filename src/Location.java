@@ -20,6 +20,19 @@ public class Location {
 		return y;
 	}
 	
-	//draw method possibly idk lol phone broke ROFL
-
+	public void moveUp(){
+		y--;
+	}
+	
+	public void moveDown(){
+		y++;
+	}
+	
+	public void moveLeft(){
+		x--;
+	}
+	
+	public void moveRight(){
+		x++;
+	}
 }

@@ -145,11 +145,22 @@ public class Game {
 	}
 	
 	public void applyMove(Player player, Direction direction){
-		
-	}
-	
-	public Board getBoard() {
-		return board;
+		switch(direction){
+			case UP:
+				player.getLocation().moveUp();
+				break;
+			case DOWN:
+				player.getLocation().moveDown();
+				break;
+			case RIGHT:
+				player.getLocation().moveRight();
+				break;
+			case LEFT:
+				player.getLocation().moveLeft();
+				break;
+		}
+
+		board.updateBoard(players);
 	}
 	
 	public boolean hallwayCheck(BoardPiece piece){
