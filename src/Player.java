@@ -120,10 +120,12 @@ public class Player implements BoardPiece {
 			if (validMove) {
 				if (direction != null) {
 					this.game.applyMove(this, direction);
+					if(this.game.isInRoom(this) ){enteredRoom = true;} // If this player is now in a room
 				}
 				movesRemaining--;
 			}
 		}
+		game.printBoard();
 
 		System.out.println(this.character.name + " your turn is over.\n" 
 		+ "Next Player enter 1 when you are ready to start your turn");
@@ -132,16 +134,6 @@ public class Player implements BoardPiece {
 		while (!start.equals("1")) {
 			start = input.next();
 		}
-		
-		//return;
-
-		// try {
-		// input.close();
-		// } catch (IOException e) {
-		// // TODO Auto-generated catch block
-		// e.printStackTrace();
-		// }
-
 	}
 
 	/**

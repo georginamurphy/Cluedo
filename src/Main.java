@@ -100,7 +100,6 @@ public class Main {
 		//input.close();
 	}
 	
-	
 	private static boolean validNumber(String s){
 		s.trim();
 		if(s.equals("3") ){return true;}

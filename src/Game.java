@@ -344,6 +344,27 @@ public class Game {
 		return null; // SHOULD NEVER HAPPEN
 	}
 	
+	public boolean isInRoom(Player p){
+		ArrayList<ArrayList<Location> > roomTileLists = new ArrayList<ArrayList<Location> >();
+		roomTileLists.add(kitchenTiles);
+		roomTileLists.add(ballRoomTiles);
+		roomTileLists.add(conservatoryTiles);
+		roomTileLists.add(billiardTiles);
+		roomTileLists.add(libraryTiles);
+		roomTileLists.add(studyTiles);
+		roomTileLists.add(hallTiles);
+		roomTileLists.add(ballRoomTiles);
+		roomTileLists.add(loungeTiles);
+		roomTileLists.add(diningRoomTiles);
+		
+		for(ArrayList<Location> list : roomTileLists){
+			for(Location l : list){
+				if(p.getLocation().equals(l) ){return true;}
+			}
+		}
+		return false;
+	}
+	
 	/**
 	 * Initializes the ArrayLists for the room tiles that players will sit in
 	 * if they are in a room
