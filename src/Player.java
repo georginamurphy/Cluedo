@@ -81,8 +81,7 @@ public class Player implements BoardPiece {
 	 */
 	public void makeMovementDecisions(int roll) {
 		Scanner input = new Scanner(System.in);
-		System.out.println(this.character.name);
-		System.out.println("It is time to move your character on the board.");
+		System.out.println("It is time to move "+ this.character.name +" on the board.");
 		System.out.println("You will enter either up, down, left or right for each of your " + roll + " moves.");
 		int movesRemaining = roll;
 		boolean enteredRoom = false;
@@ -127,7 +126,7 @@ public class Player implements BoardPiece {
 		}
 
 		System.out.println(this.character.name + " your turn is over.\n" 
-		+ "Next Player enter 1 to start your turn");
+		+ "Next Player enter 1 when you are ready to start your turn");
 
 		String start = "";
 		while (!start.equals("1")) {
