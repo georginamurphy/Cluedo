@@ -34,7 +34,7 @@ public class Game {
 	private ArrayList<Location> hallDoors;
 	private ArrayList<Location> loungeDoors;
 	private ArrayList<Location> diningRoomDoors;
-	
+
 	public enum Direction {
 		UP, DOWN, LEFT, RIGHT
 	}
@@ -43,7 +43,7 @@ public class Game {
 		this.board = board;
 		this.players = players;
 		this.gameEnd = false;
-		
+
 		initialiseRoomTileLists();
 		initialiseDoorLocations();
 	}
@@ -134,10 +134,12 @@ public class Game {
 	public void run() {
 		while (!gameEnd) {
 			for (Player p : humanPlayers) {
-				p.startTurn();
+				if (!p.getDead()) {
+					p.startTurn();
+				}
 			}
 		}
-		
+
 		System.out.println("The game has been won. The solution was:");
 		System.out.println(solution.toString());
 	}
@@ -320,7 +322,7 @@ public class Game {
 		case KITCHEN:
 			for (int i = 0; i < this.kitchenTiles.size(); i++) {
 				Location loc = this.kitchenTiles.get(i);
-				if(!(this.board.getBoard()[loc.y][loc.x] instanceof Player) ){
+				if (!(this.board.getBoard()[loc.y][loc.x] instanceof Player)) {
 					return loc;
 				}
 			}
@@ -328,7 +330,7 @@ public class Game {
 		case BALLROOM:
 			for (int i = 0; i < this.ballRoomTiles.size(); i++) {
 				Location loc = this.ballRoomTiles.get(i);
-				if(!(this.board.getBoard()[loc.y][loc.x] instanceof Player) ){
+				if (!(this.board.getBoard()[loc.y][loc.x] instanceof Player)) {
 					return loc;
 				}
 			}
@@ -336,7 +338,7 @@ public class Game {
 		case CONSERVATORY:
 			for (int i = 0; i < this.conservatoryTiles.size(); i++) {
 				Location loc = this.conservatoryTiles.get(i);
-				if(!(this.board.getBoard()[loc.y][loc.x] instanceof Player) ){
+				if (!(this.board.getBoard()[loc.y][loc.x] instanceof Player)) {
 					return loc;
 				}
 			}
@@ -344,7 +346,7 @@ public class Game {
 		case BILLIARD:
 			for (int i = 0; i < this.billiardTiles.size(); i++) {
 				Location loc = this.billiardTiles.get(i);
-				if(!(this.board.getBoard()[loc.y][loc.x] instanceof Player) ){
+				if (!(this.board.getBoard()[loc.y][loc.x] instanceof Player)) {
 					return loc;
 				}
 			}
@@ -352,7 +354,7 @@ public class Game {
 		case LIBRARY:
 			for (int i = 0; i < this.libraryTiles.size(); i++) {
 				Location loc = this.libraryTiles.get(i);
-				if(!(this.board.getBoard()[loc.y][loc.x] instanceof Player) ){
+				if (!(this.board.getBoard()[loc.y][loc.x] instanceof Player)) {
 					return loc;
 				}
 			}
@@ -360,7 +362,7 @@ public class Game {
 		case STUDY:
 			for (int i = 0; i < this.studyTiles.size(); i++) {
 				Location loc = this.studyTiles.get(i);
-				if(!(this.board.getBoard()[loc.y][loc.x] instanceof Player) ){
+				if (!(this.board.getBoard()[loc.y][loc.x] instanceof Player)) {
 					return loc;
 				}
 			}
@@ -368,7 +370,7 @@ public class Game {
 		case HALL:
 			for (int i = 0; i < this.hallTiles.size(); i++) {
 				Location loc = this.hallTiles.get(i);
-				if(!(this.board.getBoard()[loc.y][loc.x] instanceof Player) ){
+				if (!(this.board.getBoard()[loc.y][loc.x] instanceof Player)) {
 					return loc;
 				}
 			}
@@ -376,7 +378,7 @@ public class Game {
 		case LOUNGE:
 			for (int i = 0; i < this.loungeTiles.size(); i++) {
 				Location loc = this.loungeTiles.get(i);
-				if(!(this.board.getBoard()[loc.y][loc.x] instanceof Player) ){
+				if (!(this.board.getBoard()[loc.y][loc.x] instanceof Player)) {
 					return loc;
 				}
 			}
@@ -384,7 +386,7 @@ public class Game {
 		case DININGROOM:
 			for (int i = 0; i < this.diningRoomTiles.size(); i++) {
 				Location loc = this.diningRoomTiles.get(i);
-				if(!(this.board.getBoard()[loc.y][loc.x] instanceof Player) ){
+				if (!(this.board.getBoard()[loc.y][loc.x] instanceof Player)) {
 					return loc;
 				}
 			}
@@ -413,7 +415,7 @@ public class Game {
 		roomTileLists.add(diningRoomTiles);
 
 		for (ArrayList<Location> list : roomTileLists) {
-			if (list.contains(p.getLocation() ) ){
+			if (list.contains(p.getLocation())) {
 				System.out.println("returned true");
 				return true;
 			}
@@ -445,48 +447,57 @@ public class Game {
 		System.out.println("SOMETHING WENT HORRIBLY WRONG");
 		return null;
 	}
-	
-	public Location firstFreeLocation(Location doorLocation){
+
+	public Location firstFreeLocation(Location doorLocation) {
 		Location left = new Location(doorLocation.x - 1, doorLocation.y);
 		Location right = new Location(doorLocation.x + 1, doorLocation.y);
 		Location up = new Location(doorLocation.x, doorLocation.y + 1);
 		Location down = new Location(doorLocation.x, doorLocation.y - 1);
 		BoardPiece[][] gameBoard = this.board.getBoard();
-		
-		// If a door does not have a player in front of it, return the location of the hallway
+
+		// If a door does not have a player in front of it, return the location
+		// of the hallway
 		// Otherwise, a player is standing in front of the door, so return null
-		if(gameBoard[left.y][left.x] instanceof Hallway){return left;}
-		if(gameBoard[right.y][right.x] instanceof Hallway){return right;}
-		if(gameBoard[up.y][up.x] instanceof Hallway){return up;}
-		if(gameBoard[down.y][down.x] instanceof Hallway){return down;}
+		if (gameBoard[left.y][left.x] instanceof Hallway) {
+			return left;
+		}
+		if (gameBoard[right.y][right.x] instanceof Hallway) {
+			return right;
+		}
+		if (gameBoard[up.y][up.x] instanceof Hallway) {
+			return up;
+		}
+		if (gameBoard[down.y][down.x] instanceof Hallway) {
+			return down;
+		}
 		return null;
 	}
-	
-	public ArrayList<Location> getDoorLocations(Room.Name name){
-		switch(name){
-			case KITCHEN:
-				return this.kitchenDoors;
-			case BALLROOM:
-				return this.ballRoomDoors;
-			case CONSERVATORY:
-				return this.conservatoryDoors;
-			case BILLIARD:
-				return this.billiardDoors;
-			case LIBRARY:
-				return this.libraryDoors;
-			case STUDY:
-				return this.studyDoors;
-			case HALL:
-				return this.hallDoors;
-			case LOUNGE:
-				return this.loungeDoors;
-			case DININGROOM:
-				return this.diningRoomDoors;
+
+	public ArrayList<Location> getDoorLocations(Room.Name name) {
+		switch (name) {
+		case KITCHEN:
+			return this.kitchenDoors;
+		case BALLROOM:
+			return this.ballRoomDoors;
+		case CONSERVATORY:
+			return this.conservatoryDoors;
+		case BILLIARD:
+			return this.billiardDoors;
+		case LIBRARY:
+			return this.libraryDoors;
+		case STUDY:
+			return this.studyDoors;
+		case HALL:
+			return this.hallDoors;
+		case LOUNGE:
+			return this.loungeDoors;
+		case DININGROOM:
+			return this.diningRoomDoors;
 		}
 		System.out.println("HOLY SOMEWTHING WENT REALLY WRONG");
 		return null;
 	}
-	
+
 	public Character.Colour getCharacterColour(int num) {
 		switch (num) {
 		case 1:
@@ -504,7 +515,7 @@ public class Game {
 		}
 		return null;
 	}
-	
+
 	public Weapon.Type getWeaponName(int num) {
 		switch (num) {
 		case 1:
@@ -526,7 +537,7 @@ public class Game {
 	public void makeGuess(Player p) {
 		Scanner input = new Scanner(System.in);
 		int userInput;
-		
+
 		Room room = new Room(inRoom(p));
 
 		System.out.println("Room:" + room.toString());
@@ -534,42 +545,38 @@ public class Game {
 		System.out.println("Character:  1: Mrs White\n            2: Reverend Green\n"
 				+ "            3: Mrs Peacock\n            4: Professor Plum\n            5: Miss Scarlett\n"
 				+ "            6: Colonel Mustard\n");
-		
-		
-		
+
 		userInput = getUserInput(input);
 		Character character = new Character(getCharacterColour(userInput));
-		
+
 		System.out.println("Room:" + room.toString());
 		System.out.println("Character:" + character.toString());
 		System.out.println("Select a number for the weapon you are using");
 		System.out.println("Weapon:  1: Candlestick\n            2: Dagger\n"
 				+ "            3: Leadpipe\n            4: Rope\n            5: Spanner\n"
 				+ "            6: Revolver\n");
-		
+
 		userInput = getUserInput(input);
 		Weapon weapon = new Weapon(getWeaponName(userInput));
-		
+
 		Solution guess = new Solution(weapon, character, room);
-		if(guess.equals(solution)){
+		if (guess.equals(solution)) {
 			gameEnd = true;
 			System.out.println("Congratualtions " + p.getCharacter().name + " you solved the murder");
-		}else{
+		} else {
 			System.out.println("Your guess was incorrect, you have been removed from the game");
 			p.removeFromGame();
 		}
 	}
-	
-	
-	
-	public int getUserInput(Scanner input){
+
+	public int getUserInput(Scanner input) {
 		int userInput = 0;
 		boolean isValid = false;
-		
+
 		while (!isValid) {
 			try {
 				userInput = input.nextInt();
-				if(userInput >= 1 && userInput <= 6)
+				if (userInput >= 1 && userInput <= 6)
 					isValid = true;
 			} catch (InputMismatchException e) {
 				continue;
@@ -656,12 +663,12 @@ public class Game {
 		this.diningRoomTiles.add(new Location(5, 11));
 		this.diningRoomTiles.add(new Location(5, 12));
 	}
-	
+
 	/**
-	 * Initializes the arrays of doors for each room.
-	 * Doors will be listed from top to bottom, left to right
+	 * Initializes the arrays of doors for each room. Doors will be listed from
+	 * top to bottom, left to right
 	 */
-	public void initialiseDoorLocations(){
+	public void initialiseDoorLocations() {
 		this.kitchenDoors = new ArrayList<Location>();
 		this.ballRoomDoors = new ArrayList<Location>();
 		this.conservatoryDoors = new ArrayList<Location>();
@@ -671,47 +678,49 @@ public class Game {
 		this.hallDoors = new ArrayList<Location>();
 		this.loungeDoors = new ArrayList<Location>();
 		this.diningRoomDoors = new ArrayList<Location>();
-		//Initialise some arrays to use in the method
+		// Initialise some arrays to use in the method
 		BoardPiece[][] gameBoard = this.board.getBoard();
-		//ArrayList<RoomTile> doors = new ArrayList<RoomTile>();
-		
-		// Loop through every position on the board, adding it to doors if it is a roomTile representing a door
-		for(int y = 0; y < gameBoard.length; y++){
-			for(int x = 0; x < gameBoard[0].length; x++){
-				//Get the piece at the [y][x] position
+		// ArrayList<RoomTile> doors = new ArrayList<RoomTile>();
+
+		// Loop through every position on the board, adding it to doors if it is
+		// a roomTile representing a door
+		for (int y = 0; y < gameBoard.length; y++) {
+			for (int x = 0; x < gameBoard[0].length; x++) {
+				// Get the piece at the [y][x] position
 				BoardPiece piece = gameBoard[y][x];
-				
-				// If it is a RoomTile and represents a door, add it's location to the respective array
-				if(piece instanceof RoomTile){
-					if(((RoomTile) piece).door){
+
+				// If it is a RoomTile and represents a door, add it's location
+				// to the respective array
+				if (piece instanceof RoomTile) {
+					if (((RoomTile) piece).door) {
 						Room.Name name = ((RoomTile) piece).name;
-						switch(name){
-							case KITCHEN:
-								kitchenDoors.add(new Location(x, y) );
-							case BALLROOM:
-								ballRoomDoors.add(new Location(x, y) );
-							case CONSERVATORY:
-								conservatoryDoors.add(new Location(x, y) );
-							case BILLIARD:
-								billiardDoors.add(new Location(x, y) );
-							case LIBRARY:
-								libraryDoors.add(new Location(x, y) );
-							case STUDY:
-								studyDoors.add(new Location(x, y) );
-							case HALL:
-								hallDoors.add(new Location(x, y) );
-							case LOUNGE:
-								loungeDoors.add(new Location(x, y) );
-							case DININGROOM:
-								diningRoomDoors.add(new Location(x, y) );
+						switch (name) {
+						case KITCHEN:
+							kitchenDoors.add(new Location(x, y));
+						case BALLROOM:
+							ballRoomDoors.add(new Location(x, y));
+						case CONSERVATORY:
+							conservatoryDoors.add(new Location(x, y));
+						case BILLIARD:
+							billiardDoors.add(new Location(x, y));
+						case LIBRARY:
+							libraryDoors.add(new Location(x, y));
+						case STUDY:
+							studyDoors.add(new Location(x, y));
+						case HALL:
+							hallDoors.add(new Location(x, y));
+						case LOUNGE:
+							loungeDoors.add(new Location(x, y));
+						case DININGROOM:
+							diningRoomDoors.add(new Location(x, y));
 						}
 					}
 				}
 			}
 		}
 	}
-	
-	public Board getBoard(){
+
+	public Board getBoard() {
 		return this.board;
 	}
 
@@ -723,7 +732,8 @@ public class Game {
 	}
 
 	public void mockGame(ArrayList<Character> characters, ArrayList<Weapon> weapons, ArrayList<Room> rooms) {
-		solution = new Solution(new Weapon(Weapon.Type.ROPE), new Character(Character.Colour.BLUE), new Room(Room.Name.BALLROOM) );
-		
+		solution = new Solution(new Weapon(Weapon.Type.ROPE), new Character(Character.Colour.BLUE),
+				new Room(Room.Name.BALLROOM));
+
 	}
 }

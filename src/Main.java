@@ -25,10 +25,10 @@ public class Main {
 		setPlayers();
 		board = new Board(players);
 		game = new Game(board, players);
-		//game.mockGame(characters, weapons, rooms);
-		game.createSolution(characters, weapons, rooms);
-		game.dealCards(characters, weapons, rooms);
-		game.run();
+		game.mockGame(characters, weapons, rooms);
+		//game.createSolution(characters, weapons, rooms);
+		//game.dealCards(characters, weapons, rooms);
+		//game.run();
 	}
 
 	/**

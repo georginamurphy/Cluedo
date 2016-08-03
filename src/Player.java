@@ -192,4 +192,8 @@ public class Player implements BoardPiece {
 		return "";
 	}
 
+	public boolean getDead() {
+		return dead;
+	}
+
 }
