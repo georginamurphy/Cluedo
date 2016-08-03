@@ -13,10 +13,10 @@ public class Main {
 		System.out.println(""
 				+ "**********************************************************\n"
 				+ "                    Welcome to CLUEDO\n"
-				+ "At different points in the game you will be given a menu.\n"
-				+ "To navigate around the game you will enter numbers into the\n"
-				+ "console that correspond to the provided menu.\n"
-				+ "      ONLY NUMBERS WILL BE ACCEPTED AS VALID INPUT\n"
+				//+ "At different points in the game you will be given a menu.\n"
+				//+ "To navigate around the game you will enter numbers into the\n"
+				//+ "console that correspond to the provided menu.\n"
+				//+ "      ONLY NUMBERS WILL BE ACCEPTED AS VALID INPUT\n"
 				+ "**********************************************************");
 		
 		makeCharacters();
