@@ -154,7 +154,8 @@ public class Game {
 	
 	public boolean hallwayCheck(BoardPiece piece){
 		Hallway hallway = (Hallway) piece;
-		return hallway.isFull();
+		if(hallway.isFull() ){return false;}
+		else return true;
 	} 
 	
 	public void printBoard(){
