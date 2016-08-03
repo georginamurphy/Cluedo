@@ -726,8 +726,4 @@ public class Game {
 		solution = new Solution(new Weapon(Weapon.Type.ROPE), new Character(Character.Colour.BLUE), new Room(Room.Name.BALLROOM) );
 		
 	}
-
-	public Board getBoard() {
-		return board;
-	}
 }
