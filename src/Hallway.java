@@ -1,18 +1,20 @@
+/**
+ * A Hallway represents a square on the board that Player's are free to move into,
+ * and are how they traverse across the board to different Rooms.
+ */
 public class Hallway implements BoardPiece {
-	private boolean hasPlayer;
 	
+	/**
+	 * A constructor for a hallway
+	 */
 	public Hallway(){
-		this.hasPlayer = false;
+		
 	}
 	
 	/**
-	 * Returns true if a player is standing in this Hallway object
-	 * @return
+	 * A toString method for a hallway
+	 * @return - The String representing a Hallway
 	 */
-	public boolean isFull(){
-		return this.hasPlayer;
-	}
-	
 	public String toString(){
 		return "-";
 	}
