@@ -194,6 +194,8 @@ public class Player implements BoardPiece {
 				roll = applyValidMove(validMove, direction, roll);
 			} else if (userInput == 5) {
 				// make accusation
+				game.makeAccusation(this, input);
+				roll = 0;
 				
 			}
 		}

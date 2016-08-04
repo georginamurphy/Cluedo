@@ -623,6 +623,30 @@ public class Game {
 		}
 		return null;
 	}
+	
+	public Room.Name getRoomName(int num) {
+		switch (num) {
+		case 1:
+			return Room.Name.KITCHEN;
+		case 2:
+			return Room.Name.BALLROOM;
+		case 3:
+			return Room.Name.CONSERVATORY;
+		case 4:
+			return Room.Name.DININGROOM;
+		case 5:
+			return Room.Name.BILLIARD;
+		case 6:
+			return Room.Name.LIBRARY;
+		case 7:
+			return Room.Name.LOUNGE;
+		case 8:
+			return Room.Name.HALL;
+		case 9:
+			return Room.Name.STUDY;
+		}
+		return null;
+	}
 
 	public Weapon.Type getWeaponName(int num) {
 		switch (num) {
@@ -673,7 +697,7 @@ public class Game {
 	 * @param input
 	 */
 	public void makeSuggestion(Player player, Scanner input) {
-		Solution guess = constructGuess(player, input);
+		Solution guess = constructGuess(player, input, false);
 		System.out.println(guess.toString());
 		for (Player p : humanPlayers) {
 			if (!p.equals(player)) {
@@ -706,7 +730,7 @@ public class Game {
 
 		if (input.next().equals("1")) {
 			p.printCards();
-			Solution guess = constructGuess(p, input);
+			Solution guess = constructGuess(p, input, true);
 			System.out.println("Guess:");
 			System.out.println(guess.toString());
 			System.out.println("Solution:");
@@ -731,10 +755,18 @@ public class Game {
 	 *            - the current player that is making the guess
 	 * @return Solution
 	 */
-	public Solution constructGuess(Player player, Scanner input) {
+	public Solution constructGuess(Player player, Scanner input, boolean accusation) {
 		int userInput;
+		Room room;
+		if(accusation){
+			System.out.println("Room:  1: Kitchen\n       2: Ball Room\n       3: Conservatory\n       4: Dining Room\n       5: Billiard Room\n       6: Library\n       7: Lounge\n       8: Hall\n       9: Study");
+			System.out.println("Select a number for the room you are accusing");
 
-		Room room = new Room(inRoom(player));
+			userInput = getUserInput(input, 1, 9);
+			room = new Room(getRoomName(userInput));
+		}else{
+			room = new Room(inRoom(player));
+		}
 
 		System.out.println("Room: " + room.toString());
 		System.out.println("Character:  1: Mrs White\n            2: Reverend Green\n"

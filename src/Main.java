@@ -31,7 +31,7 @@ public class Main {
 	 * Declares and Initializes all of the Character cards
 	 */
 	private static void makeCharacters() {
-		characters.add(new Character("Mrs White", Character.Colour.WHITE, 9, 0));
+		characters.add(new Character("Mrs White", Character.Colour.WHITE, 7, 5));
 		characters.add(new Character("Reverend Green", Character.Colour.GREEN, 15, 0));
 		characters.add(new Character("Mrs Peacock", Character.Colour.BLUE, 24, 6));
 		characters.add(new Character("Professor Plum", Character.Colour.PURPLE, 24, 19));
