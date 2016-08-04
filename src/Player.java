@@ -82,25 +82,36 @@ public class Player implements BoardPiece {
 	 * 
 	 */
 	public void makeMovementDecisions(int roll) {
-		int deduction = 0;
-		if(this.game.isInRoom(this) ){
-			System.out.println("Got here");
-			Room.Name roomName = this.game.inRoom(this);
-			ArrayList<Location> doorLocations = this.game.getDoorLocations(roomName);
-			for(Location loc : doorLocations){
-				if(this.game.firstFreeLocation(loc) != null){
-					System.out.println("Got here2");
-					this.location = loc;
-					this.game.getBoard().updateBoard(this.game.humanPlayers);
-					deduction = 1;
-					break;
-				}
-			}
-		}
 		Scanner input = new Scanner(System.in);
+		 
+		// Is the player starting their turn in a room?
+		// If so, move them to the first free door and start their turn from the door
+		if(this.game.isInRoom(this) ){ 
+			Room.Name roomName = this.game.inRoom(this);
+			if(this.game.hasFreeDoor(roomName) ){
+				ArrayList<Location> doorLocations = this.game.getDoorLocations(roomName);
+				System.out.println("You are required to leave this room at the start of your turn.");
+				System.out.println("You will not be able to re enter this room until on this turn");
+				System.out.println("Please select a the door you wish to leave the room from.");
+				System.out.println("Doors are numbered starting from 1, top to bottom, left to right");
+				System.out.println("Which Door would you like to exit the room from? (Enter a number)");
+				String doorNumber = input.next();
+				
+			}
+			
+			//for(Location loc : doorLocations){
+				//if(this.game.firstFreeLocation(loc) != null){;
+					//this.location = loc;
+					//this.game.getBoard().updateBoard(this.game.humanPlayers);
+					//break;
+				//}
+			//}
+		}
+		
+		// The user is ready to make their moves
 		System.out.println("It is time to move "+ this.character.name +" on the board.");
 		System.out.println("You will enter either up, down, left or right for each of your " + roll + " moves.");
-		int movesRemaining = roll - deduction;
+		int movesRemaining = roll;
 		boolean enteredRoom = false;
 
 		while (movesRemaining != 0 && !enteredRoom) {
@@ -143,13 +154,18 @@ public class Player implements BoardPiece {
 			}
 		}
 		game.printBoard();
+		
+		if(enteredRoom){
+			//makeSuggestionDecisions(this );
+		}
+		else{
+			System.out.println(this.character.name + " your turn is over.\n" 
+					+ "Next Player enter 1 when you are ready to start your turn");
 
-		System.out.println(this.character.name + " your turn is over.\n" 
-		+ "Next Player enter 1 when you are ready to start your turn");
-
-		String start = "";
-		while (!start.equals("1")) {
-			start = input.next();
+			String start = "";
+			while (!start.equals("1")) {
+				start = input.next();
+			}
 		}
 	}
 	
