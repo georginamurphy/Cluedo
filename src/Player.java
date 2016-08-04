@@ -25,6 +25,10 @@ public class Player implements BoardPiece {
 	public boolean getUsed() {
 		return used;
 	}
+	
+	public ArrayList<Card> getCards(){
+		return cards;
+	}
 
 	public boolean hasCard(Card card) {
 		if (cards.contains(card))

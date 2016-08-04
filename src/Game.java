@@ -534,32 +534,61 @@ public class Game {
 		return null;
 	}
 
-	public void makeGuess(Player p) {
+	public void makeSuggestionDecisions(Player p) {
 		Scanner input = new Scanner(System.in);
-		int userInput;
+		System.out.println("You have entered a room you can make eiter a suggestion or an accusation");
+		System.out.println("Press 1 for a suggestion or 2 for an accusation");
 
-		Room room = new Room(inRoom(p));
+		int userInput = getUserInput(input, 1, 2);
 
-		System.out.println("Room:" + room.toString());
-		System.out.println("Select a number for the character you are accusing");
-		System.out.println("Character:  1: Mrs White\n            2: Reverend Green\n"
-				+ "            3: Mrs Peacock\n            4: Professor Plum\n            5: Miss Scarlett\n"
-				+ "            6: Colonel Mustard\n");
+		switch (userInput) {
+		case 1:
+			makeSuggestion(p, input);
+		case 2:
+			makeAccusation(p, input);
 
-		userInput = getUserInput(input);
-		Character character = new Character(getCharacterColour(userInput));
+		}
 
-		System.out.println("Room:" + room.toString());
-		System.out.println("Character:" + character.toString());
-		System.out.println("Select a number for the weapon you are using");
-		System.out.println("Weapon:  1: Candlestick\n            2: Dagger\n"
-				+ "            3: Leadpipe\n            4: Rope\n            5: Spanner\n"
-				+ "            6: Revolver\n");
+	}
 
-		userInput = getUserInput(input);
-		Weapon weapon = new Weapon(getWeaponName(userInput));
+	/**
+	 * Checks the users guess against all the other players cards and shows them
+	 * the first one it finds. If none of the cards are found the player is told
+	 * no matching cards were found
+	 * 
+	 * @param player
+	 *            - player making the suggestion
+	 * @param input 
+	 */
+	public void makeSuggestion(Player player, Scanner input) {
+		Solution guess = constructGuess(player, input);
+		for (Player p : humanPlayers)
+			if (!p.equals(player))
+				for (Card c : p.getCards())
+					if (guess.checkCard(c))
+						System.out.println(p.getCharacter().name + " has the card " + c.toString());
 
-		Solution guess = new Solution(weapon, character, room);
+		System.out.println("None of the other players had any of the cards in your suggestion");
+	}
+
+	/**
+	 * Checks the users guess against the secret solution. If they are correct
+	 * the game is over if they are incorrect they are removed from the game
+	 * 
+	 * @param p
+	 *            - player making the accusation
+	 * @param input2 
+	 */
+	public void makeAccusation(Player p, Scanner input) {
+		System.out.println("Are you sure you want to submit an accusation?\n"
+				+ "If you are incorrect you will be removed from the game\n"
+				+ "Press 1 to continue or press any other key to go back to game");
+
+		if (input.next() != "1"){
+			return;
+		}
+
+		Solution guess = constructGuess(p, input);
 		if (guess.equals(solution)) {
 			gameEnd = true;
 			System.out.println("Congratualtions " + p.getCharacter().name + " you solved the murder");
@@ -569,19 +598,72 @@ public class Game {
 		}
 	}
 
-	public int getUserInput(Scanner input) {
+	/**
+	 * Constructs a solution based on the users current room and their choice of
+	 * weapon and character
+	 * @param input 
+	 * 
+	 * @param Player
+	 *            - the current player that is making the guess
+	 * @return Solution
+	 */
+	public Solution constructGuess(Player player, Scanner input) {
+		int userInput;
+
+		Room room = new Room(inRoom(player));
+
+		System.out.println("Room:" + room.toString());
+		System.out.println("Select a number for the character you are accusing");
+		System.out.println("Character:  1: Mrs White\n            2: Reverend Green\n"
+				+ "            3: Mrs Peacock\n            4: Professor Plum\n            5: Miss Scarlett\n"
+				+ "            6: Colonel Mustard\n");
+
+		userInput = getUserInput(input, 1, 6);
+		Character character = new Character(getCharacterColour(userInput));
+
+		for (Player p : players) {
+			if (p.getCharacter().equals(character)) {
+				// move p into room
+			}
+		}
+
+		System.out.println("Room:" + room.toString());
+		System.out.println("Character:" + character.toString());
+		System.out.println("Select a number for the weapon you are using");
+		System.out.println("Weapon:  1: Candlestick\n            2: Dagger\n"
+				+ "            3: Leadpipe\n            4: Rope\n            5: Spanner\n"
+				+ "            6: Revolver\n");
+
+		userInput = getUserInput(input, 1, 6);
+		Weapon weapon = new Weapon(getWeaponName(userInput));
+		return new Solution(weapon, character, room);
+	}
+
+	/**
+	 * gets the users input from the console. expects a integer between the low
+	 * and high bounds (inclusive)
+	 * 
+	 * @param input
+	 *            - scanner
+	 * @param low
+	 *            - lowest valid number
+	 * @param high
+	 *            = highest valid number
+	 * @return the users valid input
+	 */
+	public int getUserInput(Scanner input, int low, int high) {
 		int userInput = 0;
 		boolean isValid = false;
 
 		while (!isValid) {
 			try {
 				userInput = input.nextInt();
-				if (userInput >= 1 && userInput <= 6)
+				if (userInput >= low && userInput <= high)
 					isValid = true;
 			} catch (InputMismatchException e) {
 				continue;
 			}
-			System.out.println("Please enter a number from 1 to 6");
+			System.out.println("Please enter a number from " + low + " to " + high);
 		}
 		return userInput;
 	}

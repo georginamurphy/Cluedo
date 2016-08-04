@@ -29,6 +29,23 @@ public class Solution {
 		return weapon;
 	}
 	
+	public boolean checkCard(Card c){
+		if(c instanceof Character){
+			if(character.equals((Character)c)){
+				return true;
+			}
+		}else if(c instanceof Weapon){
+			if(weapon.equals((Weapon)c)){
+				return true;
+			}
+		}else if(c instanceof Room){
+			if(room.equals((Room)c)){
+				return true;
+			}
+		}
+		return false;	
+	}
+	
 	public String toString(){
 		return "Room: " + this.room.toString() 
 		+ "\nCharacter: " + this.character.toString()
