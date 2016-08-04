@@ -9,6 +9,7 @@ public class Player implements BoardPiece {
 	private ArrayList<Card> cards;
 	private boolean used;
 	private boolean dead;
+	private Room.Name roomLastTurn;
 
 	public Player(Character character, boolean used) {
 		this.character = character;
@@ -16,6 +17,7 @@ public class Player implements BoardPiece {
 		this.used = used;
 		this.cards = new ArrayList<Card>();
 		dead = false;
+		roomLastTurn = null;
 	}
 
 	public Location getLocation() {
@@ -87,6 +89,7 @@ public class Player implements BoardPiece {
 	 */
 	public void makeMovementDecisions(int roll) {
 		Scanner input = new Scanner(System.in);
+		boolean turnSkipped = false;
 		 
 		// Is the player starting their turn in a room?
 		// If so, move them to the first free door and start their turn from the door
@@ -95,21 +98,31 @@ public class Player implements BoardPiece {
 			if(this.game.hasFreeDoor(roomName) ){
 				ArrayList<Location> doorLocations = this.game.getDoorLocations(roomName);
 				System.out.println("You are required to leave this room at the start of your turn.");
-				System.out.println("You will not be able to re enter this room until on this turn");
+				System.out.println("You will not be able to re enter this room on this turn");
 				System.out.println("Please select a the door you wish to leave the room from.");
 				System.out.println("Doors are numbered starting from 1, top to bottom, left to right");
 				System.out.println("Which Door would you like to exit the room from? (Enter a number)");
-				String doorNumber = input.next();
+				int doorNumber = this.game.getUserInput(input, 1, doorLocations.size() );
+				boolean exitedRoom = false;
 				
+				Location desiredDoor = doorLocations.get(doorNumber - 1);
+				desiredDoor = this.game.isFreeDoor(desiredDoor);
+				while(!exitedRoom){
+					if(desiredDoor != null){ // If the door the user wants to exit is not blocked
+						this.location = desiredDoor;
+						this.game.getBoard().updateBoard(this.game.humanPlayers);
+						exitedRoom = true;
+					}
+					else{ // The door the user wants to exit IS blocked
+						System.out.println("That door is blocked by another player! Choose a different door.");
+						doorNumber = this.game.getUserInput(input, 1, doorLocations.size() );
+						desiredDoor = doorLocations.get(doorNumber - 1);
+					}
+				}
 			}
-			
-			//for(Location loc : doorLocations){
-				//if(this.game.firstFreeLocation(loc) != null){;
-					//this.location = loc;
-					//this.game.getBoard().updateBoard(this.game.humanPlayers);
-					//break;
-				//}
-			//}
+			else{ // The room doesn't have a free door, end their turn unlucky
+				turnSkipped = true;
+			}
 		}
 		
 		// The user is ready to make their moves
@@ -118,7 +131,7 @@ public class Player implements BoardPiece {
 		int movesRemaining = roll;
 		boolean enteredRoom = false;
 
-		while (movesRemaining != 0 && !enteredRoom) {
+		while (movesRemaining != 0 && !enteredRoom & !turnSkipped) {
 			game.printBoard();
 			System.out.println("You have " + movesRemaining + " moves remaining " + this.character.name + ".\n");
 			System.out.println("Where would you like to move? ");
@@ -152,17 +165,26 @@ public class Player implements BoardPiece {
 			if (validMove) {
 				if (direction != null) {
 					this.game.applyMove(this, direction);
-					if(this.game.isInRoom(this) ){enteredRoom = true;} // If this player is now in a room
+					if(this.game.isInRoom(this) ){ // If the player is now in a room
+						enteredRoom = true;
+						this.roomLastTurn = this.game.inRoom(this);
+					}
 				}
 				movesRemaining--;
 			}
 		}
 		game.printBoard();
+		// If the user cannot leave and is stuck in a room because it is blocked
+		if(turnSkipped){
+			System.out.println("Unforunately, a player is blocking your only exit.");
+			System.out.println("Your turn will now end.");
+		}
 		
 		if(enteredRoom){
-			game.makeSuggestionDecisions(this);
+			//game.makeSuggestionDecisions(this);
 		}
 		else{
+			this.roomLastTurn = null;
 			System.out.println(this.character.name + " your turn is over.\n" 
 					+ "Next Player enter 1 when you are ready to start your turn");
 
@@ -196,6 +218,10 @@ public class Player implements BoardPiece {
 	
 	public boolean getDead() {
 		return dead;
+	}
+	
+	public Room.Name getRoomLastTurn(){
+		return this.roomLastTurn;
 	}
 	
 	public String toString() {

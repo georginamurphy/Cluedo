@@ -164,53 +164,59 @@ public class Game {
 		// Depending on the direction the player wants to move, check if it is
 		// valid
 		if (direction == Direction.UP) {
-			if (playerY == 0) {
-				return false;
-			} // Player can't move off the board
+			if (playerY == 0) {return false;} // Player can't move off the board
 			BoardPiece piece = gameBoard[playerY - 1][playerX];
 
-			if (piece instanceof Hallway) {
-				return true;
-			}
+			if (piece instanceof Hallway) {return true;}
 			if (piece instanceof RoomTile) {
-				return roomTileCheck(player, direction);
+				if(((RoomTile) piece).name.equals(player.getRoomLastTurn() ) ){
+					System.out.println("You can't enter that room! You were there during your last turn");
+					return false;
+				}
+				else{
+					return roomTileCheck(player, direction);
+				}
 			}
-		} else if (direction == Direction.DOWN) {
-			if (playerY == 24) {
-				return false;
-			} // Player can't move off the board
+			
+		} 
+		else if (direction == Direction.DOWN) {
+			if (playerY == 24) {return false;} // Player can't move off the board
 			BoardPiece piece = gameBoard[playerY + 1][playerX];
 
-			if (piece instanceof Hallway) {
-				return true;
+			if (piece instanceof Hallway) {return true;}
+			if(((RoomTile) piece).name.equals(player.getRoomLastTurn() ) ){
+				System.out.println("You can't enter that room! You were there during your last turn");
+				return false;
 			}
-			if (piece instanceof RoomTile) {
+			else{
 				return roomTileCheck(player, direction);
 			}
 
-		} else if (direction == Direction.LEFT) {
-			if (playerX == 0) {
-				return false;
-			} // Player can't move off the board
+		} 
+		else if (direction == Direction.LEFT) {
+			if (playerX == 0) {return false;} // Player can't move off the board
 			BoardPiece piece = gameBoard[playerY][playerX - 1];
 
-			if (piece instanceof Hallway) {
-				return true;
+			if (piece instanceof Hallway) {return true;}
+			if(((RoomTile) piece).name.equals(player.getRoomLastTurn() ) ){
+				System.out.println("You can't enter that room! You were there during your last turn");
+				return false;
 			}
-			if (piece instanceof RoomTile) {
+			else{
 				return roomTileCheck(player, direction);
 			}
 
-		} else if (direction == Direction.RIGHT) {
-			if (playerX == 24) {
-				return false;
-			} // Player can't move off the board
+		} 
+		else if (direction == Direction.RIGHT) {
+			if (playerX == 24) {return false;} // Player can't move off the board
 			BoardPiece piece = gameBoard[playerY][playerX + 1];
 
-			if (piece instanceof Hallway) {
-				return true;
+			if (piece instanceof Hallway) {return true;}
+			if(((RoomTile) piece).name.equals(player.getRoomLastTurn() ) ){
+				System.out.println("You can't enter that room! You were there during your last turn");
+				return false;
 			}
-			if (piece instanceof RoomTile) {
+			else{
 				return roomTileCheck(player, direction);
 			}
 
@@ -504,24 +510,24 @@ public class Game {
 	public Location isFreeDoor(Location doorLocation) {
 		Location left = new Location(doorLocation.x - 1, doorLocation.y);
 		Location right = new Location(doorLocation.x + 1, doorLocation.y);
-		Location up = new Location(doorLocation.x, doorLocation.y + 1);
-		Location down = new Location(doorLocation.x, doorLocation.y - 1);
+		Location up = new Location(doorLocation.x, doorLocation.y - 1);
+		Location down = new Location(doorLocation.x, doorLocation.y + 1);
 		BoardPiece[][] gameBoard = this.board.getBoard();
 
 		// If a door does not have a player in front of it, return the location
 		// of the hallway
 		// Otherwise, a player is standing in front of the door, so return null
 		if (gameBoard[left.y][left.x] instanceof Hallway) {
-			return left;
+			return doorLocation;
 		}
 		if (gameBoard[right.y][right.x] instanceof Hallway) {
-			return right;
+			return doorLocation;
 		}
 		if (gameBoard[up.y][up.x] instanceof Hallway) {
-			return up;
+			return doorLocation;
 		}
 		if (gameBoard[down.y][down.x] instanceof Hallway) {
-			return down;
+			return doorLocation;
 		}
 		return null;
 	}
@@ -803,7 +809,7 @@ public class Game {
 	 * Initializes the arrays of doors for each room. Doors will be listed from
 	 * top to bottom, left to right
 	 */
-	public void initialiseDoorLocations() {
+	public void initialiseDoorLocations(){
 		this.kitchenDoors = new ArrayList<Location>();
 		this.ballRoomDoors = new ArrayList<Location>();
 		this.conservatoryDoors = new ArrayList<Location>();
@@ -832,26 +838,38 @@ public class Game {
 						switch (name) {
 						case KITCHEN:
 							kitchenDoors.add(new Location(x, y));
+							break;
 						case BALLROOM:
 							ballRoomDoors.add(new Location(x, y));
+							break;
 						case CONSERVATORY:
 							conservatoryDoors.add(new Location(x, y));
+							break;
 						case BILLIARD:
 							billiardDoors.add(new Location(x, y));
+							break;
 						case LIBRARY:
 							libraryDoors.add(new Location(x, y));
+							break;
 						case STUDY:
 							studyDoors.add(new Location(x, y));
+							break;
 						case HALL:
 							hallDoors.add(new Location(x, y));
+							break;
 						case LOUNGE:
 							loungeDoors.add(new Location(x, y));
+							break;
 						case DININGROOM:
 							diningRoomDoors.add(new Location(x, y));
+							break;
 						}
 					}
 				}
 			}
+		}
+		for(Location l : ballRoomDoors){
+			System.out.println(l.x + " " + l.y);
 		}
 	}
 
