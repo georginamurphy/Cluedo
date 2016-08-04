@@ -32,6 +32,7 @@ l l l l l l # - # H H H H H H H # - S S S S S S S
  b: Ball Room        H: Hall             C: Conservatory\n    
  S: Study            L: Library\n
  
+\n*******************\n* " + c.toString() + " *\n*******************\n
 
   
  

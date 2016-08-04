@@ -32,13 +32,13 @@ public class Character implements Card {
 			name = "Reverend Green";
 			break;
 		case BLUE:
-			name = "Miss Scarlett";
+			name = "Mrs Peacock";
 			break;
 		case PURPLE:
 			name = "Proffessor Plum";
 			break;
 		case RED:
-			name = "Mrs Peacock";
+			name = "Miss Scarlett";
 			break;
 		case YELLOW:
 			name = "Colonel Mustard";

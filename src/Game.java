@@ -62,12 +62,13 @@ public class Game {
 	 * @param rooms
 	 */
 	public void createSolution(ArrayList<Character> chars, ArrayList<Weapon> weapons, ArrayList<Room> rooms) {
-		int charIndex = (int) Math.random() * chars.size();
-		int weaponIndex = (int) Math.random() * weapons.size();
-		int roomIndex = (int) Math.random() * rooms.size();
+		int charIndex = (int) (Math.random() * chars.size());
+		int weaponIndex = (int) (Math.random() * weapons.size());
+		int roomIndex = (int) (Math.random() * rooms.size());
 
 		this.solution = new Solution(weapons.get(weaponIndex), chars.get(charIndex), rooms.get(roomIndex));
 
+		System.out.println(solution.toString());
 		chars.remove(charIndex);
 		weapons.remove(weaponIndex);
 		rooms.remove(roomIndex);
@@ -603,8 +604,10 @@ public class Game {
 		switch (userInput) {
 		case 1:
 			makeSuggestion(p, input);
+			break;
 		case 2:
 			makeAccusation(p, input);
+			break;
 
 		}
 
@@ -621,13 +624,21 @@ public class Game {
 	 */
 	public void makeSuggestion(Player player, Scanner input) {
 		Solution guess = constructGuess(player, input);
-		for (Player p : humanPlayers)
-			if (!p.equals(player))
-				for (Card c : p.getCards())
-					if (guess.checkCard(c))
-						System.out.println(p.getCharacter().name + " has the card " + c.toString() + "\n");
+		System.out.println(guess.toString());
+		for (Player p : humanPlayers){
+			if (!p.equals(player)){
+				for (Card c : p.getCards()){
+					if (guess.checkCard(c)){
+						System.out.println("");
+						System.out.println(p.getCharacter().name + " has the card \n"
+								+ "\n*******************\n* " + c.toString() + " *\n*******************\n");
+						return;
+					}
+				}
+			}
+		}
 
-		System.out.println("None of the other players had any of the cards in your suggestion\n");
+		System.out.println("\n   None of the other players had any of the cards in your suggestion\n");
 	}
 
 	/**
@@ -643,11 +654,10 @@ public class Game {
 				+ "If you are incorrect you will be removed from the game\n"
 				+ "Press 1 to continue or press any other key to go back to game");
 
-		if (input.next() != "1"){
-			return;
-		}
+		p.waitForOne(input);
 
 		Solution guess = constructGuess(p, input);
+		System.out.println(guess.toString());
 		if (guess.equals(solution)) {
 			gameEnd = true;
 			System.out.println("Congratualtions " + p.getCharacter().name + " you solved the murder");
@@ -671,12 +681,12 @@ public class Game {
 
 		Room room = new Room(inRoom(player));
 
-		System.out.println("Room:" + room.toString());
-		System.out.println("Select a number for the character you are accusing");
+		System.out.println("Room: " + room.toString());
 		System.out.println("Character:  1: Mrs White\n            2: Reverend Green\n"
 				+ "            3: Mrs Peacock\n            4: Professor Plum\n            5: Miss Scarlett\n"
 				+ "            6: Colonel Mustard\n");
-
+		System.out.println("Select a number for the character you are accusing");
+		
 		userInput = getUserInput(input, 1, 6);
 		Character character = new Character(getCharacterColour(userInput));
 
@@ -686,16 +696,19 @@ public class Game {
 			}
 		}
 
-		System.out.println("Room:" + room.toString());
-		System.out.println("Character:" + character.toString());
+		System.out.println("Room: " + room.toString());
+		System.out.println("Character: " + character.toString());
+		System.out.println("Weapon:  1: Candlestick\n         2: Dagger\n"
+				+ "         3: Leadpipe\n         4: Rope\n         5: Spanner\n"
+				+ "         6: Revolver\n");
+
 		System.out.println("Select a number for the weapon you are using");
-		System.out.println("Weapon:  1: Candlestick\n          2: Dagger\n"
-				+ "          3: Leadpipe\n          4: Rope\n          5: Spanner\n"
-				+ "          6: Revolver\n");
 
 		userInput = getUserInput(input, 1, 6);
 		Weapon weapon = new Weapon(getWeaponName(userInput));
 		return new Solution(weapon, character, room);
+
+		
 	}
 
 	/**
