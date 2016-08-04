@@ -1,5 +1,3 @@
-import java.time.Year;
-
 public class Character implements Card {
 	public String name;
 	public Colour colour;
