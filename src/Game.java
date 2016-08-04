@@ -67,7 +67,7 @@ public class Game {
 		int weaponIndex = (int) (Math.random() * weapons.size());
 		int roomIndex = (int) (Math.random() * rooms.size());
 
-		this.solution = new Solution(weapons.get(0), chars.get(0), rooms.get(0));
+		this.solution = new Solution(weapons.get(weaponIndex), chars.get(charIndex), rooms.get(roomIndex));
 
 		chars.remove(charIndex);
 		weapons.remove(weaponIndex);
@@ -745,7 +745,9 @@ public class Game {
 
 		for (Player p : players) {
 			if (p.getCharacter().equals(character)) {
-				// move p into room
+				Location newPlayerLocation = getRoomTile(room.name);
+				p.updateLocation(newPlayerLocation);
+				this.board.updateBoard(humanPlayers);
 			}
 		}
 
@@ -759,7 +761,6 @@ public class Game {
 		userInput = getUserInput(input, 1, 6);
 		Weapon weapon = new Weapon(getWeaponName(userInput));
 		return new Solution(weapon, character, room);
-
 	}
 
 	/**
