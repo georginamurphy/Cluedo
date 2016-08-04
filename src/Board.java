@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
- * The board class represents the Cluedo Board. Has a 2D Array of BoardPieces
- * which will be the board
+ * The board class represents the Cluedo Board.
+ * The board is a 25 x 25 grid, where each cell holds a BoardPiece
  * 
+ * A BoardPiece in this implementation is anything that needs to be displayed on the board,
+ * which are Players, RoomTiles and Hallways.
  */
 public class Board {
 	private BoardPiece[][] board;
@@ -15,7 +17,35 @@ public class Board {
 		this.board = new BoardPiece[25][25];
 		readBoard();
 		setCharacters(players);
-		// System.out.println(this.toString());
+	}
+	
+	/**
+	 * Returns the 2D array representing the board
+	 * @return
+	 */
+	public BoardPiece[][] getBoard() {
+		return this.board;
+	}
+	
+	/**
+	 * puts all the characters into the board 2D array at their starting
+	 * position
+	 * 
+	 * @param characters
+	 */
+	private void setCharacters(ArrayList<Player> players) {
+		for (Player p : players) {
+			board[p.getLocation().getY()][p.getLocation().getX()] = p;
+		}
+	}
+	
+	/**
+	 * Reads in the default board, and applies the new character positions to it.
+	 * @param players - The list of players in the game
+	 */
+	public void updateBoard(ArrayList<Player> players){
+		readBoard();
+		setCharacters(players);
 	}
 
 	/**
@@ -110,29 +140,10 @@ public class Board {
 	}
 
 	/**
-	 * puts all the characters into the board 2D array at their starting
-	 * position
-	 * 
-	 * @param characters
+	 * A toString method for the Board Class
+	 * @return - The String representing the board,
+	 * 			 as well as the Key for the board.
 	 */
-	private void setCharacters(ArrayList<Player> players) {
-		for (Player p : players) {
-			board[p.getLocation().getY()][p.getLocation().getX()] = p;
-		}
-	}
-
-
-
-	public BoardPiece[][] getBoard() {
-		return this.board;
-	}
-
-	public void updateBoard(ArrayList<Player> players){
-		readBoard();
-		setCharacters(players);
-		
-	}
-
 	public String toString() {
 		String boardStr = "\n";
 

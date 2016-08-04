@@ -5,6 +5,7 @@ import java.util.Scanner;
 
 public class Game {
 
+	
 	private Board board;
 	private Solution solution;
 	private ArrayList<Player> players; // Consist of every player, both human
