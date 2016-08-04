@@ -160,7 +160,7 @@ public class Player implements BoardPiece {
 		game.printBoard();
 		
 		if(enteredRoom){
-			//makeSuggestionDecisions(this );
+			game.makeSuggestionDecisions(this);
 		}
 		else{
 			System.out.println(this.character.name + " your turn is over.\n" 
