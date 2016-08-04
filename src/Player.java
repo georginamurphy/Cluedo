@@ -2,15 +2,35 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Player implements BoardPiece {
-
+	
+	 // The overall game object for Cluedo
 	private Game game;
+	
+	// This player's location on the board
 	private Location location;
+	
+	 // This player's character that they are playing as
 	private Character character;
+	
+	// The cards in this player's hand
 	private ArrayList<Card> cards;
+	
+	// True if the player is controlled by a human, false otherwise
 	private boolean used;
+	
+	// True if the player has lost the game, false otherwise
 	private boolean dead;
+	
+	// Name of the room the player was in during their previous turn
+	// Will be null if they finished their turn in a hallway.
 	private Room.Name roomLastTurn;
 
+	
+	/**
+	 * Constructor for a player
+	 * @param character - The character they are playing as
+	 * @param used - True if they are a human player, false otherwise
+	 */
 	public Player(Character character, boolean used) {
 		this.character = character;
 		this.location = character.getStartLoc();
@@ -20,18 +40,36 @@ public class Player implements BoardPiece {
 		roomLastTurn = null;
 	}
 
+	/**
+	 * Getter method for this player's location
+	 * @return
+	 */
 	public Location getLocation() {
 		return location;
 	}
 
+	/**
+	 * Getter method for if this player is human
+	 * @return
+	 */
 	public boolean getUsed() {
 		return used;
 	}
 
+	/**
+	 * Getter method for the player's hand of cards
+	 * @return
+	 */
 	public ArrayList<Card> getCards() {
 		return cards;
 	}
 
+	/**
+	 * Method to check if a player's hand contains a specific card
+	 * 
+	 * @param card - The card we are inspecting the player's hand for
+	 * @return
+	 */
 	public boolean hasCard(Card card) {
 		if (cards.contains(card))
 			return true;
@@ -39,14 +77,25 @@ public class Player implements BoardPiece {
 			return false;
 	}
 
+	/**
+	 *  Setter method the game field
+	 * @param game
+	 */
 	public void setGame(Game game) {
 		this.game = game;
 	}
 
+	/**
+	 * Adds a card to this player's hand
+	 * @param card - The card to add to the player's hand
+	 */
 	public void dealCard(Card card) {
 		this.cards.add(card);
 	}
 
+	/**
+	 * Prints the player's hand of cards
+	 */
 	public void printCards() {
 		System.out.println("----------------------------");
 		System.out.println(this.character.name + "'s cards are: ");
@@ -67,26 +116,24 @@ public class Player implements BoardPiece {
 	}
 
 	/**
-	 * Small method to initiate a player's turn Will print the cards they have
-	 * and show the board's current state
-	 * 
+	 * Initiates the player's turn, starts a chain of method calls
+	 * 	that will play out everything the player must do to comeplete
+	 * 	their turn.
 	 */
 	public void startTurn() {
 		makeMovementDecisions();
 	}
 
 	/**
-	 * A method to handle how a player move's during their turn A player does
-	 * this by entering in each direction they wish to move one by one, until
-	 * they either run out of moves or move into a room.
+	 * A method to handle how a player moves during their turn.
+	 * A player moves by entering in each direction they wish to 
+	 * move one by one, until they either run out of moves or move into a room.
 	 * 
 	 * If a player moves into a room, they forfeit any remaining moves they have
 	 * left.
-	 * 
 	 */
 	public void makeMovementDecisions() {
 		Scanner input = new Scanner(System.in);
-
 		boolean turnSkipped = false;
 
 		// Is the player starting their turn in a room?
@@ -141,23 +188,16 @@ public class Player implements BoardPiece {
 		 int roll = rollDice();
 		//int roll = 12;
 		System.out.println("You rolled " + roll + "!");
-
 		game.printBoard();
 
 		int movesRemaining = roll;
 		boolean enteredRoom = false;
-
-
+		while (movesRemaining != 0 && !enteredRoom & !turnSkipped) {
+			this.game.initialiseDoorLocations(); // QUICK FIXES A SPOOKY BUG
+			System.out.println("You have " + movesRemaining + " moves remaining ");
+			System.out.println(this.character.name + " where would you like to move? (up, down, left or right)");
 			
-
-			while (movesRemaining != 0 && !enteredRoom & !turnSkipped) {
-				this.game.initialiseDoorLocations(); // QUICK FIXES A SPOOKY BUG
-				
-
-				System.out.println("You have " + movesRemaining + " moves remaining ");
-				System.out.println(this.character.name + " where would you like to move? (up, down, left or right)");
-				int userInput = getInputDirection(input);
-
+			int userInput = getInputDirection(input);
 			Game.Direction direction = null;
 
 			// Check they have entered a valid direction
@@ -165,44 +205,40 @@ public class Player implements BoardPiece {
 			if (userInput == 1) {
 				direction = Game.Direction.UP;
 				validMove = this.game.checkValidMove(this, direction);
-			} else if (userInput == 2) {
+			} 
+			else if (userInput == 2) {
 				direction = Game.Direction.DOWN;
 				validMove = this.game.checkValidMove(this, direction);
-			} else if (userInput == 3) {
+			} 
+			else if (userInput == 3) {
 				direction = Game.Direction.LEFT;
 				validMove = this.game.checkValidMove(this, direction);
-			} else if (userInput == 4) {
+			} 
+			else if (userInput == 4) {
 				direction = Game.Direction.RIGHT;
 				validMove = this.game.checkValidMove(this, direction);
 			}
 
 			// If the move was invalid, continue to the next iteration of
-			// the
-			// while loop
+			// the while loop.
 			// Otherwise, apply the move and decrement movesRemaining
 			if (validMove) {
 				if (direction != null) {
 					this.game.applyMove(this, direction);
-
-					if (this.game.isInRoom(this)) {
-						enteredRoom = true;
-					} // If this player is now in a room
-
-					if (this.game.isInRoom(this)) { // If the player is now
-													// in a room
+					if (this.game.isInRoom(this)) { // If the player is now in a room
 						enteredRoom = true;
 						this.roomLastTurn = this.game.inRoom(this);
 					}
 				}
 				movesRemaining--;
-			} else {
+			} 
+			else {
 				System.out.println("invalid move");
 			}
-			
 			game.printBoard();
 		}
-		// If the user cannot leave and is stuck in a room because it is
-		// blocked
+		
+		// If the user cannot leave a room because the only exit is blocked
 		if (turnSkipped) {
 			System.out.println("Unforunately, a player is blocking your only exit.");
 			System.out.println("Your turn will now end.");
@@ -213,13 +249,12 @@ public class Player implements BoardPiece {
 		} 
 
 		
-		if(!enteredRoom)this.roomLastTurn = null;
+		if(!enteredRoom){this.roomLastTurn = null;}
 		
 		System.out.println(this.character.name + " your turn is over.\n"
 				+ "Next Player enter 1 when you are ready to start your turn");
 
-		waitForOne(input);
-		
+		waitForOne(input);	
 	}
 
 
