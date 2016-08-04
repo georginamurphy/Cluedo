@@ -137,18 +137,18 @@ public class Player implements BoardPiece {
 		boolean turnSkipped = false;
 
 		// Is the player starting their turn in a room?
-		// If so, move them to the first free door and start their turn from the
-		// door
+		// If so, move them to the first free door and start their turn from the door
+		// (They will only be able to move out of the door, into a hallway)
 		if (this.game.isInRoom(this)) {
 			Room.Name roomName = this.game.inRoom(this);
 			if (this.game.hasFreeDoor(roomName)) {
 				ArrayList<Location> doorLocations = this.game.getDoorLocations(roomName);
 				game.printBoard();
-				System.out.println("You are required to leave this room at the start of your turn.");
-				System.out.println("You will not be able to re enter this room on this turn");
-				System.out.println("Please select a the door you wish to leave the room from.");
-				System.out.println("Doors are numbered starting from 1, top to bottom, left to right");
-				System.out.println("Which Door would you like to exit the room from? (Enter a number)");
+				System.out.println(this.character.name + ", you are required to leave this room at the start of your current turn.");
+				System.out.println("You will not be able to re-enter this room until your next turn.");
+				System.out.println("Please select the door you wish to leave the room from.");
+				System.out.println("Doors for each room are numbered left to right, top to bottom, starting from 1.");
+				System.out.println("Which Door would you like to exit the room from? (Enter 1 - " + doorLocations.size() +  ")");
 
 				int doorNumber = this.game.getUserInput(input, 1, doorLocations.size());
 				boolean exitedRoom = false;
@@ -222,6 +222,7 @@ public class Player implements BoardPiece {
 			// If the move was invalid, continue to the next iteration of
 			// the while loop.
 			// Otherwise, apply the move and decrement movesRemaining
+			String invalid = "";
 			if (validMove) {
 				if (direction != null) {
 					this.game.applyMove(this, direction);
@@ -233,9 +234,10 @@ public class Player implements BoardPiece {
 				movesRemaining--;
 			} 
 			else {
-				System.out.println("invalid move");
+				invalid = "You made an invalid move, please try again.";
 			}
 			game.printBoard();
+			System.out.println(invalid); 
 		}
 		
 		// If the user cannot leave a room because the only exit is blocked
@@ -313,7 +315,7 @@ public class Player implements BoardPiece {
 		}
 		return false;
 	}
-
+	
 	public void removeFromGame() {
 		this.game.getBoard().getBoard()[this.character.startLoc.getY()][this.character.startLoc.getX()] = this;
 		dead = true;

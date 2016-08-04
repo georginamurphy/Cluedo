@@ -714,7 +714,9 @@ public class Game {
 
 		for (Player p : players) {
 			if (p.getCharacter().equals(character)) {
-				// move p into room
+				Location newPlayerLocation = getRoomTile(room.name);
+				p.updateLocation(newPlayerLocation);
+				this.board.updateBoard(humanPlayers);
 			}
 		}
 
@@ -729,8 +731,6 @@ public class Game {
 		userInput = getUserInput(input, 1, 6);
 		Weapon weapon = new Weapon(getWeaponName(userInput));
 		return new Solution(weapon, character, room);
-
-		
 	}
 
 	/**
