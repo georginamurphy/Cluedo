@@ -151,6 +151,7 @@ public class Player implements BoardPiece {
 			System.out.println(this.character.name + " where would you like to move? (up, down, left or right)");
 
 			while (movesRemaining != 0 && !enteredRoom & !turnSkipped) {
+				this.game.initialiseDoorLocations(); // QUICK FIXES A SPOOKY BUG
 				game.printBoard();
 				System.out.println("You have " + movesRemaining + " moves remaining " + this.character.name + ".\n");
 				System.out.println("Where would you like to move? ");
@@ -158,6 +159,7 @@ public class Player implements BoardPiece {
 				int userInput = getInputDirection(input);
 
 				Game.Direction direction = null;
+				this.game.printDoors(Room.Name.BALLROOM);
 
 				// Check they have entered a valid direction
 				boolean validMove = false;
@@ -208,7 +210,7 @@ public class Player implements BoardPiece {
 			}
 
 			if (enteredRoom) {
-				game.makeSuggestionDecisions(this);
+				//game.makeSuggestionDecisions(this);
 			} else {
 				this.roomLastTurn = null;
 				System.out.println(this.character.name + " your turn is over.\n"
