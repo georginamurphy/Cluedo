@@ -136,6 +136,7 @@ public class Game {
 			for (Player p : humanPlayers) {
 				if (!p.getDead()) {
 					p.startTurn();
+					if(gameEnd){break;}
 				}
 			}
 		}
@@ -267,7 +268,7 @@ public class Game {
 	}
 
 	/**
-	 * Checks if a given tile in the direction FROM the player is a room tile
+	 * Checks if a given tile in the direction FROM the player is a room tile that represents a door
 	 * 
 	 * @param player
 	 * @param direction
@@ -447,8 +448,60 @@ public class Game {
 		System.out.println("SOMETHING WENT HORRIBLY WRONG");
 		return null;
 	}
+	
+	public boolean hasFreeDoor(Room.Name name){
+		switch(name){
+			case KITCHEN:
+				for(Location l : kitchenDoors){
+					if(isFreeDoor(l) != null){return true;}
+				}
+				return false;
+			case BALLROOM:
+				for(Location l : ballRoomDoors){
+					if(isFreeDoor(l) != null){return true;}
+				}
+				return false;
+			case CONSERVATORY:
+				for(Location l : conservatoryDoors){
+					if(isFreeDoor(l) != null){return true;}
+				}
+				return false;
+			case BILLIARD:
+				for(Location l : billiardDoors){
+					if(isFreeDoor(l) != null){return true;}
+				}
+				return false;
+			case LIBRARY:
+				for(Location l : libraryDoors){
+					if(isFreeDoor(l) != null){return true;}
+				}
+				return false;
+			case STUDY:
+				for(Location l : studyDoors){
+					if(isFreeDoor(l) != null){return true;}
+				}
+				return false;
+			case HALL:
+				for(Location l : hallDoors){
+					if(isFreeDoor(l) != null){return true;}
+				}
+				return false;
+			case LOUNGE:
+				for(Location l : loungeDoors){
+					if(isFreeDoor(l) != null){return true;}
+				}
+				return false;
+			case DININGROOM:
+				for(Location l : diningRoomDoors){
+					if(isFreeDoor(l) != null){return true;}
+				}
+				return false;
+			}
+		System.out.println("SHOULDNT HAVE GOT HERE LOL");
+		return false;
+	}
 
-	public Location firstFreeLocation(Location doorLocation) {
+	public Location isFreeDoor(Location doorLocation) {
 		Location left = new Location(doorLocation.x - 1, doorLocation.y);
 		Location right = new Location(doorLocation.x + 1, doorLocation.y);
 		Location up = new Location(doorLocation.x, doorLocation.y + 1);

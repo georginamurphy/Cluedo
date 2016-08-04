@@ -18,17 +18,16 @@ public class Main {
 				//+ "console that correspond to the provided menu.\n"
 				//+ "      ONLY NUMBERS WILL BE ACCEPTED AS VALID INPUT\n"
 				+ "**********************************************************");
-		
 		makeCharacters();
 		makeWeapons();
 		makeRooms();
 		setPlayers();
 		board = new Board(players);
 		game = new Game(board, players);
-		game.mockGame(characters, weapons, rooms);
-		//game.createSolution(characters, weapons, rooms);
-		//game.dealCards(characters, weapons, rooms);
-		//game.run();
+		//game.mockGame(characters, weapons, rooms);
+		game.createSolution(characters, weapons, rooms);
+		game.dealCards(characters, weapons, rooms);
+		game.run();
 	}
 
 	/**
