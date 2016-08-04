@@ -130,6 +130,7 @@ public class Board {
 	public void updateBoard(ArrayList<Player> players){
 		readBoard();
 		setCharacters(players);
+		
 	}
 
 	public String toString() {

@@ -62,13 +62,13 @@ public class Game {
 	 * @param rooms
 	 */
 	public void createSolution(ArrayList<Character> chars, ArrayList<Weapon> weapons, ArrayList<Room> rooms) {
-		int charIndex = (int) (Math.random() * chars.size());
-		int weaponIndex = (int) (Math.random() * weapons.size());
+
+		int charIndex = (int) (Math.random() * chars.size() );
+		int weaponIndex = (int) (Math.random() * weapons.size() );
 		int roomIndex = (int) (Math.random() * rooms.size());
 
 		this.solution = new Solution(weapons.get(weaponIndex), chars.get(charIndex), rooms.get(roomIndex));
 
-		System.out.println(solution.toString());
 		chars.remove(charIndex);
 		weapons.remove(weaponIndex);
 		rooms.remove(roomIndex);
@@ -170,24 +170,32 @@ public class Game {
 
 			if (piece instanceof Hallway) {return true;}
 			if (piece instanceof RoomTile) {
-				if(((RoomTile) piece).name.equals(player.getRoomLastTurn() ) ){
-					System.out.println("You can't enter that room! You were there during your last turn");
-					return false;
-				}
-				else{
-					return roomTileCheck(player, direction);
+				if(piece != null){
+					if(((RoomTile) piece).name.equals(player.getRoomLastTurn() ) ){
+						System.out.println("You can't enter that room! You were there during your last turn");
+						return false;
+					}
+					else{
+						return roomTileCheck(player, direction);
+					}
 				}
 			}
-			
 		} 
 		else if (direction == Direction.DOWN) {
 			if (playerY == 24) {return false;} // Player can't move off the board
 			BoardPiece piece = gameBoard[playerY + 1][playerX];
 
 			if (piece instanceof Hallway) {return true;}
-			if(((RoomTile) piece).name.equals(player.getRoomLastTurn() ) ){
-				System.out.println("You can't enter that room! You were there during your last turn");
-				return false;
+			if (piece instanceof RoomTile) {
+				if(piece != null){
+					if(((RoomTile) piece).name.equals(player.getRoomLastTurn() ) ){
+						System.out.println("You can't enter that room! You were there during your last turn");
+						return false;
+					}
+					else{
+						return roomTileCheck(player, direction);
+					}
+				}
 			}
 			else{
 				return roomTileCheck(player, direction);
@@ -199,9 +207,16 @@ public class Game {
 			BoardPiece piece = gameBoard[playerY][playerX - 1];
 
 			if (piece instanceof Hallway) {return true;}
-			if(((RoomTile) piece).name.equals(player.getRoomLastTurn() ) ){
-				System.out.println("You can't enter that room! You were there during your last turn");
-				return false;
+			if (piece instanceof RoomTile) {
+				if(piece != null){
+					if(((RoomTile) piece).name.equals(player.getRoomLastTurn() ) ){
+						System.out.println("You can't enter that room! You were there during your last turn");
+						return false;
+					}
+					else{
+						return roomTileCheck(player, direction);
+					}
+				}
 			}
 			else{
 				return roomTileCheck(player, direction);
@@ -213,9 +228,16 @@ public class Game {
 			BoardPiece piece = gameBoard[playerY][playerX + 1];
 
 			if (piece instanceof Hallway) {return true;}
-			if(((RoomTile) piece).name.equals(player.getRoomLastTurn() ) ){
-				System.out.println("You can't enter that room! You were there during your last turn");
-				return false;
+			if (piece instanceof RoomTile) {
+				if(piece != null){
+					if(((RoomTile) piece).name.equals(player.getRoomLastTurn() ) ){
+						System.out.println("You can't enter that room! You were there during your last turn");
+						return false;
+					}
+					else{
+						return roomTileCheck(player, direction);
+					}
+				}
 			}
 			else{
 				return roomTileCheck(player, direction);
@@ -884,9 +906,6 @@ public class Game {
 				}
 			}
 		}
-		for(Location l : ballRoomDoors){
-			System.out.println(l.x + " " + l.y);
-		}
 	}
 
 	public Board getBoard() {
@@ -904,5 +923,15 @@ public class Game {
 		solution = new Solution(new Weapon(Weapon.Type.ROPE), new Character(Character.Colour.BLUE),
 				new Room(Room.Name.BALLROOM));
 
+	}
+	
+	public void printDoors(Room.Name name){
+		switch (name) {
+		case BALLROOM:
+			for(Location l : ballRoomDoors){
+				System.out.println(l.x + " " + l.y);
+			}
+			break;
+		}
 	}
 }

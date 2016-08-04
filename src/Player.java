@@ -96,6 +96,7 @@ public class Player implements BoardPiece {
 			Room.Name roomName = this.game.inRoom(this);
 			if (this.game.hasFreeDoor(roomName)) {
 				ArrayList<Location> doorLocations = this.game.getDoorLocations(roomName);
+				game.printBoard();
 				System.out.println("You are required to leave this room at the start of your turn.");
 				System.out.println("You will not be able to re enter this room on this turn");
 				System.out.println("Please select a the door you wish to leave the room from.");
@@ -119,6 +120,7 @@ public class Player implements BoardPiece {
 						desiredDoor = doorLocations.get(doorNumber - 1);
 					}
 				}
+				game.printBoard();
 			} else { // The room doesn't have a free door, end their turn
 						// unlucky
 				turnSkipped = true;
@@ -136,8 +138,8 @@ public class Player implements BoardPiece {
 		System.out.println("\nEnter 1 to begin your turn by rolling the dice");
 		waitForOne(input);
 
-		// int roll = rollDice();
-		int roll = 12;
+		 int roll = rollDice();
+		//int roll = 12;
 		System.out.println("You rolled " + roll + "!");
 
 		game.printBoard();
@@ -145,12 +147,16 @@ public class Player implements BoardPiece {
 		int movesRemaining = roll;
 		boolean enteredRoom = false;
 
-		while (movesRemaining != 0 && !enteredRoom) {
-			
-			System.out.println("You have " + movesRemaining + " moves remaining ");
-			System.out.println(this.character.name + " where would you like to move? (up, down, left or right)");
 
-			int userInput = getInputDirection(input);
+			
+
+			while (movesRemaining != 0 && !enteredRoom & !turnSkipped) {
+				this.game.initialiseDoorLocations(); // QUICK FIXES A SPOOKY BUG
+				
+
+				System.out.println("You have " + movesRemaining + " moves remaining ");
+				System.out.println(this.character.name + " where would you like to move? (up, down, left or right)");
+				int userInput = getInputDirection(input);
 
 			Game.Direction direction = null;
 
@@ -192,8 +198,8 @@ public class Player implements BoardPiece {
 			} else {
 				System.out.println("invalid move");
 			}
+			
 			game.printBoard();
-
 		}
 		// If the user cannot leave and is stuck in a room because it is
 		// blocked
@@ -206,11 +212,13 @@ public class Player implements BoardPiece {
 			game.makeSuggestionDecisions(this);
 		} 
 
-			this.roomLastTurn = null;
-			System.out.println(this.character.name + " your turn is over.\n"
-					+ "Next Player enter 1 when you are ready to start your turn");
+		
+		if(!enteredRoom)this.roomLastTurn = null;
+		
+		System.out.println(this.character.name + " your turn is over.\n"
+				+ "Next Player enter 1 when you are ready to start your turn");
 
-			waitForOne(input);
+		waitForOne(input);
 		
 	}
 
