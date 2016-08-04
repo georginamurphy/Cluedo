@@ -643,6 +643,7 @@ public class Game {
 
 	public void makeSuggestionDecisions(Player p) {
 		Scanner input = new Scanner(System.in);
+		printBoard();
 		System.out.println("You have entered a room you can make eiter a suggestion or an accusation");
 		System.out.println("Press 1 for a suggestion or 2 for an accusation");
 
@@ -940,6 +941,10 @@ public class Game {
 
 	public Board getBoard() {
 		return this.board;
+	}
+	
+	public boolean getGameEnd(){
+		return this.gameEnd;
 	}
 
 	/**
