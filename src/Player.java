@@ -121,6 +121,7 @@ public class Player implements BoardPiece {
 	 * 	their turn.
 	 */
 	public void startTurn() {
+		System.out.println("_________________________________________________________ "+this.character.name+" _________________________________________________________");
 		makeMovementDecisions();
 	}
 
@@ -177,12 +178,7 @@ public class Player implements BoardPiece {
 		// The user is ready to make their moves
 		System.out.println("\nIt is time to move " + this.character.name + " on the board.");
 		printCards();
-		System.out.println("You will have four options for each of your moves.");
-		System.out.println("up");
-		System.out.println("down");
-		System.out.println("left");
-		System.out.println("right");
-		System.out.println("\nEnter 1 to begin your turn by rolling the dice");
+		System.out.println("\nPress 1 to roll the dice");
 		waitForOne(input);
 
 		 int roll = rollDice();

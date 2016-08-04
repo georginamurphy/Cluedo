@@ -63,11 +63,11 @@ public class Game {
 	 */
 	public void createSolution(ArrayList<Character> chars, ArrayList<Weapon> weapons, ArrayList<Room> rooms) {
 
-		int charIndex = (int) (Math.random() * chars.size() );
-		int weaponIndex = (int) (Math.random() * weapons.size() );
+		int charIndex = (int) (Math.random() * chars.size());
+		int weaponIndex = (int) (Math.random() * weapons.size());
 		int roomIndex = (int) (Math.random() * rooms.size());
 
-		this.solution = new Solution(weapons.get(weaponIndex), chars.get(charIndex), rooms.get(roomIndex));
+		this.solution = new Solution(weapons.get(0), chars.get(0), rooms.get(0));
 
 		chars.remove(charIndex);
 		weapons.remove(weaponIndex);
@@ -137,7 +137,9 @@ public class Game {
 			for (Player p : humanPlayers) {
 				if (!p.getDead()) {
 					p.startTurn();
-					if(gameEnd){break;}
+					if (gameEnd) {
+						break;
+					}
 				}
 			}
 		}
@@ -165,81 +167,87 @@ public class Game {
 		// Depending on the direction the player wants to move, check if it is
 		// valid
 		if (direction == Direction.UP) {
-			if (playerY == 0) {return false;} // Player can't move off the board
+			if (playerY == 0) {
+				return false;
+			} // Player can't move off the board
 			BoardPiece piece = gameBoard[playerY - 1][playerX];
 
-			if (piece instanceof Hallway) {return true;}
+			if (piece instanceof Hallway) {
+				return true;
+			}
 			if (piece instanceof RoomTile) {
-				if(piece != null){
-					if(((RoomTile) piece).name.equals(player.getRoomLastTurn() ) ){
+				if (piece != null) {
+					if (((RoomTile) piece).name.equals(player.getRoomLastTurn())) {
 						System.out.println("You can't enter that room! You were there during your last turn");
 						return false;
-					}
-					else{
+					} else {
 						return roomTileCheck(player, direction);
 					}
 				}
 			}
-		} 
-		else if (direction == Direction.DOWN) {
-			if (playerY == 24) {return false;} // Player can't move off the board
+		} else if (direction == Direction.DOWN) {
+			if (playerY == 24) {
+				return false;
+			} // Player can't move off the board
 			BoardPiece piece = gameBoard[playerY + 1][playerX];
 
-			if (piece instanceof Hallway) {return true;}
+			if (piece instanceof Hallway) {
+				return true;
+			}
 			if (piece instanceof RoomTile) {
-				if(piece != null){
-					if(((RoomTile) piece).name.equals(player.getRoomLastTurn() ) ){
+				if (piece != null) {
+					if (((RoomTile) piece).name.equals(player.getRoomLastTurn())) {
 						System.out.println("You can't enter that room! You were there during your last turn");
 						return false;
-					}
-					else{
+					} else {
 						return roomTileCheck(player, direction);
 					}
 				}
-			}
-			else{
+			} else {
 				return roomTileCheck(player, direction);
 			}
 
-		} 
-		else if (direction == Direction.LEFT) {
-			if (playerX == 0) {return false;} // Player can't move off the board
+		} else if (direction == Direction.LEFT) {
+			if (playerX == 0) {
+				return false;
+			} // Player can't move off the board
 			BoardPiece piece = gameBoard[playerY][playerX - 1];
 
-			if (piece instanceof Hallway) {return true;}
+			if (piece instanceof Hallway) {
+				return true;
+			}
 			if (piece instanceof RoomTile) {
-				if(piece != null){
-					if(((RoomTile) piece).name.equals(player.getRoomLastTurn() ) ){
+				if (piece != null) {
+					if (((RoomTile) piece).name.equals(player.getRoomLastTurn())) {
 						System.out.println("You can't enter that room! You were there during your last turn");
 						return false;
-					}
-					else{
+					} else {
 						return roomTileCheck(player, direction);
 					}
 				}
-			}
-			else{
+			} else {
 				return roomTileCheck(player, direction);
 			}
 
-		} 
-		else if (direction == Direction.RIGHT) {
-			if (playerX == 24) {return false;} // Player can't move off the board
+		} else if (direction == Direction.RIGHT) {
+			if (playerX == 24) {
+				return false;
+			} // Player can't move off the board
 			BoardPiece piece = gameBoard[playerY][playerX + 1];
 
-			if (piece instanceof Hallway) {return true;}
+			if (piece instanceof Hallway) {
+				return true;
+			}
 			if (piece instanceof RoomTile) {
-				if(piece != null){
-					if(((RoomTile) piece).name.equals(player.getRoomLastTurn() ) ){
+				if (piece != null) {
+					if (((RoomTile) piece).name.equals(player.getRoomLastTurn())) {
 						System.out.println("You can't enter that room! You were there during your last turn");
 						return false;
-					}
-					else{
+					} else {
 						return roomTileCheck(player, direction);
 					}
 				}
-			}
-			else{
+			} else {
 				return roomTileCheck(player, direction);
 			}
 
@@ -297,7 +305,8 @@ public class Game {
 	}
 
 	/**
-	 * Checks if a given tile in the direction FROM the player is a room tile that represents a door
+	 * Checks if a given tile in the direction FROM the player is a room tile
+	 * that represents a door
 	 * 
 	 * @param player
 	 * @param direction
@@ -475,55 +484,73 @@ public class Game {
 		System.out.println("SOMETHING WENT HORRIBLY WRONG");
 		return null;
 	}
-	
-	public boolean hasFreeDoor(Room.Name name){
-		switch(name){
-			case KITCHEN:
-				for(Location l : kitchenDoors){
-					if(isFreeDoor(l) != null){return true;}
+
+	public boolean hasFreeDoor(Room.Name name) {
+		switch (name) {
+		case KITCHEN:
+			for (Location l : kitchenDoors) {
+				if (isFreeDoor(l) != null) {
+					return true;
 				}
-				return false;
-			case BALLROOM:
-				for(Location l : ballRoomDoors){
-					if(isFreeDoor(l) != null){return true;}
-				}
-				return false;
-			case CONSERVATORY:
-				for(Location l : conservatoryDoors){
-					if(isFreeDoor(l) != null){return true;}
-				}
-				return false;
-			case BILLIARD:
-				for(Location l : billiardDoors){
-					if(isFreeDoor(l) != null){return true;}
-				}
-				return false;
-			case LIBRARY:
-				for(Location l : libraryDoors){
-					if(isFreeDoor(l) != null){return true;}
-				}
-				return false;
-			case STUDY:
-				for(Location l : studyDoors){
-					if(isFreeDoor(l) != null){return true;}
-				}
-				return false;
-			case HALL:
-				for(Location l : hallDoors){
-					if(isFreeDoor(l) != null){return true;}
-				}
-				return false;
-			case LOUNGE:
-				for(Location l : loungeDoors){
-					if(isFreeDoor(l) != null){return true;}
-				}
-				return false;
-			case DININGROOM:
-				for(Location l : diningRoomDoors){
-					if(isFreeDoor(l) != null){return true;}
-				}
-				return false;
 			}
+			return false;
+		case BALLROOM:
+			for (Location l : ballRoomDoors) {
+				if (isFreeDoor(l) != null) {
+					return true;
+				}
+			}
+			return false;
+		case CONSERVATORY:
+			for (Location l : conservatoryDoors) {
+				if (isFreeDoor(l) != null) {
+					return true;
+				}
+			}
+			return false;
+		case BILLIARD:
+			for (Location l : billiardDoors) {
+				if (isFreeDoor(l) != null) {
+					return true;
+				}
+			}
+			return false;
+		case LIBRARY:
+			for (Location l : libraryDoors) {
+				if (isFreeDoor(l) != null) {
+					return true;
+				}
+			}
+			return false;
+		case STUDY:
+			for (Location l : studyDoors) {
+				if (isFreeDoor(l) != null) {
+					return true;
+				}
+			}
+			return false;
+		case HALL:
+			for (Location l : hallDoors) {
+				if (isFreeDoor(l) != null) {
+					return true;
+				}
+			}
+			return false;
+		case LOUNGE:
+			for (Location l : loungeDoors) {
+				if (isFreeDoor(l) != null) {
+					return true;
+				}
+			}
+			return false;
+		case DININGROOM:
+			for (Location l : diningRoomDoors) {
+				if (isFreeDoor(l) != null) {
+					return true;
+				}
+			}
+			return false;
+		}
 		System.out.println("SHOULDNT HAVE GOT HERE LOL");
 		return false;
 	}
@@ -621,10 +648,9 @@ public class Game {
 
 		int userInput = getUserInput(input, 1, 2);
 
-		p.printCards();
-		
 		switch (userInput) {
 		case 1:
+			p.printCards();
 			makeSuggestion(p, input);
 			break;
 		case 2:
@@ -642,18 +668,18 @@ public class Game {
 	 * 
 	 * @param player
 	 *            - player making the suggestion
-	 * @param input 
+	 * @param input
 	 */
 	public void makeSuggestion(Player player, Scanner input) {
 		Solution guess = constructGuess(player, input);
 		System.out.println(guess.toString());
-		for (Player p : humanPlayers){
-			if (!p.equals(player)){
-				for (Card c : p.getCards()){
-					if (guess.checkCard(c)){
+		for (Player p : humanPlayers) {
+			if (!p.equals(player)) {
+				for (Card c : p.getCards()) {
+					if (guess.checkCard(c)) {
 						System.out.println("");
-						System.out.println(p.getCharacter().name + " has the card \n"
-								+ "\n*******************\n* " + c.toString() + " *\n*******************\n");
+						System.out.println(p.getCharacter().name + " has the card \n" + "\n*******************\n* "
+								+ c.toString() + " *\n*******************\n");
 						return;
 					}
 				}
@@ -669,30 +695,35 @@ public class Game {
 	 * 
 	 * @param p
 	 *            - player making the accusation
-	 * @param input2 
+	 * @param input2
 	 */
 	public void makeAccusation(Player p, Scanner input) {
 		System.out.println("Are you sure you want to submit an accusation?\n"
 				+ "If you are incorrect you will be removed from the game\n"
 				+ "Press 1 to continue or press any other key to go back to game");
 
-		p.waitForOne(input);
-
-		Solution guess = constructGuess(p, input);
-		System.out.println(guess.toString());
-		if (guess.equals(solution)) {
-			gameEnd = true;
-			System.out.println("Congratualtions " + p.getCharacter().name + " you solved the murder");
-		} else {
-			System.out.println("Your guess was incorrect, you have been removed from the game");
-			p.removeFromGame();
+		if (input.next().equals("1")) {
+			p.printCards();
+			Solution guess = constructGuess(p, input);
+			System.out.println("Guess:");
+			System.out.println(guess.toString());
+			System.out.println("Solution:");
+			System.out.println(solution.toString());
+			if (guess.equals(solution)) {
+				gameEnd = true;
+				System.out.println("\n  Congratualtions " + p.getCharacter().name + " you solved the murder\n");
+			} else {
+				System.out.println("\n  Your guess was incorrect, you have been removed from the game\n");
+				p.removeFromGame();
+			}
 		}
 	}
 
 	/**
 	 * Constructs a solution based on the users current room and their choice of
 	 * weapon and character
-	 * @param input 
+	 * 
+	 * @param input
 	 * 
 	 * @param Player
 	 *            - the current player that is making the guess
@@ -708,7 +739,7 @@ public class Game {
 				+ "            3: Mrs Peacock\n            4: Professor Plum\n            5: Miss Scarlett\n"
 				+ "            6: Colonel Mustard\n");
 		System.out.println("Select a number for the character you are accusing");
-		
+
 		userInput = getUserInput(input, 1, 6);
 		Character character = new Character(getCharacterColour(userInput));
 
@@ -721,8 +752,7 @@ public class Game {
 		System.out.println("Room: " + room.toString());
 		System.out.println("Character: " + character.toString());
 		System.out.println("Weapon:  1: Candlestick\n         2: Dagger\n"
-				+ "         3: Leadpipe\n         4: Rope\n         5: Spanner\n"
-				+ "         6: Revolver\n");
+				+ "         3: Leadpipe\n         4: Rope\n         5: Spanner\n" + "         6: Revolver\n");
 
 		System.out.println("Select a number for the weapon you are using");
 
@@ -730,7 +760,6 @@ public class Game {
 		Weapon weapon = new Weapon(getWeaponName(userInput));
 		return new Solution(weapon, character, room);
 
-		
 	}
 
 	/**
@@ -760,7 +789,7 @@ public class Game {
 				System.out.println("Please enter a number from " + low + " to " + high);
 				continue;
 			}
-			
+
 		}
 		return userInput;
 	}
@@ -847,7 +876,7 @@ public class Game {
 	 * Initializes the arrays of doors for each room. Doors will be listed from
 	 * top to bottom, left to right
 	 */
-	public void initialiseDoorLocations(){
+	public void initialiseDoorLocations() {
 		this.kitchenDoors = new ArrayList<Location>();
 		this.ballRoomDoors = new ArrayList<Location>();
 		this.conservatoryDoors = new ArrayList<Location>();
@@ -924,11 +953,11 @@ public class Game {
 				new Room(Room.Name.BALLROOM));
 
 	}
-	
-	public void printDoors(Room.Name name){
+
+	public void printDoors(Room.Name name) {
 		switch (name) {
 		case BALLROOM:
-			for(Location l : ballRoomDoors){
+			for (Location l : ballRoomDoors) {
 				System.out.println(l.x + " " + l.y);
 			}
 			break;

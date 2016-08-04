@@ -151,7 +151,7 @@ public class Board {
 				+ "\n \n #: Out of Bounds    D: Dining Room      -: Hallway\n"
 				+ " B: Billiard Room    K: Kitchen          l: Lounge\n"
 				+ " b: Ball Room        H: Hall             C: Conservatory\n"
-				+ " S: Study            L: Library\n";
+				+ " S: Study            L: Library          @: Door\n";
 
 		return boardStr;
 	}
