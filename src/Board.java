@@ -133,7 +133,7 @@ public class Board {
 	}
 
 	public String toString() {
-		String boardStr = "\n***************** Cluedo Board ******************\n\n";
+		String boardStr = "\n";
 
 		for (int row = 0; row <= 24; row++) {
 			for (int col = 0; col <= 24; col++) {
@@ -145,11 +145,12 @@ public class Board {
 			boardStr += "\n";
 		}
 
-		boardStr += "\n  1: Mrs White         4: Professor Plum\n" + "  2: Reverend Green    5: Miss Scarlett\n"
-				+ "  3: Mrs Peacock       6: Colonel Mustard\n\n" + "  #: Out of Bounds     D: Dining Room\n"
-				+ "  -: Hallway           B: Billiard Room\n" + "  K: Kitchen           l: Lounge\n"
-				+ "  b: Ball Room         H: Hall\n" + "  C: Conservatory      S: Study\n"
-						+ "  L: Library\n";
+		boardStr += "\n 1: Mrs White        2: Reverend Green   3: Mrs Peacock"
+				+ "\n 4: Professor Plum   5: Miss Scarlett    6: Colonel Mustard"
+				+ "\n \n #: Out of Bounds    D: Dining Room      -: Hallway\n"
+				+ " B: Billiard Room    K: Kitchen          l: Lounge\n"
+				+ " b: Ball Room        H: Hall             C: Conservatory\n"
+				+ " S: Study            L: Library\n";
 
 		return boardStr;
 	}

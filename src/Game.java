@@ -417,11 +417,9 @@ public class Game {
 
 		for (ArrayList<Location> list : roomTileLists) {
 			if (list.contains(p.getLocation())) {
-				System.out.println("returned true");
 				return true;
 			}
 		}
-		System.out.println("returned false");
 		return false;
 	}
 
@@ -594,6 +592,8 @@ public class Game {
 
 		int userInput = getUserInput(input, 1, 2);
 
+		p.printCards();
+		
 		switch (userInput) {
 		case 1:
 			makeSuggestion(p, input);
@@ -619,9 +619,9 @@ public class Game {
 			if (!p.equals(player))
 				for (Card c : p.getCards())
 					if (guess.checkCard(c))
-						System.out.println(p.getCharacter().name + " has the card " + c.toString());
+						System.out.println(p.getCharacter().name + " has the card " + c.toString() + "\n");
 
-		System.out.println("None of the other players had any of the cards in your suggestion");
+		System.out.println("None of the other players had any of the cards in your suggestion\n");
 	}
 
 	/**
@@ -683,9 +683,9 @@ public class Game {
 		System.out.println("Room:" + room.toString());
 		System.out.println("Character:" + character.toString());
 		System.out.println("Select a number for the weapon you are using");
-		System.out.println("Weapon:  1: Candlestick\n            2: Dagger\n"
-				+ "            3: Leadpipe\n            4: Rope\n            5: Spanner\n"
-				+ "            6: Revolver\n");
+		System.out.println("Weapon:  1: Candlestick\n          2: Dagger\n"
+				+ "          3: Leadpipe\n          4: Rope\n          5: Spanner\n"
+				+ "          6: Revolver\n");
 
 		userInput = getUserInput(input, 1, 6);
 		Weapon weapon = new Weapon(getWeaponName(userInput));
@@ -713,10 +713,13 @@ public class Game {
 				userInput = input.nextInt();
 				if (userInput >= low && userInput <= high)
 					isValid = true;
+				else
+					System.out.println("Please enter a number from " + low + " to " + high);
 			} catch (InputMismatchException e) {
+				System.out.println("Please enter a number from " + low + " to " + high);
 				continue;
 			}
-			System.out.println("Please enter a number from " + low + " to " + high);
+			
 		}
 		return userInput;
 	}

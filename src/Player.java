@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Player implements BoardPiece {
@@ -25,8 +26,8 @@ public class Player implements BoardPiece {
 	public boolean getUsed() {
 		return used;
 	}
-	
-	public ArrayList<Card> getCards(){
+
+	public ArrayList<Card> getCards() {
 		return cards;
 	}
 
@@ -70,10 +71,7 @@ public class Player implements BoardPiece {
 	 * 
 	 */
 	public void startTurn() {
-		printCards();
-		int roll = rollDice();
-		System.out.println("You rolled a " + roll + "!");
-		makeMovementDecisions(roll);
+		makeMovementDecisions();
 	}
 
 	/**
@@ -85,14 +83,15 @@ public class Player implements BoardPiece {
 	 * left.
 	 * 
 	 */
-	public void makeMovementDecisions(int roll) {
+	public void makeMovementDecisions() {
 		Scanner input = new Scanner(System.in);
-		 
+
 		// Is the player starting their turn in a room?
-		// If so, move them to the first free door and start their turn from the door
-		if(this.game.isInRoom(this) ){ 
+		// If so, move them to the first free door and start their turn from the
+		// door
+		if (this.game.isInRoom(this)) {
 			Room.Name roomName = this.game.inRoom(this);
-			if(this.game.hasFreeDoor(roomName) ){
+			if (this.game.hasFreeDoor(roomName)) {
 				ArrayList<Location> doorLocations = this.game.getDoorLocations(roomName);
 				System.out.println("You are required to leave this room at the start of your turn.");
 				System.out.println("You will not be able to re enter this room until on this turn");
@@ -100,51 +99,53 @@ public class Player implements BoardPiece {
 				System.out.println("Doors are numbered starting from 1, top to bottom, left to right");
 				System.out.println("Which Door would you like to exit the room from? (Enter a number)");
 				String doorNumber = input.next();
-				
+
 			}
-			
-			//for(Location loc : doorLocations){
-				//if(this.game.firstFreeLocation(loc) != null){;
-					//this.location = loc;
-					//this.game.getBoard().updateBoard(this.game.humanPlayers);
-					//break;
-				//}
-			//}
 		}
-		
+
 		// The user is ready to make their moves
-		System.out.println("It is time to move "+ this.character.name +" on the board.");
-		System.out.println("You will enter either up, down, left or right for each of your " + roll + " moves.");
+		System.out.println("\n\nIt is time to move " + this.character.name + " on the board.");
+		printCards();
+		System.out.println("You will have four options for each of your moves.");
+		System.out.println("up");
+		System.out.println("down");
+		System.out.println("left");
+		System.out.println("right");
+		System.out.println("\nEnter 1 to begin your turn by rolling the dice");
+		waitForOne(input);
+
+		int roll = rollDice();
+		System.out.println("You rolled " + roll + "!");
+		
+		game.printBoard();
+
 		int movesRemaining = roll;
 		boolean enteredRoom = false;
 
 		while (movesRemaining != 0 && !enteredRoom) {
-			game.printBoard();
-			System.out.println("You have " + movesRemaining + " moves remaining " + this.character.name + ".\n");
-			System.out.println("Where would you like to move? ");
+			
+			System.out.println("You have " + movesRemaining + " moves remaining ");
+			System.out.println(this.character.name + " where would you like to move? (up, down, left or right)");
 
-			String userInput = input.next();
-			userInput = userInput.toUpperCase();
+			int userInput = getInputDirection(input);
+			
 			Game.Direction direction = null;
 
 			// Check they have entered a valid direction
 			boolean validMove = false;
-			if (userInput.equals(Game.Direction.UP.toString())) {
+			if (userInput == 1) {
 				direction = Game.Direction.UP;
 				validMove = this.game.checkValidMove(this, direction);
-			} else if (userInput.equals(Game.Direction.DOWN.toString())) {
+			} else if (userInput == 2) {
 				direction = Game.Direction.DOWN;
 				validMove = this.game.checkValidMove(this, direction);
-			} else if (userInput.equals(Game.Direction.LEFT.toString())) {
+			} else if (userInput == 3) {
 				direction = Game.Direction.LEFT;
 				validMove = this.game.checkValidMove(this, direction);
-			} else if (userInput.equals(Game.Direction.RIGHT.toString())) {
+			} else if (userInput == 4) {
 				direction = Game.Direction.RIGHT;
 				validMove = this.game.checkValidMove(this, direction);
-			} else {
-				System.out.println("That was not a valid expression, please enter up, down, left or right.");
-				continue;
-			}
+			} 
 
 			// If the move was invalid, continue to the next iteration of the
 			// while loop
@@ -152,27 +153,69 @@ public class Player implements BoardPiece {
 			if (validMove) {
 				if (direction != null) {
 					this.game.applyMove(this, direction);
-					if(this.game.isInRoom(this) ){enteredRoom = true;} // If this player is now in a room
+					if (this.game.isInRoom(this)) {
+						enteredRoom = true;
+					} // If this player is now in a room
 				}
 				movesRemaining--;
+			}else{
+				System.out.println("invalid move");
 			}
+			game.printBoard();
 		}
-		game.printBoard();
 		
-		if(enteredRoom){
+		
+
+		if (enteredRoom) {
 			game.makeSuggestionDecisions(this);
-		}
-		else{
-			System.out.println(this.character.name + " your turn is over.\n" 
+		} else {
+			System.out.println(this.character.name + " your turn is over.\n"
+					+ "\n----------------------------------------------------------\n"
 					+ "Next Player enter 1 when you are ready to start your turn");
 
-			String start = "";
-			while (!start.equals("1")) {
-				start = input.next();
-			}
+			waitForOne(input);
+
 		}
 	}
 	
+	
+	/**
+	 * gets the users input from the console. expects a integer between the low
+	 * and high bounds (inclusive)
+	 * 
+	 * @param input
+	 *            - scanner
+	 * @return the users valid input
+	 */
+	public int getInputDirection(Scanner input) {
+		String userInput = "";
+
+		while (true) {
+				userInput = input.next();
+				if (userInput.equals("up"))
+					return 1;
+				else if(userInput.equals("down"))
+					return 2;
+				else if(userInput.equals("left"))
+					return 3;
+				else if(userInput.equals("right"))
+					return 4;
+				else
+					System.out.println("Please enter up, down, left or right");
+		}
+	}
+
+	/**
+	 * a simple method that waits for the user to enter 1
+	 * 
+	 * @param input
+	 */
+	public void waitForOne(Scanner input) {
+		String start = "";
+		while (!start.equals("1")) {
+			start = input.next();
+		}
+	}
 
 	/**
 	 * A simple method to update the Location for this player
@@ -180,12 +223,15 @@ public class Player implements BoardPiece {
 	public void updateLocation(Location location) {
 		this.location = location;
 	}
-	
-	public Character getCharacter(){
+
+	public Character getCharacter() {
 		return character;
 	}
-	public boolean equals(Player p){
-		if(this.character.equals(p.character) ){return true;}
+
+	public boolean equals(Player p) {
+		if (this.character.equals(p.character)) {
+			return true;
+		}
 		return false;
 	}
 
@@ -193,11 +239,11 @@ public class Player implements BoardPiece {
 		this.game.getBoard().getBoard()[this.character.startLoc.getY()][this.character.startLoc.getX()] = this;
 		dead = true;
 	}
-	
+
 	public boolean getDead() {
 		return dead;
 	}
-	
+
 	public String toString() {
 		switch (this.character.colour) {
 		case WHITE:

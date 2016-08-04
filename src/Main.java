@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Main {
@@ -13,10 +14,6 @@ public class Main {
 		System.out.println(""
 				+ "**********************************************************\n"
 				+ "                    Welcome to CLUEDO\n"
-				//+ "At different points in the game you will be given a menu.\n"
-				//+ "To navigate around the game you will enter numbers into the\n"
-				//+ "console that correspond to the provided menu.\n"
-				//+ "      ONLY NUMBERS WILL BE ACCEPTED AS VALID INPUT\n"
 				+ "**********************************************************");
 		makeCharacters();
 		makeWeapons();
@@ -78,18 +75,11 @@ public class Main {
 
 		System.out.println("There must be between 3 and 6 players, inclusive.");
 		System.out.println("Please enter the number of players: ");
-		String number = input.next();
-		// If the user has not entered a valid number of players, loop until they do
-		while(!validNumber(number) ){
-			System.out.println("You must have between 3 and 6 players, inclusive!");
-			System.out.println("Please enter the number of players: ");
-			number = input.next();
-		}
-		int numberOfPlayers = Integer.parseInt(number);
+		int numPlayers = getUserInput(input, 3, 6);
 		
 		int count = 0;
 		for (Character c : characters) {
-			if (count < numberOfPlayers) {
+			if (count < numPlayers) {
 				players.add(new Player(c, true));
 				count++;
 			} else {
@@ -97,16 +87,39 @@ public class Main {
 			}
 			
 		}
-		//input.close();
-	}
-	
-	private static boolean validNumber(String s){
-		s.trim();
-		if(s.equals("3") ){return true;}
-		if(s.equals("4") ){return true;}
-		if(s.equals("5") ){return true;}
-		if(s.equals("6") ){return true;}
-		return false;
 	}
 
+	
+	/**
+	 * gets the users input from the console. expects a integer between the low
+	 * and high bounds (inclusive)
+	 * 
+	 * @param input
+	 *            - scanner
+	 * @param low
+	 *            - lowest valid number
+	 * @param high
+	 *            - highest valid number
+	 * @return the users valid input
+	 */
+	public static int getUserInput(Scanner input, int low, int high) {
+		int userInput = 0;
+		boolean isValid = false;
+
+		while (!isValid) {
+			userInput = 0;
+			try {
+				userInput = input.nextInt();
+				if (userInput >= low && userInput <= high)
+					isValid = true;
+				else
+					System.out.println("Please enter a number from " + low + " to " + high);
+			} catch (InputMismatchException e) {
+				System.out.println("Catch: "+ userInput +"Please enter a number from " + low + " to " + high);
+				continue;
+			}
+			
+		}
+		return userInput;
+	}
 }

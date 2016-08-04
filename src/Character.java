@@ -1,3 +1,5 @@
+import java.time.Year;
+
 public class Character implements Card {
 	public String name;
 	public Colour colour;
@@ -22,6 +24,26 @@ public class Character implements Card {
 	 */
 	public Character(Colour colour) {
 		this.colour = colour;
+		switch(colour){
+		case WHITE:
+			name = "Mrs White";
+			break;
+		case GREEN:
+			name = "Reverend Green";
+			break;
+		case BLUE:
+			name = "Miss Scarlett";
+			break;
+		case PURPLE:
+			name = "Proffessor Plum";
+			break;
+		case RED:
+			name = "Mrs Peacock";
+			break;
+		case YELLOW:
+			name = "Colonel Mustard";
+			break;
+		}
 	}
 
 	public boolean equals(Character character) {
