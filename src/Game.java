@@ -181,7 +181,7 @@ public class Game {
 			}
 			if (piece instanceof RoomTile) {
 				if (piece != null) {
-					if (((RoomTile) piece).name.equals(player.getRoomLastTurn())) {
+					if (((RoomTile) piece).getName().equals(player.getRoomLastTurn())) {
 						System.out.println("You can't enter that room! You were there during your last turn");
 						return false;
 					} else {
@@ -200,7 +200,7 @@ public class Game {
 			}
 			if (piece instanceof RoomTile) {
 				if (piece != null) {
-					if (((RoomTile) piece).name.equals(player.getRoomLastTurn())) {
+					if (((RoomTile) piece).getName().equals(player.getRoomLastTurn())) {
 						System.out.println("You can't enter that room! You were there during your last turn");
 						return false;
 					} else {
@@ -222,7 +222,7 @@ public class Game {
 			}
 			if (piece instanceof RoomTile) {
 				if (piece != null) {
-					if (((RoomTile) piece).name.equals(player.getRoomLastTurn())) {
+					if (((RoomTile) piece).getName().equals(player.getRoomLastTurn())) {
 						System.out.println("You can't enter that room! You were there during your last turn");
 						return false;
 					} else {
@@ -244,7 +244,7 @@ public class Game {
 			}
 			if (piece instanceof RoomTile) {
 				if (piece != null) {
-					if (((RoomTile) piece).name.equals(player.getRoomLastTurn())) {
+					if (((RoomTile) piece).getName().equals(player.getRoomLastTurn())) {
 						System.out.println("You can't enter that room! You were there during your last turn");
 						return false;
 					} else {
@@ -275,7 +275,7 @@ public class Game {
 			player.getLocation().moveUp();
 			piece = this.board.getBoard()[playerY - 1][playerX];
 			if (piece instanceof RoomTile) {
-				Room.Name name = ((RoomTile) piece).name;
+				Room.Name name = ((RoomTile) piece).getName();
 				player.updateLocation(getRoomTile(name));
 			}
 			break;
@@ -283,7 +283,7 @@ public class Game {
 			player.getLocation().moveDown();
 			piece = this.board.getBoard()[playerY + 1][playerX];
 			if (piece instanceof RoomTile) {
-				Room.Name name = ((RoomTile) piece).name;
+				Room.Name name = ((RoomTile) piece).getName();
 				player.updateLocation(getRoomTile(name));
 			}
 			break;
@@ -291,7 +291,7 @@ public class Game {
 			player.getLocation().moveRight();
 			piece = this.board.getBoard()[playerY][playerX + 1];
 			if (piece instanceof RoomTile) {
-				Room.Name name = ((RoomTile) piece).name;
+				Room.Name name = ((RoomTile) piece).getName();
 				player.updateLocation(getRoomTile(name));
 			}
 			break;
@@ -299,7 +299,7 @@ public class Game {
 			player.getLocation().moveLeft();
 			piece = this.board.getBoard()[playerY][playerX - 1];
 			if (piece instanceof RoomTile) {
-				Room.Name name = ((RoomTile) piece).name;
+				Room.Name name = ((RoomTile) piece).getName();
 				player.updateLocation(getRoomTile(name));
 			}
 			break;
@@ -324,28 +324,28 @@ public class Game {
 		if (direction == Direction.UP) {
 			tile = this.board.getBoard()[playerY - 1][playerX];
 			if (tile instanceof RoomTile) {
-				if (((RoomTile) tile).door) {
+				if (((RoomTile) tile).isDoor() ) {
 					return true;
 				}
 			}
 		} else if (direction == Direction.DOWN) {
 			tile = this.board.getBoard()[playerY + 1][playerX];
 			if (tile instanceof RoomTile) {
-				if (((RoomTile) tile).door) {
+				if (((RoomTile) tile).isDoor() ) {
 					return true;
 				}
 			}
 		} else if (direction == Direction.LEFT) {
 			tile = this.board.getBoard()[playerY][playerX - 1];
 			if (tile instanceof RoomTile) {
-				if (((RoomTile) tile).door) {
+				if (((RoomTile) tile).isDoor() ) {
 					return true;
 				}
 			}
 		} else if (direction == Direction.RIGHT) {
 			tile = this.board.getBoard()[playerY][playerX + 1];
 			if (tile instanceof RoomTile) {
-				if (((RoomTile) tile).door) {
+				if (((RoomTile) tile).isDoor() ) {
 					return true;
 				}
 			}
@@ -938,8 +938,8 @@ public class Game {
 				// If it is a RoomTile and represents a door, add it's location
 				// to the respective array
 				if (piece instanceof RoomTile) {
-					if (((RoomTile) piece).door) {
-						Room.Name name = ((RoomTile) piece).name;
+					if (((RoomTile) piece).isDoor() ) {
+						Room.Name name = ((RoomTile) piece).getName();
 						switch (name) {
 						case KITCHEN:
 							kitchenDoors.add(new Location(x, y));

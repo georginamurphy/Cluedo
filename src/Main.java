@@ -3,13 +3,33 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Main {
+	// An ArrayList to hold character cards for the game
 	private static ArrayList<Character> characters = new ArrayList<Character>();
+	
+	// An ArrayList to hold weapon cards for the game
 	private static ArrayList<Weapon> weapons = new ArrayList<Weapon>();
+	
+	// An ArrayList to hold room cards the game
 	private static ArrayList<Room> rooms = new ArrayList<Room>();
-	private static Board board;
-	private static Game game;
+	
+	// An ArrayList to hold the players for the game
 	private static ArrayList<Player> players = new ArrayList<Player>();
+	
+	// The board for the game
+	private static Board board;
+	
+	// The game object for the game
+	private static Game game;
 
+	
+	/**
+	 * Responsible for initializing aspects of the game, such as creating the board and game
+	 * objects.  Also creates the solution for the game, and deals cards to the human players.
+	 * 
+	 * The run method called on game is what actually starts the loop that runs the game.
+	 * 
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		System.out.println(""
 				+ "**********************************************************\n"
@@ -21,7 +41,6 @@ public class Main {
 		setPlayers();
 		board = new Board(players);
 		game = new Game(board, players);
-		//game.mockGame(characters, weapons, rooms);
 		game.createSolution(characters, weapons, rooms);
 		game.dealCards(characters, weapons, rooms);
 		game.run();

@@ -1,6 +1,13 @@
 import java.util.ArrayList;
 import java.util.Scanner;
 
+/**
+ * The player class represents a player in the Cluedo game.
+ * Can either be a human player, or a non human player. 
+ *  
+ * Non-human players have no AI, but their pieces on the board can be manipulated by human players,
+ * which is why they are still classified as 'players'.
+ */
 public class Player implements BoardPiece {
 
 	// The overall game object for Cluedo
@@ -59,6 +66,39 @@ public class Player implements BoardPiece {
 	public boolean getUsed() {
 		return used;
 	}
+	
+	/**
+	 * Getter method for the character for this player
+	 * @return
+	 */
+	public Character getCharacter() {
+		return character;
+	}
+	
+	/**
+	 * A method which removes the player from the game because they have lost
+	 */
+	public void removeFromGame() {
+		this.game.getBoard().getBoard()[this.character.startLoc.getY()][this.character.startLoc.getX()] = this;
+		dead = true;
+	}
+
+	/**
+	 * A getter method for the dead field
+	 * @return - True if the player has lost, false otherwise
+	 */
+	public boolean getDead() {
+		return dead;
+	}
+
+	/**
+	 * Returns the room the player was in during their previous turn
+	 * Will be null if they player did not finish in a room
+	 * @return
+	 */
+	public Room.Name getRoomLastTurn() {
+		return this.roomLastTurn;
+	}
 
 	/**
 	 * Getter method for the player's hand of cards
@@ -113,6 +153,13 @@ public class Player implements BoardPiece {
 		}
 		System.out.println("----------------------------");
 	}
+	
+	/**
+	 * A simple method to update the Location for this player
+	 */
+	public void updateLocation(Location location) {
+		this.location = location;
+	}
 
 	/**
 	 * A simple method that will generate two values between 1 and 6, inclusive
@@ -126,7 +173,7 @@ public class Player implements BoardPiece {
 
 	/**
 	 * Initiates the player's turn, starts a chain of method calls that will
-	 * play out everything the player must do to comeplete their turn.
+	 * play out everything the player must do to complete their turn.
 	 */
 	public void startTurn() {
 		System.out.println("_________________________________________________________ " + this.character.name
@@ -206,10 +253,6 @@ public class Player implements BoardPiece {
 			System.out.println("Your turn will now end.");
 		}
 
-		//if (enteredRoom) {
-		//	game.makeSuggestionDecisions(this);
-		//}
-
 		if(!game.getGameEnd() ){
 			if (!enteredRoom) {
 				this.roomLastTurn = null;
@@ -230,6 +273,7 @@ public class Player implements BoardPiece {
 	 * will return a boolean representing whether a player's turn is being skipped.
 	 * @return
 	 */
+	@SuppressWarnings("resource")
 	public boolean startTurnInRoom() {
 		Room.Name roomName = this.game.inRoom(this);
 		Scanner input = new Scanner(System.in);
@@ -269,19 +313,34 @@ public class Player implements BoardPiece {
 		return false;
 	}
 	
-	
+	/**
+	 * 
+	 * @param validMove - True if a move needs to be applied in the given direction,
+	 * 					  false if the move was invalid and shouldn't be applied.
+	 * @param direction - The direction a validMove will be applied in
+	 * @param roll - An int representing how many moves a player has left to make
+	 * 
+	 * @return - How many moves the player has left after the application of the move.
+	 * 			 If the move was invalid, will return the same value that it was passed.
+	 *           If the move was valid, it will return the value passed, decremented by one.
+	 */
 	public int applyValidMove(boolean validMove, Game.Direction direction, int roll){
-		// If the move was invalid, continue to the next iteration of
-		// the while loop.
-		// Otherwise, apply the move and decrement movesRemaining
 		String invalid = "";
+		
+		// If validMove is true, we must apply the move to the board in the given direction
+		// Otherwise, set the invalid String to an appropriate message and print it to the player.
+		// Will decrement roll by one if a valid move was made.
 		if (validMove) {
 			if (direction != null) {
 				this.game.applyMove(this, direction);
-				if (this.game.isInRoom(this)) { // If the player is now in a room
-					this.roomLastTurn = this.game.inRoom(this);
+				
+				// If the player is now in a room, set the appropriate fields and call
+				// the makeSuggestions method.  This initiates the next 'phase' of a 
+				// players turn
+				if (this.game.isInRoom(this)) {
+					this.roomLastTurn = this.game.inRoom(this); 
 					game.makeSuggestionDecisions(this);
-					return 0;
+					return 0; // The user made a suggestion or accusation, forfeiting their remaining moves
 				}
 			}
 			roll--;
@@ -289,6 +348,8 @@ public class Player implements BoardPiece {
 		else {
 			invalid = "You made an invalid move, please try again.";
 		}
+		// Print the updated board, and the invalid String.
+		// 
 		game.printBoard();
 		System.out.println(invalid);
 		return roll;
@@ -323,7 +384,7 @@ public class Player implements BoardPiece {
 	}
 
 	/**
-	 * a simple method that waits for the user to enter 1
+	 * A simple method that waits for the user to enter 1
 	 * 
 	 * @param input
 	 */
@@ -335,36 +396,22 @@ public class Player implements BoardPiece {
 	}
 
 	/**
-	 * A simple method to update the Location for this player
+	 * A method which determines if two players are equal.
+	 * A player is considered equal to another if they share the same character.
+	 * 
+	 * @param p - The player we are comparing this object to
+	 * @return
 	 */
-	public void updateLocation(Location location) {
-		this.location = location;
-	}
-
-	public Character getCharacter() {
-		return character;
-	}
-
 	public boolean equals(Player p) {
 		if (this.character.equals(p.character)) {
 			return true;
 		}
 		return false;
 	}
-
-	public void removeFromGame() {
-		this.game.getBoard().getBoard()[this.character.startLoc.getY()][this.character.startLoc.getX()] = this;
-		dead = true;
-	}
-
-	public boolean getDead() {
-		return dead;
-	}
-
-	public Room.Name getRoomLastTurn() {
-		return this.roomLastTurn;
-	}
-
+	
+	/**
+	 * A toString method for a player
+	 */
 	public String toString() {
 		switch (this.character.colour) {
 		case WHITE:
