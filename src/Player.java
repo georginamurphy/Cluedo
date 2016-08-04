@@ -10,6 +10,7 @@ public class Player implements BoardPiece {
 	private ArrayList<Card> cards;
 	private boolean used;
 	private boolean dead;
+	private Room.Name roomLastTurn;
 
 	public Player(Character character, boolean used) {
 		this.character = character;
@@ -17,6 +18,7 @@ public class Player implements BoardPiece {
 		this.used = used;
 		this.cards = new ArrayList<Card>();
 		dead = false;
+		roomLastTurn = null;
 	}
 
 	public Location getLocation() {
@@ -86,6 +88,8 @@ public class Player implements BoardPiece {
 	public void makeMovementDecisions() {
 		Scanner input = new Scanner(System.in);
 
+		boolean turnSkipped = false;
+
 		// Is the player starting their turn in a room?
 		// If so, move them to the first free door and start their turn from the
 		// door
@@ -94,12 +98,31 @@ public class Player implements BoardPiece {
 			if (this.game.hasFreeDoor(roomName)) {
 				ArrayList<Location> doorLocations = this.game.getDoorLocations(roomName);
 				System.out.println("You are required to leave this room at the start of your turn.");
-				System.out.println("You will not be able to re enter this room until on this turn");
+				System.out.println("You will not be able to re enter this room on this turn");
 				System.out.println("Please select a the door you wish to leave the room from.");
 				System.out.println("Doors are numbered starting from 1, top to bottom, left to right");
 				System.out.println("Which Door would you like to exit the room from? (Enter a number)");
-				String doorNumber = input.next();
 
+				int doorNumber = this.game.getUserInput(input, 1, doorLocations.size());
+				boolean exitedRoom = false;
+
+				Location desiredDoor = doorLocations.get(doorNumber - 1);
+				desiredDoor = this.game.isFreeDoor(desiredDoor);
+				while (!exitedRoom) {
+					if (desiredDoor != null) { // If the door the user wants to
+												// exit is not blocked
+						this.location = desiredDoor;
+						this.game.getBoard().updateBoard(this.game.humanPlayers);
+						exitedRoom = true;
+					} else { // The door the user wants to exit IS blocked
+						System.out.println("That door is blocked by another player! Choose a different door.");
+						doorNumber = this.game.getUserInput(input, 1, doorLocations.size());
+						desiredDoor = doorLocations.get(doorNumber - 1);
+					}
+				}
+			} else { // The room doesn't have a free door, end their turn
+						// unlucky
+				turnSkipped = true;
 			}
 		}
 
@@ -116,69 +139,87 @@ public class Player implements BoardPiece {
 
 		int roll = rollDice();
 		System.out.println("You rolled " + roll + "!");
-		
+
 		game.printBoard();
 
 		int movesRemaining = roll;
 		boolean enteredRoom = false;
 
 		while (movesRemaining != 0 && !enteredRoom) {
-			
+
 			System.out.println("You have " + movesRemaining + " moves remaining ");
 			System.out.println(this.character.name + " where would you like to move? (up, down, left or right)");
 
-			int userInput = getInputDirection(input);
-			
-			Game.Direction direction = null;
+			while (movesRemaining != 0 && !enteredRoom & !turnSkipped) {
+				game.printBoard();
+				System.out.println("You have " + movesRemaining + " moves remaining " + this.character.name + ".\n");
+				System.out.println("Where would you like to move? ");
 
-			// Check they have entered a valid direction
-			boolean validMove = false;
-			if (userInput == 1) {
-				direction = Game.Direction.UP;
-				validMove = this.game.checkValidMove(this, direction);
-			} else if (userInput == 2) {
-				direction = Game.Direction.DOWN;
-				validMove = this.game.checkValidMove(this, direction);
-			} else if (userInput == 3) {
-				direction = Game.Direction.LEFT;
-				validMove = this.game.checkValidMove(this, direction);
-			} else if (userInput == 4) {
-				direction = Game.Direction.RIGHT;
-				validMove = this.game.checkValidMove(this, direction);
-			} 
+				int userInput = getInputDirection(input);
 
-			// If the move was invalid, continue to the next iteration of the
-			// while loop
-			// Otherwise, apply the move and decrement movesRemaining
-			if (validMove) {
-				if (direction != null) {
-					this.game.applyMove(this, direction);
-					if (this.game.isInRoom(this)) {
-						enteredRoom = true;
-					} // If this player is now in a room
+				Game.Direction direction = null;
+
+				// Check they have entered a valid direction
+				boolean validMove = false;
+				if (userInput == 1) {
+					direction = Game.Direction.UP;
+					validMove = this.game.checkValidMove(this, direction);
+				} else if (userInput == 2) {
+					direction = Game.Direction.DOWN;
+					validMove = this.game.checkValidMove(this, direction);
+				} else if (userInput == 3) {
+					direction = Game.Direction.LEFT;
+					validMove = this.game.checkValidMove(this, direction);
+				} else if (userInput == 4) {
+					direction = Game.Direction.RIGHT;
+					validMove = this.game.checkValidMove(this, direction);
 				}
-				movesRemaining--;
-			}else{
-				System.out.println("invalid move");
+
+				// If the move was invalid, continue to the next iteration of
+				// the
+				// while loop
+				// Otherwise, apply the move and decrement movesRemaining
+				if (validMove) {
+					if (direction != null) {
+						this.game.applyMove(this, direction);
+
+						if (this.game.isInRoom(this)) {
+							enteredRoom = true;
+						} // If this player is now in a room
+
+						if (this.game.isInRoom(this)) { // If the player is now
+														// in a room
+							enteredRoom = true;
+							this.roomLastTurn = this.game.inRoom(this);
+						}
+					}
+					movesRemaining--;
+				} else {
+					System.out.println("invalid move");
+				}
+				game.printBoard();
 			}
 			game.printBoard();
+			// If the user cannot leave and is stuck in a room because it is
+			// blocked
+			if (turnSkipped) {
+				System.out.println("Unforunately, a player is blocking your only exit.");
+				System.out.println("Your turn will now end.");
+			}
+
+			if (enteredRoom) {
+				game.makeSuggestionDecisions(this);
+			} else {
+				this.roomLastTurn = null;
+				System.out.println(this.character.name + " your turn is over.\n"
+						+ "Next Player enter 1 when you are ready to start your turn");
+
+				waitForOne(input);
+			}
 		}
-		
-		
 
-		if (enteredRoom) {
-			game.makeSuggestionDecisions(this);
-		} else {
-			System.out.println(this.character.name + " your turn is over.\n"
-					+ "\n----------------------------------------------------------\n"
-					+ "Next Player enter 1 when you are ready to start your turn");
-
-			waitForOne(input);
-
-		}
 	}
-	
-	
+
 	/**
 	 * gets the users input from the console. expects a integer between the low
 	 * and high bounds (inclusive)
@@ -191,17 +232,17 @@ public class Player implements BoardPiece {
 		String userInput = "";
 
 		while (true) {
-				userInput = input.next();
-				if (userInput.equals("up"))
-					return 1;
-				else if(userInput.equals("down"))
-					return 2;
-				else if(userInput.equals("left"))
-					return 3;
-				else if(userInput.equals("right"))
-					return 4;
-				else
-					System.out.println("Please enter up, down, left or right");
+			userInput = input.next();
+			if (userInput.equals("up"))
+				return 1;
+			else if (userInput.equals("down"))
+				return 2;
+			else if (userInput.equals("left"))
+				return 3;
+			else if (userInput.equals("right"))
+				return 4;
+			else
+				System.out.println("Please enter up, down, left or right");
 		}
 	}
 
@@ -242,6 +283,10 @@ public class Player implements BoardPiece {
 
 	public boolean getDead() {
 		return dead;
+	}
+
+	public Room.Name getRoomLastTurn() {
+		return this.roomLastTurn;
 	}
 
 	public String toString() {
