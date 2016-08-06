@@ -80,4 +80,11 @@ public class Location {
 		}
 		return false;
 	}
+	
+	/**
+	 * A toString method for a location
+	 */
+	public String toString(){
+		return this.x + " " + this.y;
+	}
 }

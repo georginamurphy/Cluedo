@@ -55,7 +55,7 @@ public class Player implements BoardPiece {
 		dead = false;
 		roomLastTurn = null;
 	}
-
+	
 	/**
 	 * Getter method for this player's location
 	 * 

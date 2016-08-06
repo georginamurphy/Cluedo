@@ -90,11 +90,26 @@ public class Game {
 	}
 	
 	/**
+	 * Getter for the solution
+	 * @return
+	 */
+	public Solution getSolution() {
+		return this.solution;
+	}
+	
+	/**
 	 * Getter for the gameEnd field
 	 * @return
 	 */
 	public boolean getGameEnd(){
 		return this.gameEnd;
+	}
+	
+	/**
+	 * Setter for the humanPlayers field
+	 */
+	public void setHumanPlayers(ArrayList<Player> humanPlayers){
+		this.humanPlayers = humanPlayers;
 	}
 	
 	/**
@@ -154,7 +169,7 @@ public class Game {
 		}
 		
 		// Set the field that holds all the human players to be the array we just calculated
-		this.humanPlayers = realPlayers;
+		setHumanPlayers(realPlayers);
 		
 		// Also, initialize the game field for each player to be this game object
 		for (Player p : players) {
@@ -753,13 +768,21 @@ public class Game {
 		switch (userInput) {
 		case 1:
 			p.printCards();
-			makeSuggestion(p, input);
+			Solution guess = constructGuess(p, input, false);
+			Card c = makeSuggestion(p, guess);
+			if(c != null){
+				System.out.println("");
+				System.out.println(p.getCharacter().name + " has the card \n" + "\n*******************\n* "
+						+ c.toString() + " *\n*******************\n");
+			}
+			else{
+				System.out.println("\n   None of the other players had any of the cards in your suggestion\n");
+			}
 			break;
 		case 2:
 			makeAccusation(p, input);
 			break;
 		}
-
 	}
 
 	/**
@@ -771,23 +794,18 @@ public class Game {
 	 *            - player making the suggestion
 	 * @param input
 	 */
-	public void makeSuggestion(Player player, Scanner input) {
-		Solution guess = constructGuess(player, input, false);
+	public Card makeSuggestion(Player player, Solution guess) {
 		System.out.println(guess.toString());
 		for (Player p : humanPlayers) {
 			if (!p.equals(player)) {
 				for (Card c : p.getCards()) {
 					if (guess.checkCard(c)) {
-						System.out.println("");
-						System.out.println(p.getCharacter().name + " has the card \n" + "\n*******************\n* "
-								+ c.toString() + " *\n*******************\n");
-						return;
+						return c;
 					}
 				}
 			}
 		}
-
-		System.out.println("\n   None of the other players had any of the cards in your suggestion\n");
+		return null;
 	}
 
 	/**
@@ -810,13 +828,32 @@ public class Game {
 			System.out.println(guess.toString());
 			System.out.println("Solution:");
 			System.out.println(solution.toString());
-			if (guess.equals(solution)) {
-				gameEnd = true;
+			
+			if(checkSolution(guess, p) ){
 				System.out.println("\n  Congratualtions " + p.getCharacter().name + " you solved the murder\n");
-			} else {
-				System.out.println("\n  Your guess was incorrect, you have been removed from the game\n");
-				p.removeFromGame();
 			}
+			else{
+				System.out.println("\n  Your guess was incorrect, you have been removed from the game\n");
+			}
+		}
+	}
+	
+	/**
+	 * Checks a guess against this game's solution and returns the result
+	 * Will also set the gameEnd field to true if the solution was correct
+	 * Will remove the player from the game if their guess was incorrect
+	 * 
+	 * @param guess
+	 * @param p
+	 * @return
+	 */
+	public boolean checkSolution(Solution guess, Player p){
+		if (guess.equals(solution)) {
+			gameEnd = true;
+			return true;
+		} else {
+			p.removeFromGame();
+			return false;
 		}
 	}
 
