@@ -1,5 +1,12 @@
+package cluedo.boardpieces;
 import java.util.ArrayList;
 import java.util.Scanner;
+
+import cluedo.cards.Card;
+import cluedo.cards.Character;
+import cluedo.cards.Room;
+import cluedo.game.Game;
+import cluedo.game.Game.Direction;
 
 /**
  * The player class represents a player in the Cluedo game.

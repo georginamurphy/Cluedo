@@ -1,6 +1,14 @@
+package cluedo.main;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
+
+import cluedo.boardpieces.Player;
+import cluedo.cards.Character;
+import cluedo.cards.Room;
+import cluedo.cards.Weapon;
+import cluedo.game.Board;
+import cluedo.game.Game;
 
 public class Main {
 	// An ArrayList to hold character cards for the game

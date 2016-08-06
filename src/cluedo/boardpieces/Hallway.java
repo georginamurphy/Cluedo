@@ -1,3 +1,4 @@
+package cluedo.boardpieces;
 /**
  * A Hallway represents a square on the board that Player's are free to move into,
  * and are how they traverse across the board to different Rooms.

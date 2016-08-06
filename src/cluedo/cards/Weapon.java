@@ -1,3 +1,5 @@
+package cluedo.cards;
+
 /**
  * A weapon card for the Cluedo game.
  */

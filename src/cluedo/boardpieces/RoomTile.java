@@ -1,3 +1,6 @@
+package cluedo.boardpieces;
+import cluedo.cards.Room;
+
 /**
  * A RoomTile is a piece on the board that represents part of a room.
  * A RoomTile can either represent a door to the room, or a wall / floor.

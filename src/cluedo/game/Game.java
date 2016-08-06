@@ -1,7 +1,18 @@
+package cluedo.game;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.InputMismatchException;
 import java.util.Scanner;
+
+import cluedo.boardpieces.BoardPiece;
+import cluedo.boardpieces.Hallway;
+import cluedo.boardpieces.Location;
+import cluedo.boardpieces.Player;
+import cluedo.boardpieces.RoomTile;
+import cluedo.cards.Card;
+import cluedo.cards.Character;
+import cluedo.cards.Room;
+import cluedo.cards.Weapon;
 
 /**
  * The game class is what ties everything together and holds a lot

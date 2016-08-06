@@ -1,3 +1,4 @@
+package cluedo.cards;
 /**
  * A class that represents a Room in the game.
  * Holds basic information about a room card

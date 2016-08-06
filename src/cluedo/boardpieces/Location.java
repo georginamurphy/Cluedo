@@ -1,3 +1,4 @@
+package cluedo.boardpieces;
 /**
  * The location class is used to help store coordinates of Pieces on the Board.
  */

@@ -1,3 +1,9 @@
+package cluedo.game;
+import cluedo.cards.Card;
+import cluedo.cards.Character;
+import cluedo.cards.Room;
+import cluedo.cards.Weapon;
+
 /**
  * A solution represents the answer to the Cluedo Game.
  * Will hold one type of each card, a weapon, a character and a room.
