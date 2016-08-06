@@ -1,3 +1,5 @@
+package cluedo.cards;
+import cluedo.boardpieces.Location;
 
 /**
  * A class representing a Character in Cluedo, implements Card.

@@ -1,7 +1,14 @@
+package cluedo.game;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
+
+import cluedo.boardpieces.BoardPiece;
+import cluedo.boardpieces.Hallway;
+import cluedo.boardpieces.Player;
+import cluedo.boardpieces.RoomTile;
+import cluedo.cards.Room;
 
 /**
  * The board class represents the Cluedo Board.
