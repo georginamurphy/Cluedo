@@ -313,8 +313,8 @@ public class Player implements BoardPiece {
 				}
 			}
 			game.printBoard();
-		} else { // The room doesn't have a free door, end their turn
-					// unlucky
+		} 
+		else { // The room doesn't have a free door, end their turn
 			return true;
 		}
 		return false;

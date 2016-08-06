@@ -102,8 +102,8 @@ public class Main {
 
 		System.out.println("There must be between 3 and 6 players, inclusive.");
 		System.out.println("Please enter the number of players: ");
-		int numPlayers = getUserInput(input, 3, 6);
-		
+		String number = input.next();
+		int numPlayers = getValidPlayerCount(number, input);
 		int count = 0;
 		for (Character c : characters) {
 			if (count < numPlayers) {
@@ -115,38 +115,19 @@ public class Main {
 			
 		}
 	}
-
 	
-	/**
-	 * gets the users input from the console. expects a integer between the low
-	 * and high bounds (inclusive)
-	 * 
-	 * @param input
-	 *            - scanner
-	 * @param low
-	 *            - lowest valid number
-	 * @param high
-	 *            - highest valid number
-	 * @return the users valid input
-	 */
-	public static int getUserInput(Scanner input, int low, int high) {
-		int userInput = 0;
-		boolean isValid = false;
-
-		while (!isValid) {
-			userInput = 0;
-			try {
-				userInput = input.nextInt();
-				if (userInput >= low && userInput <= high)
-					isValid = true;
-				else
-					System.out.println("Please enter a number from " + low + " to " + high);
-			} catch (InputMismatchException e) {
-				System.out.println("Catch: "+ userInput +"Please enter a number from " + low + " to " + high);
-				continue;
+	private static int getValidPlayerCount(String number, Scanner input){
+		boolean countFound = false;
+		while(!countFound){
+			if(number.equals("3") ){return 3;}
+			else if(number.equals("4") ){return 4;}
+			else if(number.equals("5") ){return 5;}
+			else if(number.equals("6") ){return 6;}
+			else{
+				System.out.println("Please enter either 3, 4, 5 or 6 for the number of players.");
+				number = input.next();
 			}
-			
 		}
-		return userInput;
+		return 0; // Shouldnt happen
 	}
 }
