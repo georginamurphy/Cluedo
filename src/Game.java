@@ -5,7 +5,6 @@ import java.util.Scanner;
 
 public class Game {
 
-	
 	private Board board;
 	private Solution solution;
 	private ArrayList<Player> players; // Consist of every player, both human
@@ -623,7 +622,7 @@ public class Game {
 		}
 		return null;
 	}
-	
+
 	public Room.Name getRoomName(int num) {
 		switch (num) {
 		case 1:
@@ -699,20 +698,27 @@ public class Game {
 	public void makeSuggestion(Player player, Scanner input) {
 		Solution guess = constructGuess(player, input, false);
 		System.out.println(guess.toString());
-		for (Player p : humanPlayers) {
-			if (!p.equals(player)) {
-				for (Card c : p.getCards()) {
+		for (int i = humanPlayers.indexOf(player) + 1; i < humanPlayers.size(); i++) {
+			// for (Player p : humanPlayers) {
+			if (humanPlayers.get(i).equals(player)) {
+				System.out.println("\n   None of the other players had any of the cards in your suggestion\n");
+				return;
+			} else {
+				for (Card c : humanPlayers.get(i).getCards()) {
 					if (guess.checkCard(c)) {
 						System.out.println("");
-						System.out.println(p.getCharacter().name + " has the card \n" + "\n*******************\n* "
-								+ c.toString() + " *\n*******************\n");
+						System.out.println(humanPlayers.get(i).getCharacter().name + " has the card \n"
+								+ "\n*******************\n* " + c.toString() + " *\n*******************\n");
 						return;
 					}
 				}
 			}
+
+			if (i == humanPlayers.size()) {
+				i = 0;
+			}
 		}
 
-		System.out.println("\n   None of the other players had any of the cards in your suggestion\n");
 	}
 
 	/**
@@ -758,13 +764,14 @@ public class Game {
 	public Solution constructGuess(Player player, Scanner input, boolean accusation) {
 		int userInput;
 		Room room;
-		if(accusation){
-			System.out.println("Room:  1: Kitchen\n       2: Ball Room\n       3: Conservatory\n       4: Dining Room\n       5: Billiard Room\n       6: Library\n       7: Lounge\n       8: Hall\n       9: Study");
+		if (accusation) {
+			System.out.println(
+					"Room:  1: Kitchen\n       2: Ball Room\n       3: Conservatory\n       4: Dining Room\n       5: Billiard Room\n       6: Library\n       7: Lounge\n       8: Hall\n       9: Study");
 			System.out.println("Select a number for the room you are accusing");
 
 			userInput = getUserInput(input, 1, 9);
 			room = new Room(getRoomName(userInput));
-		}else{
+		} else {
 			room = new Room(inRoom(player));
 		}
 
@@ -975,8 +982,8 @@ public class Game {
 	public Board getBoard() {
 		return this.board;
 	}
-	
-	public boolean getGameEnd(){
+
+	public boolean getGameEnd() {
 		return this.gameEnd;
 	}
 
