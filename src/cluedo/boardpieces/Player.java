@@ -6,7 +6,6 @@ import cluedo.cards.Card;
 import cluedo.cards.Character;
 import cluedo.cards.Room;
 import cluedo.game.Game;
-import cluedo.game.Game.Direction;
 
 /**
  * The player class represents a player in the Cluedo game.
@@ -313,8 +312,8 @@ public class Player implements BoardPiece {
 				}
 			}
 			game.printBoard();
-		} else { // The room doesn't have a free door, end their turn
-					// unlucky
+		} 
+		else { // The room doesn't have a free door, end their turn
 			return true;
 		}
 		return false;
