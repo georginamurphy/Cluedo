@@ -763,7 +763,8 @@ public class Game {
 		System.out.println("You have entered a room you can make either a suggestion or an accusation");
 		System.out.println("Press 1 for a suggestion or 2 for an accusation");
 
-		int userInput = getUserInput(input, 1, 2);
+		String number = "";
+		int userInput = getValidOneOrTwo(number, input);
 
 		switch (userInput) {
 		case 1:
@@ -868,13 +869,15 @@ public class Game {
 	 * @return Solution
 	 */
 	public Solution constructGuess(Player player, Scanner input, boolean accusation) {
+		String number = "";
 		int userInput;
 		Room room;
 		if(accusation){
 			System.out.println("Room:  1: Kitchen\n       2: Ball Room\n       3: Conservatory\n       4: Dining Room\n       5: Billiard Room\n       6: Library\n       7: Lounge\n       8: Hall\n       9: Study");
 			System.out.println("Select a number for the room you are accusing");
 
-			userInput = getUserInput(input, 1, 9);
+			number = "";
+			userInput = getValidOneToNine(number, input);
 			room = new Room(getRoomName(userInput));
 		}else{
 			room = new Room(inRoom(player));
@@ -886,7 +889,8 @@ public class Game {
 				+ "            6: Colonel Mustard\n");
 		System.out.println("Select a number for the character you are accusing");
 
-		userInput = getUserInput(input, 1, 6);
+		number = "";
+		userInput = getValidOneToSix(number, input);
 		Character character = new Character(getCharacterColour(userInput));
 
 		for (Player p : players) {
@@ -904,11 +908,83 @@ public class Game {
 
 		System.out.println("Select a number for the weapon you are using");
 
-		userInput = getUserInput(input, 1, 6);
+		number = "";
+		userInput = getValidOneToSix(number, input);
 		Weapon weapon = new Weapon(getWeaponName(userInput));
 		return new Solution(weapon, character, room);
 	}
-
+	
+	/**
+	 * Will repeatedly ask a user for an input until it is either 1 or 2
+	 * 
+	 * @param number
+	 * @param input
+	 * @return
+	 */
+	public int getValidOneOrTwo(String number, Scanner input){
+		boolean countFound = false;
+		while(!countFound){
+			if(number.equals("1") ){return 1;}
+			else if(number.equals("2") ){return 2;}
+			else{
+				System.out.println("Please enter either 1 or 2.");
+				number = input.next();
+			}
+		}
+		return 0; // Shouldnt happen
+	}
+	
+	/**
+	 * Will repeatedly ask a user for an input until it is number from 1-6
+	 * 
+	 * @param number
+	 * @param input
+	 * @return
+	 */
+	public int getValidOneToSix(String number, Scanner input){
+		boolean countFound = false;
+		while(!countFound){
+			if(number.equals("1") ){return 1;}
+			else if(number.equals("2") ){return 2;}
+			else if(number.equals("3") ){return 3;}
+			else if(number.equals("4") ){return 4;}
+			else if(number.equals("5") ){return 5;}
+			else if(number.equals("6") ){return 6;}
+			else{
+				System.out.println("Please enter either 1, 2, 3, 4, 5 or 6.");
+				number = input.next();
+			}
+		}
+		return 0; // Shouldnt happen
+	}
+	
+	/**
+	 * Will repeatedly ask a user for an input until it is a number from 1-9
+	 * 
+	 * @param number
+	 * @param input
+	 * @return
+	 */
+	public int getValidOneToNine(String number, Scanner input){
+		boolean countFound = false;
+		while(!countFound){
+			if(number.equals("1") ){return 1;}
+			else if(number.equals("2") ){return 2;}
+			else if(number.equals("3") ){return 3;}
+			else if(number.equals("4") ){return 4;}
+			else if(number.equals("5") ){return 5;}
+			else if(number.equals("6") ){return 6;}
+			else if(number.equals("7") ){return 7;}
+			else if(number.equals("8") ){return 8;}
+			else if(number.equals("9") ){return 9;}
+			else{
+				System.out.println("Please enter either 1, 2, 3, 4, 5, 6, 7, 8 or 9.");
+				number = input.next();
+			}
+		}
+		return 0; // Shouldnt happen
+	}
+	
 	/**
 	 * gets the users input from the console. expects a integer between the low
 	 * and high bounds (inclusive)
