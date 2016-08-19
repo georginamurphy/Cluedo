@@ -1,4 +1,6 @@
 package cluedo.boardpieces;
+import javax.swing.ImageIcon;
+
 import cluedo.cards.Room;
 
 /**
@@ -8,6 +10,7 @@ import cluedo.cards.Room;
  * Players may only pass through a RoomTile if it represents a door.
  */
 public class RoomTile implements BoardPiece {
+	ImageIcon roomTile = new ImageIcon("grey.png");
 	
 	// The name of the room this RoomTile belongs to
 	private Room.Name name;
@@ -42,6 +45,11 @@ public class RoomTile implements BoardPiece {
 		return this.door;
 	}
 	
+	@Override
+	public ImageIcon getImageIcon() {
+		return roomTile;
+	}
+	
 	/**
 	 * A toString method for a RoomTile
 	 */
@@ -70,4 +78,6 @@ public class RoomTile implements BoardPiece {
 		}
 		return ""; // Should never happen
 	}
+
+	
 }

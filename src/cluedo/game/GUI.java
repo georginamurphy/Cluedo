@@ -7,13 +7,10 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import cluedo.boardpieces.Player;
-import cluedo.boardpieces.RoomTile;
 
 public class GUI extends JPanel {
 	/**
@@ -29,17 +26,14 @@ public class GUI extends JPanel {
 	private JLabel instructionLabel = new JLabel("Welcome to Cluedo");
 	private JLabel feedbackLabel = new JLabel("");
 	private JPanel[][] board = new JPanel[25][25];
-	ImageIcon floorTile = new ImageIcon("floorTile.png");
-	ImageIcon whiteTile = new ImageIcon("white.png");
-	ImageIcon roomTile = new ImageIcon("grey.png");
 	ImageIcon outOfBoundsTile = new ImageIcon("black.png");
 
-	public GUI(Board board) {
+	public GUI() {
 		setLayout();
-		drawBoard(board);
+		
 	}
 
-	private void drawBoard(Board boardObj) {
+	public void drawBoard(Board boardObj) {
 		for (int row = 0; row <= 24; row++) {
 			for (int col = 0; col <= 24; col++) {
 				board[row][col] = new JPanel();
@@ -52,16 +46,12 @@ public class GUI extends JPanel {
 				// label.setPreferredSize(new Dimension(3, 3));
 				label.setBackground(Color.blue);
 				boardPanel.add(board[row][col].add(label));
-				if (boardObj.getBoard()[row][col] instanceof RoomTile) {
-					label.setIcon(roomTile);
-				}else if (boardObj.getBoard()[row][col] == null) {
+				if(boardObj.getBoard()[row][col] == null){
 					label.setIcon(outOfBoundsTile);
-				}else if(boardObj.getBoard()[row][col] instanceof Player){
-					label.setIcon(whiteTile);
+				}else{
+					label.setIcon(boardObj.getBoard()[row][col].getImageIcon());
 				}
-				else {
-					label.setIcon(floorTile);
-				}
+				
 				label.setVisible(true);
 			}
 		}

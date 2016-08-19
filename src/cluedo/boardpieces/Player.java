@@ -2,6 +2,8 @@ package cluedo.boardpieces;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import javax.swing.ImageIcon;
+
 import cluedo.cards.Card;
 import cluedo.cards.Character;
 import cluedo.cards.Room;
@@ -16,6 +18,15 @@ import cluedo.game.Game;
  */
 public class Player implements BoardPiece {
 
+
+
+	ImageIcon redTile = new ImageIcon("red.png");
+	ImageIcon yellowTile = new ImageIcon("yellow.png");
+	ImageIcon blueTile = new ImageIcon("blue.png");
+	ImageIcon greenTile = new ImageIcon("green.png");
+	ImageIcon purpleTile = new ImageIcon("purple.png");
+	ImageIcon whiteTile = new ImageIcon("white.png");
+	
 	// The overall game object for Cluedo
 	private Game game;
 
@@ -415,6 +426,26 @@ public class Player implements BoardPiece {
 		return false;
 	}
 	
+	@Override
+	public ImageIcon getImageIcon() {
+		switch (this.character.colour) {
+		case WHITE:
+			return whiteTile;
+		case GREEN:
+			return greenTile;
+		case BLUE:
+			return blueTile;
+		case PURPLE:
+			return purpleTile;
+		case RED:
+			return redTile;
+		case YELLOW:
+			return  yellowTile;
+		}
+		
+		return null;
+	}
+	
 	/**
 	 * A toString method for a player
 	 */
@@ -435,4 +466,6 @@ public class Player implements BoardPiece {
 		}
 		return "";
 	}
+
+	
 }

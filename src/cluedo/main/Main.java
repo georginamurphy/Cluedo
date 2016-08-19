@@ -45,26 +45,22 @@ public class Main {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		
-
-		makeCharacters();
-		makeWeapons();
-		makeRooms();
-		board = new Board(players);
-		game = new Game(board, players);
-		game.createSolution(characters, weapons, rooms);
-		
-		
 		JFrame cludo = new JFrame("Cluedo");
-		gui = new GUI(board);
+		gui = new GUI();
 	    cludo.getContentPane().add(gui);   
 	    cludo.setVisible(true);
 	    cludo.pack();
 	    cludo.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	    cludo.setLocation(100,45);
-	    
-	    setPlayers();
-	    game.dealCards(characters, weapons, rooms);
+
+		makeCharacters();
+		makeWeapons();
+		makeRooms();
+		setPlayers();
+		board = new Board(players, gui);
+		game = new Game(board, players);
+		game.createSolution(characters, weapons, rooms);
+		game.dealCards(characters, weapons, rooms);
 		
 		//game.run();
 	}
