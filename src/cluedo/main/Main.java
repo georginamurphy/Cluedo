@@ -125,19 +125,4 @@ public class Main {
 			
 		}
 	}
-	
-	private static int getValidPlayerCount(String number, Scanner input){
-		boolean countFound = false;
-		while(!countFound){
-			if(number.equals("3") ){return 3;}
-			else if(number.equals("4") ){return 4;}
-			else if(number.equals("5") ){return 5;}
-			else if(number.equals("6") ){return 6;}
-			else{
-				System.out.println("Please enter either 3, 4, 5 or 6 for the number of players.");
-				number = input.next();
-			}
-		}
-		return 0; // Shouldnt happen
-	}
 }
