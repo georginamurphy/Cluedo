@@ -86,14 +86,15 @@ public class GUI extends JPanel {
 	}
 
 	public int getNumPlayers() {
+		
 		String[] options = new String[] { "3", "4", "5", "6" };
 
 		JComboBox<String> numList = new JComboBox<>(options);
-
+		numList.setVisible(true);
 		right.add(numList);
-		
+		System.out.println("here");
 		// get the selected item:
-		return(int) numList.getSelectedItem();
+		return Integer.parseInt((String)numList.getSelectedItem());
 
 	
 	}
