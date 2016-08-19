@@ -3,11 +3,14 @@ import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
+import javax.swing.JFrame;
+
 import cluedo.boardpieces.Player;
 import cluedo.cards.Character;
 import cluedo.cards.Room;
 import cluedo.cards.Weapon;
 import cluedo.game.Board;
+import cluedo.game.GUI;
 import cluedo.game.Game;
 
 public class Main {
@@ -39,6 +42,13 @@ public class Main {
 	 * @param args
 	 */
 	public static void main(String[] args) {
+		JFrame cludo = new JFrame("Cluedo");
+	    cludo.getContentPane().add(new GUI());   
+	    cludo.setVisible(true);
+	    cludo.pack();
+	    cludo.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	    cludo.setLocation(100,45);
+		
 		System.out.println(""
 				+ "**********************************************************\n"
 				+ "                    Welcome to CLUEDO\n"
@@ -51,6 +61,9 @@ public class Main {
 		game = new Game(board, players);
 		game.createSolution(characters, weapons, rooms);
 		game.dealCards(characters, weapons, rooms);
+		
+		
+		
 		game.run();
 	}
 
