@@ -31,6 +31,9 @@ public class Main {
 	
 	// The game object for the game
 	private static Game game;
+	
+	// The GUI for this cluedo game
+	private static GUI gui;
 
 	
 	/**
@@ -42,29 +45,28 @@ public class Main {
 	 * @param args
 	 */
 	public static void main(String[] args) {
+		
+
+		makeCharacters();
+		makeWeapons();
+		makeRooms();
+		board = new Board(players);
+		game = new Game(board, players);
+		game.createSolution(characters, weapons, rooms);
+		
+		
 		JFrame cludo = new JFrame("Cluedo");
-	    cludo.getContentPane().add(new GUI());   
+		gui = new GUI(board);
+	    cludo.getContentPane().add(gui);   
 	    cludo.setVisible(true);
 	    cludo.pack();
 	    cludo.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	    cludo.setLocation(100,45);
+	    
+	    setPlayers();
+	    game.dealCards(characters, weapons, rooms);
 		
-		System.out.println(""
-				+ "**********************************************************\n"
-				+ "                    Welcome to CLUEDO\n"
-				+ "**********************************************************");
-		makeCharacters();
-		makeWeapons();
-		makeRooms();
-		setPlayers();
-		board = new Board(players);
-		game = new Game(board, players);
-		game.createSolution(characters, weapons, rooms);
-		game.dealCards(characters, weapons, rooms);
-		
-		
-		
-		game.run();
+		//game.run();
 	}
 
 	/**
@@ -111,12 +113,7 @@ public class Main {
 	 * constructs an arrayList with the desired number of players
 	 */
 	private static void setPlayers() {
-		Scanner input = new Scanner(System.in);
-
-		System.out.println("There must be between 3 and 6 players, inclusive.");
-		System.out.println("Please enter the number of players: ");
-		String number = input.next();
-		int numPlayers = getValidPlayerCount(number, input);
+		int numPlayers = gui.getNumPlayers();
 		int count = 0;
 		for (Character c : characters) {
 			if (count < numPlayers) {
