@@ -15,7 +15,7 @@ import cluedo.game.Game;
 
 public class Main {
 	// An ArrayList to hold character cards for the game
-	private static ArrayList<Character> characters = new ArrayList<Character>();
+	public static ArrayList<Character> characters = new ArrayList<Character>();
 	
 	// An ArrayList to hold weapon cards for the game
 	private static ArrayList<Weapon> weapons = new ArrayList<Weapon>();
@@ -45,22 +45,23 @@ public class Main {
 	 * @param args
 	 */
 	public static void main(String[] args) {
+		makeCharacters();
+		makeWeapons();
+		makeRooms();
+		
 		JFrame cludo = new JFrame("Cluedo");
-		gui = new GUI();
+		gui = new GUI(characters);
 	    cludo.getContentPane().add(gui);   
 	    cludo.setVisible(true);
 	    cludo.pack();
 	    cludo.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	    cludo.setLocation(100,45);
 
-		makeCharacters();
-		makeWeapons();
-		makeRooms();
-		setPlayers();
+		
 		board = new Board(players, gui);
 		game = new Game(board, players);
 		game.createSolution(characters, weapons, rooms);
-		game.dealCards(characters, weapons, rooms);
+		//game.dealCards(characters, weapons, rooms);
 		
 		//game.run();
 	}
@@ -108,17 +109,7 @@ public class Main {
 	 * Asks the user for the number of players. Checks the input is valid and
 	 * constructs an arrayList with the desired number of players
 	 */
-	private static void setPlayers() {
-		int numPlayers = gui.getNumPlayers();
-		int count = 0;
-		for (Character c : characters) {
-			if (count < numPlayers) {
-				players.add(new Player(c, true));
-				count++;
-			} else {
-				players.add(new Player(c, false));
-			}
-			
-		}
+	private static void setPlayers(int num) {
+		//players = gui.pickCharacters(num, characters);
 	}
 }
