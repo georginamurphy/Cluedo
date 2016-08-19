@@ -20,11 +20,10 @@ import cluedo.cards.Room;
 public class Board {
 	private BoardPiece[][] board;
 
-	public Board(ArrayList<Player> players, GUI gui) {
+	public Board(ArrayList<Player> players) {
 		this.board = new BoardPiece[25][25];
 		readBoard();
 		setCharacters(players);
-		gui.drawBoard(this);
 	}
 	
 	/**

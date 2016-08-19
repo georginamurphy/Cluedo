@@ -26,8 +26,7 @@ public class Main {
 	// An ArrayList to hold the players for the game
 	private static ArrayList<Player> players = new ArrayList<Player>();
 	
-	// The board for the game
-	private static Board board;
+	
 	
 	// The game object for the game
 	private static Game game;
@@ -58,8 +57,8 @@ public class Main {
 	    cludo.setLocation(100,45);
 
 		
-		board = new Board(players, gui);
-		game = new Game(board, players);
+		
+		game = new Game(gui);
 		game.createSolution(characters, weapons, rooms);
 		//game.dealCards(characters, weapons, rooms);
 		

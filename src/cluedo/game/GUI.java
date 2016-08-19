@@ -15,6 +15,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
@@ -39,8 +40,13 @@ public class GUI extends JPanel {
 	ImageIcon outOfBoundsTile = new ImageIcon("black.png");
 
 	private ButtonGroup characterGroup = new ButtonGroup();
-	private JRadioButton[] characterButtons = { new JRadioButton(" "), new JRadioButton(" "), new JRadioButton(" "),
-			new JRadioButton(" "), new JRadioButton(" "), new JRadioButton(" ") };
+	private JRadioButton[] characterButtons = { 
+			new JRadioButton(" "), 
+			new JRadioButton(" "), 
+			new JRadioButton(" "),
+			new JRadioButton(" "), 
+			new JRadioButton(" "), 
+			new JRadioButton(" ") };
 	JButton submitButton = new JButton("Sumbit");
 	JButton nextButton = new JButton("Next Player");
 	int playerIndex;
@@ -82,20 +88,22 @@ public class GUI extends JPanel {
 		}
 
 	}
+	
+	//Object[] nums = { 3, 4, 5, 6 };
+	//int num = (int) JOptionPane.showInputDialog(this, "Select Number of players", "Number of players",
+	//		JOptionPane.QUESTION_MESSAGE, null, nums, nums[0]);
 
 	public void getNumPlayers() {
-		String[] options = new String[] { "3", "4", "5", "6" };
-
-		// add the listener to the done button and add button to the pannel
-		doneButton.addActionListener(listener);
-		bottom.add(doneButton);
-
-		numList = new JComboBox<>(options);
-
-		instructionLabel.setText("How many players are in this game?");
-		top.add(numList);
-		top.validate();
-
+		
+		Object[] nums = { 3, 4, 5, 6 };
+		Object input =  JOptionPane.showInputDialog(this, "How many players are in this game", "Number of players",JOptionPane.QUESTION_MESSAGE, null, nums, nums[0]);
+		if(input == null){
+			System.exit(0);
+		}else{
+			numPlayers = (int) input;
+			playerIndex = 0;
+			pickCharacter();
+		}
 	}
 
 	// method sets the layout of the GUI
@@ -117,24 +125,28 @@ public class GUI extends JPanel {
 		right.setBackground(Color.yellow);
 
 		top.add(instructionLabel);
-		bottom.add(doneButton);
 		boardPanel.setLayout(new GridLayout(25, 25));
 
+	}
+	
+	public void pickCharacter() {
+		right.setLayout(new GridLayout(7, 1));
+		JLabel title = new JLabel();
+		characterGroup.clearSelection();
+		title.setText("Player " + playerIndex + " select your character");
+		right.add(title);
+		for (int i = 0; i < characterButtons.length; i++) {
+			characterButtons[i].setText(characters.get(i).name);
+		}
+		for (JRadioButton characterButton : characterButtons) {
+			characterGroup.add(characterButton);
+			right.add(characterButton);
+			characterButton.addActionListener(listener);
+		}
 	}
 
 	private class AnswerListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-
-			if (e.getSource() == doneButton) {
-				 numPlayers = Integer.parseInt((String) numList.getSelectedItem());
-
-				doneButton.setVisible(false); // hide done button
-				numList.setVisible(false); // hide the text field
-				playerIndex = 0;
-				pickCharacter();
-
-			}
-			
 
 			for (JRadioButton characterButton : characterButtons) {
 				// ensures user has selected an answer before they can move on
@@ -157,22 +169,6 @@ public class GUI extends JPanel {
 						pickCharacter();
 					}
 				}
-			}
-		}
-
-		private void pickCharacter() {
-			right.setLayout(new GridLayout(7, 1));
-			JLabel title = new JLabel();
-			characterGroup.clearSelection();
-			title.setText("Player " + playerIndex + " select your character");
-			right.add(title);
-			for (int i = 0; i < characterButtons.length; i++) {
-				characterButtons[i].setText(characters.get(i).name);
-			}
-			for (JRadioButton characterButton : characterButtons) {
-				characterGroup.add(characterButton);
-				right.add(characterButton);
-				characterButton.addActionListener(listener);
 			}
 		}
 	}
