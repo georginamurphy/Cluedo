@@ -4,6 +4,7 @@ package cluedo.game;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.GridLayout;
 
 import javax.swing.ImageIcon;
@@ -63,9 +64,13 @@ public class GUI extends JPanel {
 		String[] options = new String[] { "3", "4", "5", "6" };
 
 		JComboBox<String> numList = new JComboBox<>(options);
-		numList.setVisible(true);
+		JLabel title = (new JLabel("How many players are in this game?") );
+		numList.setLayout(new BorderLayout() );
+		numList.add(title, BorderLayout.NORTH);
+		numList.setPreferredSize(title.getSize() );
 		right.add(numList);
 		System.out.println("here");
+		right.validate();
 		// get the selected item:
 		return Integer.parseInt((String)numList.getSelectedItem());
 	}
@@ -92,6 +97,6 @@ public class GUI extends JPanel {
 	    bottom.add(feedbackLabel);
 	    boardPanel.setLayout(new GridLayout(25, 25));
 	    
-	   
+	    
 	  }
 }
