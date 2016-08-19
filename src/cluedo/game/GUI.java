@@ -62,29 +62,6 @@ public class GUI extends JPanel {
 
 	}
 
-	// method sets the layout of the GUI
-	public void setLayout() {
-		// creates a new border layout-adds only the top, bottom and center
-		// panels
-		setLayout(new BorderLayout());
-		setPreferredSize(new Dimension(700, 600));
-		add(top, BorderLayout.NORTH);
-		add(bottom, BorderLayout.SOUTH);
-		add(boardPanel, BorderLayout.CENTER);
-		add(right, BorderLayout.EAST);
-		// sets the size and colour of the border layout pannels
-		top.setPreferredSize(new Dimension(700, 100));
-		bottom.setPreferredSize(new Dimension(700, 100));
-		right.setPreferredSize(new Dimension(300, 400));
-		top.setBackground(Color.magenta);
-		bottom.setBackground(Color.green);
-		right.setBackground(Color.yellow);
-
-		top.add(instructionLabel);
-		bottom.add(feedbackLabel);
-		boardPanel.setLayout(new GridLayout(25, 25));
-	}
-
 	public int getNumPlayers() {
 		
 		String[] options = new String[] { "3", "4", "5", "6" };
@@ -95,7 +72,46 @@ public class GUI extends JPanel {
 		System.out.println("here");
 		// get the selected item:
 		return Integer.parseInt((String)numList.getSelectedItem());
+	}
 
 	
-	}
+	//method sets the layout of the GUI
+	  public void setLayout(){
+	//creates a new border layout-adds only the top, bottom and boardPanel panels
+	    setLayout(new BorderLayout());
+	    setPreferredSize(new Dimension(700,600));
+	    add(top, BorderLayout.NORTH);
+	    add(bottom, BorderLayout.SOUTH);
+	    add(boardPanel, BorderLayout.CENTER);
+	    add(right, BorderLayout.EAST); 
+	//sets the size and colour of the border layout pannels
+	    top.setPreferredSize(new Dimension(700,100));
+	    bottom.setPreferredSize(new Dimension(700,100));
+	    right.setPreferredSize(new Dimension(300, 400));
+	    top.setBackground(Color.magenta);
+	    bottom.setBackground(Color.green);
+	    right.setBackground(Color.yellow);
+	    
+	    top.add(instructionLabel);
+	    bottom.add(feedbackLabel);
+	    boardPanel.setLayout(new GridLayout(25, 25));
+	    
+	    for(int row = 0; row <= 24; row++){
+	    	for(int col = 0; col <= 24; col++){
+	    		board[row][col] = new JPanel();
+	    	}
+	    }
+	    
+	    for(int row = 0; row <= 24; row++){
+	    	for(int col = 0; col <= 24; col++){
+	    		JLabel label = new JLabel();
+	    		//label.setPreferredSize(new Dimension(3, 3));
+	    		label.setBackground(Color.blue);
+	    		boardPanel.add(board[row][col].add(label));
+	    		
+	    		label.setIcon(floorTile);
+	    		label.setVisible(true);
+	    	}
+	    }
+	  }
 }
