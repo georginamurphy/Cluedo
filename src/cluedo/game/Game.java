@@ -429,6 +429,7 @@ public class Game {
 		}
 
 		board.updateBoard(players); // Physically updates the board
+		gui.drawBoard(board);
 	}
 
 	/**
