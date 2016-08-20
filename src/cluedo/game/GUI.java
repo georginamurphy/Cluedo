@@ -9,6 +9,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.ArrayList;
 
 import javax.swing.ButtonGroup;
@@ -38,6 +40,7 @@ public class GUI extends JFrame {
 	ArrayList<Character> characters;
 	ArrayList<Weapon> weapons;
 	ArrayList<Room> rooms;
+	Player focusPlayer;
 
 	// Panels
 	JPanel instructionPanel;
@@ -54,7 +57,6 @@ public class GUI extends JFrame {
 	// Labels
 	JLabel decisionLabel;
 	JLabel instructionLabel = new JLabel("Welcome To Cluedo");
-	JLabel instructionLabel2 = new JLabel(" ");
 	JLabel feedbackLabel = new JLabel(" ");
 
 	// Buttons
@@ -70,7 +72,12 @@ public class GUI extends JFrame {
 
 	// Listeners
 	ItemListener jRadio;
-	JButtonListener jButtonListen;
+
+	JButtonListener enterListen;
+	JButtonListener startListen;
+	JButtonListener rollListen;
+	JKeyListener moveListen;
+	
 
 	// Variables for setup of game
 	int numPlayers;
@@ -96,8 +103,6 @@ public class GUI extends JFrame {
 	 * it's panels to be ready for the user to set up the game.
 	 */
 	public void setLayout() {
-		// Set the button listener
-		jButtonListen = new JButtonListener();
 		// Initialize panels
 		instructionPanel = new JPanel();
 		boardPanel = new JPanel();
@@ -114,12 +119,11 @@ public class GUI extends JFrame {
 
 		// Add buttons to the button panel
 		buttonPanel.add(ready);
-		buttonPanel.add(accuse);
 		buttonPanel.add(suggest);
 		buttonPanel.add(rollDice);
+		buttonPanel.add(accuse);
 		ready.setVisible(false);
-		accuse.setVisible(true);
-		accuse.addActionListener(jButtonListen);
+		accuse.setVisible(false);
 		suggest.setVisible(false);
 		rollDice.setVisible(false);
 
@@ -140,6 +144,9 @@ public class GUI extends JFrame {
 
 		// Setting up layout for decisionPanel
 		decisionPanel.setLayout(new FlowLayout());
+		
+		// Set up the layout for feedbackPanel
+		feedbackPanel.setLayout(new FlowLayout() );
 
 		// Sets the size and color of the border layout panels
 		instructionPanel.setPreferredSize(new Dimension(700, 75));
@@ -379,8 +386,10 @@ public class GUI extends JFrame {
 		enter = new JButton("Enter");
 		decisionPanel.add(enter);
 
-		
-		enter.addActionListener(jButtonListen);
+
+		// Set the button listener
+		enterListen = new JButtonListener();
+		enter.addActionListener(enterListen);
 	}
 
 	/**
@@ -418,17 +427,28 @@ public class GUI extends JFrame {
 		decisionPanel.add(decisionLabel);
 		startGame = new JButton("Start");
 		decisionPanel.add(startGame);
+		startListen = new JButtonListener();
+		startGame.addActionListener(startListen);
 		validate();
 	}
 
 	public void takeTurn(Player player) {
-		instructionLabel.setText("It is time to move " + player.getCharacter().name + " on the board");
-		instructionLabel2.setText("Roll the dice");
-		instructionPanel.add(instructionLabel);
-		instructionPanel.add(instructionLabel2);
-		rollDice.setVisible(true);
-		validate();
+		accuse.setVisible(true);
+		focusPlayer = player;
+		// Reset the decision panel
+		decisionPanel.removeAll();
+		decisionPanel.validate();
+		decisionPanel.repaint();
 
+		// Setup the instruction panel
+		instructionLabel.setText("It is time to move " + player.getCharacter().name + " on the board. Roll the dice");
+		instructionPanel.add(instructionLabel);
+		
+		// Show the rollDice button to the user
+		rollDice.setVisible(true);
+		rollListen = new JButtonListener();
+		rollDice.addActionListener(rollListen);
+		validate();
 	}
 
 	public void gameWon(Player winner) {
@@ -460,14 +480,28 @@ public class GUI extends JFrame {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			// If the user hit the startGame button
 			if (e.getSource() == startGame) {
+				System.out.println("hello");
 				game.run();
 			}
+			
+			// If the user hit the rollDice button
 			if (e.getSource() == rollDice) {
 				int roll = game.rollDice();
+				// Remove rollDice button from view
 				rollDice.setVisible(false);
-				instructionLabel2.setText(" ");
 				feedbackLabel.setText("You rolled " + roll);
+				feedbackPanel.validate();
+				feedbackPanel.repaint();
+				
+				// Let the user begin to move
+				moveListen = new JKeyListener();
+				buttonPanel.addKeyListener(moveListen);
+				
+				// Set our buttonPanel to have focus so keyListener triggers events
+				buttonPanel.setFocusable(true);
+				buttonPanel.requestFocus();
 			}
 			if(e.getSource() == accuse){
 				int r = (int) JOptionPane.showConfirmDialog(null, "Are you sure you want to submit an accusation?\n"
@@ -488,11 +522,45 @@ public class GUI extends JFrame {
 													// the JTextArea / Button
 						prepareGame();
 					}
-				} else {
-					decisionLabel.setText("Please enter a name before clicking enter.");
+				}
+				else {
+					decisionLabel.setText((currentPlayer + 1) + ", please enter a name before clicking enter.");
 				}
 			}
 		}
+	}
+	
+	private class JKeyListener implements KeyListener{
+
+		@Override
+		public void keyTyped(KeyEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void keyPressed(KeyEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+		
+		@Override
+		public void keyReleased(KeyEvent e) {
+			
+			if(e.getKeyCode() == KeyEvent.VK_W){
+				
+			}
+			else if(e.getKeyCode() == KeyEvent.VK_S){
+				
+			}
+			else if(e.getKeyCode() == KeyEvent.VK_A){
+				
+			}
+			else if(e.getKeyCode() == KeyEvent.VK_D){
+				
+			}
+		}
+		
 	}
 
 }

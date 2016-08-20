@@ -192,27 +192,27 @@ public class Player implements BoardPiece {
 	 */
 	public void startTurn() {
 		game.getGui().takeTurn(this);
-		Scanner input = new Scanner(System.in);
-		boolean turnSkipped = false;
+		//Scanner input = new Scanner(System.in);
+		//boolean turnSkipped = false;
 		// Is the player starting their turn in a room?
 		// If so, move them to the first free door and start their turn from the
 		// door
 		// (They will only be able to move out of the door, into a hallway)
-		if (this.game.isInRoom(this)) {
-			turnSkipped = startTurnInRoom();
-		}
+		//if (this.game.isInRoom(this)) {
+		//	turnSkipped = startTurnInRoom();
+		//}
 
 		// The user is ready to make their moves
 		System.out.println("\nIt is time to move " + this.character.name + " on the board.");
 		printCards();
 		System.out.println("\nPress 1 to roll the dice");
-		waitForOne(input);
+		//waitForOne(input);
 
-		int roll = game.rollDice();
+		//int roll = game.rollDice();
 		// int roll = 12;
-		System.out.println("You rolled " + roll + "!");
-		game.printBoard();
-		makeMovementDecisions(turnSkipped, roll);
+		//System.out.println("You rolled " + roll + "!");
+		//game.printBoard();
+		//makeMovementDecisions(turnSkipped, roll);
 	}
 
 	/**
