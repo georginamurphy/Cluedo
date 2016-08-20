@@ -586,10 +586,7 @@ public class GUI extends JFrame {
 		JPanel panel = new JPanel();
 		panel.setPreferredSize(new Dimension(200, 50));
 
-		String[] items = new String[9];
-		for (int i = 0; i < 8; i++) {
-			items[i] = rooms.get(i).toString();
-		}
+		String[] items = {"BALLROOM", "BILLIARD", "CONSERVATORY", "DININGROOM", "HALL", "KITCHEN", "LIBRARY", "LOUNGE", "STUDY"};
 		roomComboBox = new JComboBox<String>(items);
 		panel.add(roomComboBox);
 
@@ -601,12 +598,9 @@ public class GUI extends JFrame {
 		JPanel panel = new JPanel();
 		panel.setPreferredSize(new Dimension(200, 50));
 
-		String[] items = new String[6];
-		for (int i = 0; i < 2; i++) {
-			items[i] = characters.get(i).toString();
-		}
-		roomComboBox = new JComboBox<String>(items);
-		panel.add(roomComboBox);
+		String[] items = {"Mrs White", "Reverend Green", "Mrs Peacock", "Professor Plum", "Miss Scarlett", "Colonel Mustard"};
+		characterComboBox = new JComboBox<String>(items);
+		panel.add(characterComboBox);
 
 		panel.validate();
 		return panel;
@@ -616,10 +610,7 @@ public class GUI extends JFrame {
 		JPanel panel = new JPanel();
 		panel.setPreferredSize(new Dimension(200, 50));
 
-		String[] items = new String[6];
-		for (int i = 0; i < 5; i++) {
-			items[i] = weapons.get(i).toString();
-		}
+		String[] items = {"CANDLESTICK", "DAGGER", "LEADPIPE", "REVOLVER", "ROPE", "SPANNER"};
 		weaponComboBox = new JComboBox<String>(items);
 		panel.add(weaponComboBox);
 
