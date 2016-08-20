@@ -18,15 +18,6 @@ import cluedo.game.Game;
  */
 public class Player implements BoardPiece {
 
-
-
-	ImageIcon redTile = new ImageIcon("red.png");
-	ImageIcon yellowTile = new ImageIcon("yellow.png");
-	ImageIcon blueTile = new ImageIcon("blue.png");
-	ImageIcon greenTile = new ImageIcon("green.png");
-	ImageIcon purpleTile = new ImageIcon("purple.png");
-	ImageIcon whiteTile = new ImageIcon("white.png");
-	
 	// The overall game object for Cluedo
 	private Game game;
 
@@ -48,6 +39,9 @@ public class Player implements BoardPiece {
 	// Name of the room the player was in during their previous turn
 	// Will be null if they finished their turn in a hallway.
 	private Room.Name roomLastTurn;
+	
+	// The user defined name for the player
+	private String name;
 
 	/**
 	 * Constructor for a player
@@ -124,6 +118,10 @@ public class Player implements BoardPiece {
 	 */
 	public ArrayList<Card> getCards() {
 		return cards;
+	}
+	
+	public void setName(String name){
+		this.name = name;
 	}
 
 	/**
@@ -428,22 +426,24 @@ public class Player implements BoardPiece {
 	
 	@Override
 	public ImageIcon getImageIcon() {
-		switch (this.character.colour) {
-		case WHITE:
-			return whiteTile;
-		case GREEN:
-			return greenTile;
-		case BLUE:
-			return blueTile;
-		case PURPLE:
-			return purpleTile;
-		case RED:
-			return redTile;
-		case YELLOW:
-			return  yellowTile;
+		switch(character.colour){
+			case WHITE:
+				return new ImageIcon("white.png");
+			case GREEN:
+				return new ImageIcon("green.png");
+			case BLUE:
+				return new ImageIcon("blue.png");
+			case PURPLE:
+				return new ImageIcon("purple.png");
+			case RED:
+				return new ImageIcon("red.png");
+			case YELLOW:
+				return new ImageIcon("yellow.png");
+			default:
+				System.out.println("MEGA ISSUE");
+				return new ImageIcon(); // Shouldn't happen
 		}
 		
-		return null;
 	}
 	
 	/**
@@ -466,6 +466,4 @@ public class Player implements BoardPiece {
 		}
 		return "";
 	}
-
-	
 }

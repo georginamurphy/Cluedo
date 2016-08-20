@@ -1,4 +1,3 @@
-
 package cluedo.game;
 
 import java.awt.BorderLayout;
@@ -8,172 +7,391 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.util.ArrayList;
 
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
 
 import cluedo.boardpieces.Player;
 import cluedo.cards.Character;
+import cluedo.cards.Room;
+import cluedo.cards.Weapon;
 
-public class GUI extends JPanel {
-	/**
-	 * 
-	 */
+public class GUI extends JFrame{
 	private static final long serialVersionUID = 1L;
-	// Create and initalize JPanels for outer borderLayout
-	private JPanel top = new JPanel();
-	private JPanel boardPanel = new JPanel();
-	private JPanel right = new JPanel();
-	private JPanel bottom = new JPanel();
-
-	private JButton doneButton = new JButton("Done");
-
-	private JLabel instructionLabel = new JLabel();
-	private JPanel[][] board = new JPanel[25][25];
-	ImageIcon outOfBoundsTile = new ImageIcon("black.png");
-
-	private ButtonGroup characterGroup = new ButtonGroup();
-	private JRadioButton[] characterButtons = { 
-			new JRadioButton(" "), 
-			new JRadioButton(" "), 
-			new JRadioButton(" "),
-			new JRadioButton(" "), 
-			new JRadioButton(" "), 
-			new JRadioButton(" ") };
-	JButton submitButton = new JButton("Sumbit");
-	JButton nextButton = new JButton("Next Player");
-	int playerIndex;
-	int numPlayers;
-
-	// Create listener event
-	AnswerListener listener = new AnswerListener();
-	JComboBox<String> numList;
-	ArrayList<Player> players;
+	
+	// The board and game objects, as well as Cards for the game
+	Board board;
+	Game game;
 	ArrayList<Character> characters;
-
-	public GUI(ArrayList<Character> characters) {
+	ArrayList<Weapon> weapons;
+	ArrayList<Room> rooms;
+	
+	// Panels
+	JPanel instructionPanel;
+	JPanel boardPanel;
+	JPanel decisionPanel;
+	JPanel feedbackPanel;
+	JPanel[][] boardPanels;
+	
+	// JRadioButtons
+	ButtonGroup group;
+	JRadioButton red, yellow, blue, green, purple, white;
+	
+	// Labels
+	JLabel decisionLabel;
+	
+	// Buttons
+	JButton startGame;
+	JButton enter;
+	
+	// JTextFields
+	JTextField names;
+	
+	// Listeners
+	ItemListener jRadio;
+	JButtonListener enterListen;
+	
+	
+	// Variables for setup of game
+	int numPlayers;
+	int currentPlayer;
+	
+	// Players and Characters
+	ArrayList<Player> players;
+	ArrayList<Character> chars;
+	
+	
+	public GUI(Board board, ArrayList<Character> characters, ArrayList<Weapon> weapons, ArrayList<Room> rooms){
+		this.board = board;
+		this.chars = characters;
 		this.characters = characters;
+		this.weapons = weapons;
+		this.rooms = rooms;
 		setLayout();
-
+		drawBoard(this.board);
+		pack();
 	}
-
+	
+	/**
+	 * Called upon creation of the game. Essentially initializes the GUI
+	 * and it's panels to be ready for the user to set up the game.
+	 */
+	public void setLayout(){
+		// Initialize panels
+		instructionPanel = new JPanel();
+		boardPanel = new JPanel();
+		decisionPanel = new JPanel();
+		feedbackPanel = new JPanel();
+		boardPanels = new JPanel[25][25];
+		
+		// Sets Layout / Size of JFrame, and adds our 4 panels
+		setLayout(new BorderLayout(0, 0));
+		setPreferredSize(new Dimension(700, 600));
+		add(instructionPanel, BorderLayout.NORTH);
+		add(feedbackPanel, BorderLayout.SOUTH);
+		add(boardPanel, BorderLayout.CENTER);
+		add(decisionPanel, BorderLayout.EAST);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setVisible(true);
+		
+		// Setting up layout for boardPanel
+		GridLayout bpLayout = new GridLayout(25, 25, 0, 0);
+		boardPanel.setLayout(bpLayout);
+		
+		// Setting up layout for decisionPanel
+		decisionPanel.setLayout(new FlowLayout() );
+		
+		// Sets the size and color of the border layout panels
+		instructionPanel.setPreferredSize(new Dimension(700, 75));
+		feedbackPanel.setPreferredSize(new Dimension(700, 75));
+		decisionPanel.setPreferredSize(new Dimension(300, 400));
+		instructionPanel.setBackground(Color.magenta);
+		feedbackPanel.setBackground(Color.green);
+		decisionPanel.setBackground(Color.yellow);
+		
+		validate();
+	}
+	
+	/**
+	 * Draws the board on the screen in the boardPanel JPanel
+	 * Uses a GridLayout(25, 25).  
+	 * 
+	 * @param boardObj - The board object we want to draw
+	 */
 	public void drawBoard(Board boardObj) {
 		for (int row = 0; row <= 24; row++) {
 			for (int col = 0; col <= 24; col++) {
-				board[row][col] = new JPanel();
-			}
-		}
-
-		for (int row = 0; row <= 24; row++) {
-			for (int col = 0; col <= 24; col++) {
+				boardPanels[row][col] = new JPanel(new GridLayout() );
+				
 				JLabel label = new JLabel();
-				// label.setPreferredSize(new Dimension(3, 3));
-				label.setBackground(Color.blue);
-				boardPanel.add(board[row][col].add(label));
+				boardPanel.add(boardPanels[row][col].add(label));
 				if (boardObj.getBoard()[row][col] == null) {
-					label.setIcon(outOfBoundsTile);
-				} else {
-					label.setIcon(boardObj.getBoard()[row][col].getImageIcon());
+					label.setIcon(new ImageIcon("black.png"));
+				} 
+				else {
+					label.setIcon(boardObj.getBoard()[row][col].getImageIcon() );
 				}
-
 				label.setVisible(true);
 			}
 		}
-
+		
+		boardPanel.validate();
 	}
 	
-	//Object[] nums = { 3, 4, 5, 6 };
-	//int num = (int) JOptionPane.showInputDialog(this, "Select Number of players", "Number of players",
-	//		JOptionPane.QUESTION_MESSAGE, null, nums, nums[0]);
-
-	public void getNumPlayers() {
+	/**
+	 * Called to allow the user's to select which character they wish to play as.
+	 * Uses RadioButtons.
+	 */
+	public void pickCharacters(int numPlayers){
+		players = new ArrayList<Player>();
+		jRadio = new JRadioListener();
+		// Make our label for the panel
+		currentPlayer = 0;
+		decisionLabel = new JLabel("Player " + (currentPlayer + 1) + ", select the player you wish to play as.");
+		decisionPanel.add(decisionLabel);
 		
+		// Make all the JRadioButtons
+		red = new JRadioButton("Miss Scarlett");
+		yellow = new JRadioButton("Colonel Mustard");
+		blue = new JRadioButton("Miss Peacock");
+		green = new JRadioButton("Reverend Green");
+		purple = new JRadioButton("Professor Plum");
+		white = new JRadioButton("Mrs. White");
+		
+		// Add the listener to all the JRadioButtons
+		red.addItemListener(jRadio);
+		yellow.addItemListener(jRadio);
+		blue.addItemListener(jRadio);
+		green.addItemListener(jRadio);
+		purple.addItemListener(jRadio);
+		white.addItemListener(jRadio);
+		
+		// Add all of the JRadioButtons to a group
+		group = new ButtonGroup();
+		group.add(red);
+		group.add(yellow);
+		group.add(blue);
+		group.add(green);
+		group.add(purple);
+		group.add(white);
+		
+		// Add all the buttons to the decisionPanel
+		decisionPanel.add(red);
+		decisionPanel.add(yellow);
+		decisionPanel.add(blue);
+		decisionPanel.add(green);
+		decisionPanel.add(purple);
+		decisionPanel.add(white);
+		
+		decisionPanel.validate();
+	}
+	
+	/**
+	 * Displays an OptionPane to the user to get input on how many
+	 * players will be taking part.
+	 * If the user selects cancel, the game will exit.
+	 * 
+	 * @return - The number of players between 3 and 6, inclusive.
+	 */
+	public int getNumPlayers() {
 		Object[] nums = { 3, 4, 5, 6 };
-		Object input =  JOptionPane.showInputDialog(this, "How many players are in this game", "Number of players",JOptionPane.QUESTION_MESSAGE, null, nums, nums[0]);
+		Object input =  JOptionPane.showInputDialog(this, "How many players are in this game", "Number of players",
+				JOptionPane.QUESTION_MESSAGE, null, nums, nums[0]);
+		
 		if(input == null){
 			System.exit(0);
-		}else{
-			numPlayers = (int) input;
-			playerIndex = 0;
-			pickCharacter();
+			return -1; // Shouldn't happen, needed to compile
 		}
-	}
-
-	// method sets the layout of the GUI
-	public void setLayout() {
-		// creates a new border layout-adds only the top, bottom and boardPanel
-		// panels
-		setLayout(new BorderLayout());
-		setPreferredSize(new Dimension(700, 600));
-		add(top, BorderLayout.NORTH);
-		add(bottom, BorderLayout.SOUTH);
-		add(boardPanel, BorderLayout.CENTER);
-		add(right, BorderLayout.EAST);
-		// sets the size and colour of the border layout pannels
-		top.setPreferredSize(new Dimension(700, 100));
-		bottom.setPreferredSize(new Dimension(700, 100));
-		right.setPreferredSize(new Dimension(300, 400));
-		top.setBackground(Color.magenta);
-		bottom.setBackground(Color.green);
-		right.setBackground(Color.yellow);
-
-		top.add(instructionLabel);
-		boardPanel.setLayout(new GridLayout(25, 25));
-
+		else{
+			numPlayers = (int) input;
+			currentPlayer = 0;
+			return numPlayers;
+		}
 	}
 	
-	public void pickCharacter() {
-		right.setLayout(new GridLayout(7, 1));
-		JLabel title = new JLabel();
-		characterGroup.clearSelection();
-		title.setText("Player " + playerIndex + " select your character");
-		right.add(title);
-		for (int i = 0; i < characterButtons.length; i++) {
-			characterButtons[i].setText(characters.get(i).name);
+	/**
+	 * Called when the JRadioListener detects a state change amongst the buttons
+	 * 
+	 * @param o - The object that was the source of the state change
+	 */
+	public void setPlayer(Object o){
+		if(o == red){
+			players.add(new Player(getCharacter(Character.Colour.RED), true) );
+			decisionPanel.remove(red);
+			currentPlayer++;
 		}
-		for (JRadioButton characterButton : characterButtons) {
-			characterGroup.add(characterButton);
-			right.add(characterButton);
-			characterButton.addActionListener(listener);
+		else if(o == yellow){
+			players.add(new Player(getCharacter(Character.Colour.YELLOW), true) );
+			decisionPanel.remove(yellow);
+			currentPlayer++;
+		}
+		else if(o == blue){
+			players.add(new Player(getCharacter(Character.Colour.BLUE), true) );
+			decisionPanel.remove(blue);
+			currentPlayer++;
+		}
+		else if(o == green){
+			players.add(new Player(getCharacter(Character.Colour.GREEN), true) );
+			decisionPanel.remove(green);
+			currentPlayer++;
+		}
+		else if(o == purple){
+			players.add(new Player(getCharacter(Character.Colour.PURPLE), true) );
+			decisionPanel.remove(purple);
+			currentPlayer++;
+		}
+		else if(o == white){
+			players.add(new Player(getCharacter(Character.Colour.WHITE), true) );
+			decisionPanel.remove(white);
+			currentPlayer++;
+		}
+		
+		if(currentPlayer != numPlayers){
+			decisionLabel.setText("Player " + (currentPlayer + 1) + ", select the player you wish to play as.");
+			decisionPanel.validate();
+		}
+		else{
+			// Fill the non human players
+			fillRemainingPlayers();
+			resetDecisionPanel();
 		}
 	}
+	
+	/**
+	 * Fills the players array with the remaining characters that have not been chosen
+	 */
+	public void fillRemainingPlayers(){
+		if(numPlayers == 6){return;}
+		
+		for(Character c : chars){
+			players.add(new Player(c, false) );
+		}
+	}
+	
+	public void resetDecisionPanel(){
+		// Reset boardPanel and redraw with player locations
+		boardPanel.removeAll();
+		board = new Board(players);
+		drawBoard(board);
+		
+		// Remove the decisionPanel from our components
+		// Initalize our startGame button!
+		remove(decisionPanel);
+		decisionPanel.removeAll();
+		setLayout();
+		chooseNames();
+		//prepareGame();
+	}
+	
+	/**
+	 * Creates the Text area and button for the user's to input their names
+	 */
+	public void chooseNames(){
+		currentPlayer = 0;
+		
+		// Set the label
+		decisionLabel.setText("Player " + (currentPlayer + 1) + ", enter your name and click enter.");
+		decisionPanel.add(decisionLabel);
+		
+		// Set the JTextArea
+		names = new JTextField();
+		names.setPreferredSize(new Dimension(150, 28) );
+		decisionPanel.add(names);
+		names.setVisible(true);
+		
+		// Set the button
+		enter = new JButton("Enter");
+		decisionPanel.add(enter);
+		
+		// Set the button listener
+		enterListen = new JButtonListener();
+		enter.addActionListener(enterListen);
+	}
+	
+	/**
+	 * Gets a character and then removes it from our ArrayList as it has been used
+	 * 
+	 * @param col
+	 * @return
+	 */
+	private Character getCharacter(Character.Colour col){
+		Character toReturn = null;
+		for(Character c : chars){
+			if(c.colour == col){
+				toReturn = c;
+			}
+		}
+		chars.remove(toReturn);
+		return toReturn;
+	}
+	
+	/**
+	 * Called after players have chosen their names, creates the game, the solution
+	 * and deals the cards
+	 */
+	public void prepareGame(){
+		game = new Game(board, players);
+		game.createSolution(characters, weapons, rooms);
+		game.dealCards(characters, weapons, rooms);
+		
+		startLabel();
+	}
+	
+	public void startLabel(){
+		decisionLabel.setText("Press the button to start the game!");
+		decisionPanel.add(decisionLabel);
+		startGame = new JButton("Start");
+		decisionPanel.add(startGame);
+		validate();
+	}
+	
+	// ============================================================================================================================================
+	//                                                LISTENER CLASSES LAY BEYOND THIS POINT
+	// ============================================================================================================================================
+	
+	/**
+	 * A listener for the JRadioButtons
+	 */
+	private class JRadioListener implements ItemListener{
 
-	private class AnswerListener implements ActionListener {
+		@Override
+		public void itemStateChanged(ItemEvent e) {
+			if(e.getStateChange() == ItemEvent.SELECTED){
+				setPlayer(e.getSource() );
+			}
+		}
+	}
+	
+	private class JButtonListener implements ActionListener{
+
+		@Override
 		public void actionPerformed(ActionEvent e) {
-
-			for (JRadioButton characterButton : characterButtons) {
-				// ensures user has selected an answer before they can move on
-				if (characterButton.isSelected()) {
-					// when the user selects a character show the submit button
-					instructionLabel.setText("Click Submit");
-					submitButton.setVisible(true);
-				}
-				if (e.getSource() == nextButton) {
-					String selectedCharacter = characterButton.getText();
-					Character character = null;
-					for(Character c: characters){
-						if(character.name.equals(selectedCharacter)){
-							character = c;
-						}
-					}
-					players.add(new Player(character, true));
-					playerIndex ++;
-					if(playerIndex < numPlayers ){
-						pickCharacter();
-					}
+			if(e.getSource() == startGame){
+				
+			}
+			else if(e.getSource() == enter){
+				players.get(currentPlayer).setName(names.getText() );
+				currentPlayer++;
+				decisionLabel.setText("Player " + (currentPlayer + 1) + ", enter your name and click enter.");
+				
+				if(currentPlayer == numPlayers){
+					decisionPanel.removeAll();
+					decisionPanel.repaint(); // Repaints the panel to remove the JTextArea / Button
+					prepareGame();
 				}
 			}
 		}
 	}
-
-	public ArrayList<Player> getPlayers() {
-		return players;
-	}
+	
 }

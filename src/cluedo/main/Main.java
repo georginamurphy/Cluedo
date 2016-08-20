@@ -3,8 +3,6 @@ import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-import javax.swing.JFrame;
-
 import cluedo.boardpieces.Player;
 import cluedo.cards.Character;
 import cluedo.cards.Room;
@@ -15,7 +13,7 @@ import cluedo.game.Game;
 
 public class Main {
 	// An ArrayList to hold character cards for the game
-	public static ArrayList<Character> characters = new ArrayList<Character>();
+	private static ArrayList<Character> characters = new ArrayList<Character>();
 	
 	// An ArrayList to hold weapon cards for the game
 	private static ArrayList<Weapon> weapons = new ArrayList<Weapon>();
@@ -26,13 +24,11 @@ public class Main {
 	// An ArrayList to hold the players for the game
 	private static ArrayList<Player> players = new ArrayList<Player>();
 	
-	
+	// The board for the game
+	private static Board board;
 	
 	// The game object for the game
 	private static Game game;
-	
-	// The GUI for this cluedo game
-	private static GUI gui;
 
 	
 	/**
@@ -44,24 +40,23 @@ public class Main {
 	 * @param args
 	 */
 	public static void main(String[] args) {
+		System.out.println(""
+				+ "**********************************************************\n"
+				+ "                    Welcome to CLUEDO\n"
+				+ "**********************************************************");
 		makeCharacters();
 		makeWeapons();
 		makeRooms();
 		
-		JFrame cludo = new JFrame("Cluedo");
-		gui = new GUI(characters);
-	    cludo.getContentPane().add(gui);   
-	    cludo.setVisible(true);
-	    cludo.pack();
-	    cludo.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	    cludo.setLocation(100,45);
-
+		board = new Board();
+		GUI GUI = new GUI(board, characters, weapons, rooms);
+		int numPlayers = GUI.getNumPlayers();
+		GUI.pickCharacters(numPlayers);
+		//GUI.prepareGame(characters, weapons, rooms);
+		//setPlayers();
 		
-		
-		game = new Game(gui);
-		game.createSolution(characters, weapons, rooms);
+		//game.createSolution(characters, weapons, rooms);
 		//game.dealCards(characters, weapons, rooms);
-		
 		//game.run();
 	}
 
@@ -108,7 +103,37 @@ public class Main {
 	 * Asks the user for the number of players. Checks the input is valid and
 	 * constructs an arrayList with the desired number of players
 	 */
-	private static void setPlayers(int num) {
-		//players = gui.pickCharacters(num, characters);
+	private static void setPlayers() {
+		Scanner input = new Scanner(System.in);
+
+		System.out.println("There must be between 3 and 6 players, inclusive.");
+		System.out.println("Please enter the number of players: ");
+		String number = input.next();
+		int numPlayers = getValidPlayerCount(number, input);
+		int count = 0;
+		for (Character c : characters) {
+			if (count < numPlayers) {
+				players.add(new Player(c, true));
+				count++;
+			} else {
+				players.add(new Player(c, false));
+			}
+			
+		}
+	}
+	
+	private static int getValidPlayerCount(String number, Scanner input){
+		boolean countFound = false;
+		while(!countFound){
+			if(number.equals("3") ){return 3;}
+			else if(number.equals("4") ){return 4;}
+			else if(number.equals("5") ){return 5;}
+			else if(number.equals("6") ){return 6;}
+			else{
+				System.out.println("Please enter either 3, 4, 5 or 6 for the number of players.");
+				number = input.next();
+			}
+		}
+		return 0; // Shouldnt happen
 	}
 }

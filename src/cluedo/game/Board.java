@@ -27,6 +27,14 @@ public class Board {
 	}
 	
 	/**
+	 * Used in the GUI class to create a board without using players
+	 */
+	public Board(){
+		this.board = new BoardPiece[25][25];
+		readBoard();
+	}
+	
+	/**
 	 * Returns the 2D array representing the board
 	 * @return
 	 */

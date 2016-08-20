@@ -59,8 +59,6 @@ public class Game {
 	private ArrayList<Location> loungeDoors;
 	private ArrayList<Location> diningRoomDoors;
 
-	private GUI gui;
-
 	// An enum representing a direction on the board
 	public enum Direction {
 		UP, DOWN, LEFT, RIGHT
@@ -71,16 +69,11 @@ public class Game {
 	 * 
 	 * @param board - The board for the game
 	 * @param players - The list of all players
-	 * @param gui 
 	 */
-	public Game(GUI gui) {
-		this.gui = gui;
-		gui.getNumPlayers();
-		gui.pickCharacter();
-		this.players = gui.getPlayers();
-		board = new Board(players);
+	public Game(Board board, ArrayList<Player> players) {
+		this.board = board;
+		this.players = players;
 		this.gameEnd = false;
-		
 
 		// These two method calls initialize information about the board that never changes between games
 		// The information helps when moving player's into and out of rooms
