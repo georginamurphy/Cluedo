@@ -582,6 +582,7 @@ public class Game {
 		roomTileLists.add(loungeTiles);
 		roomTileLists.add(diningRoomTiles);
 
+		//System.out.println(p.getLocation().equals(new Location(2, 21) ) );
 		// Will return true if a player's location is equal to one of
 		// the 6 designated spots in each room for players to sit in.
 		for (ArrayList<Location> list : roomTileLists) {

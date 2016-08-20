@@ -290,10 +290,10 @@ public class Player implements BoardPiece {
 	@SuppressWarnings("resource")
 	public boolean startTurnInRoom() {
 		Room.Name roomName = this.game.inRoom(this);
-		Scanner input = new Scanner(System.in);
+		//Scanner input = new Scanner(System.in);
 		if (this.game.hasFreeDoor(roomName)) {
 			ArrayList<Location> doorLocations = this.game.getDoorLocations(roomName);
-			game.printBoard();
+			//game.printBoard();
 			System.out.println(
 					this.character.name + ", you are required to leave this room at the start of your current turn.");
 			System.out.println("You will not be able to re-enter this room until your next turn.");
@@ -302,9 +302,9 @@ public class Player implements BoardPiece {
 			System.out.println(
 					"Which Door would you like to exit the room from? (Enter 1 - " + doorLocations.size() + ")");
 
-			int doorNumber = this.game.getUserInput(input, 1, doorLocations.size());
+			//int doorNumber = this.game.getUserInput(input, 1, doorLocations.size());
+			int doorNumber = game.getGui().getDoorNumber(doorLocations.size() );
 			boolean exitedRoom = false;
-
 			Location desiredDoor = doorLocations.get(doorNumber - 1);
 			desiredDoor = this.game.isFreeDoor(desiredDoor);
 			while (!exitedRoom) {
@@ -315,11 +315,11 @@ public class Player implements BoardPiece {
 					exitedRoom = true;
 				} else { // The door the user wants to exit IS blocked
 					System.out.println("That door is blocked by another player! Choose a different door.");
-					doorNumber = this.game.getUserInput(input, 1, doorLocations.size());
+					doorNumber = game.getGui().getDoorNumber(doorLocations.size() );
 					desiredDoor = doorLocations.get(doorNumber - 1);
 				}
 			}
-			game.printBoard();
+			//game.printBoard();
 		} 
 		else { // The room doesn't have a free door, end their turn
 			return true;

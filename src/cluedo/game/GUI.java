@@ -29,6 +29,7 @@ import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
 import cluedo.boardpieces.Player;
+import cluedo.boardpieces.RoomTile;
 import cluedo.cards.Character;
 import cluedo.cards.Room;
 import cluedo.cards.Weapon;
@@ -47,6 +48,7 @@ public class GUI extends JFrame {
 	Player focusPlayer;
 	int movesLeft;
 
+	// Image Icons
 	Icon redIcon = new ImageIcon("MissScarlett.png");
 	Icon yellowIcon = new ImageIcon("ColonelMustard.png");
 	Icon blueIcon = new ImageIcon("MrsPeacock.png");
@@ -70,6 +72,8 @@ public class GUI extends JFrame {
 	Icon hallIcon = new ImageIcon("Hall.png");
 	Icon ballroomIcon = new ImageIcon("Ballroom.png");
 	Icon billiardIcon = new ImageIcon("BilliardRoom.png");
+	
+	Icon doorIcon = new ImageIcon("Door.png");
 
 	// Panels
 	JPanel instructionPanel;
@@ -101,6 +105,10 @@ public class GUI extends JFrame {
 	JButton suggest;
 	JButton ready;
 	JButton rollDice;
+	JButton door1;
+	JButton door2;
+	JButton door3;
+	JButton door4;
 
 	// JTextFields
 	JTextField names;
@@ -112,6 +120,7 @@ public class GUI extends JFrame {
 	JButtonListener accuseListen;
 	JButtonListener startListen;
 	JButtonListener rollListen;
+	JButtonListener suggestListen;
 	JKeyListener moveListen;
 
 	// Variables for setup of game
@@ -497,6 +506,45 @@ public class GUI extends JFrame {
 		rollDice.addActionListener(rollListen);
 		validate();
 	}
+	
+	public void enteredRoom(Player player){
+		instructionLabel.setText(focusPlayer.getName() + ", you have entered a room, please make an accusation or a suggestion.");
+		feedbackLabel.setVisible(false);
+		suggest.setVisible(true);
+		suggestListen = new JButtonListener();
+		suggest.addActionListener(suggestListen);
+		validate();
+	}
+	
+	public void leaveRoom(Player player){
+		focusPlayer = player;
+		boolean cantLeaveRoom = focusPlayer.startTurnInRoom();
+		drawBoard(board);
+		if(!cantLeaveRoom){
+			takeTurn(focusPlayer);
+		}
+		else{
+			
+		}
+	}
+	
+	public int getDoorNumber(int numOfDoors){
+		Object[] nums = new Object[numOfDoors];
+		int i = 1;
+		for(int x = 0; x < numOfDoors; x++){
+			nums[x] = i;
+			i++;
+		}
+		Object input = JOptionPane.showInputDialog(this, "Choose the door number you wish to exit from", "Choose door number",
+				JOptionPane.QUESTION_MESSAGE, null, nums, nums[0]);
+		
+		if (input == null) {
+			System.exit(0);
+			return -1; // Shouldn't happen, needed to compile
+		} else {
+			return (int) input;
+		}
+	}
 
 	public JFrame makeGuess(Player player) {
 		JFrame guess = new JFrame("Construct Guess");
@@ -597,6 +645,7 @@ public class GUI extends JFrame {
 				boardPanel.setFocusable(true);
 				boardPanel.requestFocus();
 			}
+			
 			if (e.getSource() == accuse) {
 				int r = (int) JOptionPane.showConfirmDialog(null,
 						"Are you sure you want to submit an accusation?\n"
@@ -607,6 +656,12 @@ public class GUI extends JFrame {
 				}
 
 			}
+			
+			if(e.getSource() == suggest){
+				 //game.constructGuess(focusPlayer, false);
+				takeTurn(getNextPlayer() );
+			}
+			
 			if (e.getSource() == enter) {
 				if (!names.getText().equals(" ")) {
 					players.get(currentPlayer).setName(names.getText());
@@ -673,13 +728,22 @@ public class GUI extends JFrame {
 			
 			// Has the user entered a room?
 			if(game.isInRoom(focusPlayer) ){
-	
+				enteredRoom(focusPlayer);
 			}
 			// Else have they ended their turn not in a room? Move onto next player  
 			else if(movesLeft == 0 && !game.isInRoom(focusPlayer) ){
 				Player nextPlayer = getNextPlayer();
 				if(nextPlayer == null){System.out.println("NEXT PLAYER WAS NULL???");}
-				else{takeTurn(nextPlayer);}
+				else{
+					if(game.isInRoom(nextPlayer) ){
+						feedbackLabel.setText(" ");
+						instructionLabel.setText(nextPlayer.getName() + ", you must now leave this room, choose which door you would like to exit from.");
+						leaveRoom(nextPlayer);
+					}
+					else{
+						takeTurn(nextPlayer);
+					}
+				}
 			}
 		}
 
