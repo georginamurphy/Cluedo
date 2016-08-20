@@ -509,6 +509,9 @@ public class GUI extends JFrame {
 		feedbackLabel.setVisible(false);
 		suggest.setVisible(true);
 		suggestListen = new JButtonListener();
+		for(ActionListener ls : suggest.getActionListeners() ){
+			suggest.removeActionListener(ls);
+		}
 		suggest.addActionListener(suggestListen);
 		validate();
 	}
@@ -780,7 +783,6 @@ public class GUI extends JFrame {
 			}
 
 			// Has the user entered a room?
-
 			if(game.isInRoom(focusPlayer) ){
 				enteredRoom(focusPlayer);
 			}

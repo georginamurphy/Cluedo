@@ -393,7 +393,6 @@ public class Game {
 			// If the player moved onto a RoomTile that is a door, update their
 			// location to a designated spot in the room
 			piece = this.board.getBoard()[playerY - 1][playerX];
-			System.out.println(piece);
 			if (piece instanceof RoomTile) {
 				Room.Name name = ((RoomTile) piece).getName();
 				player.updateLocation(getRoomTile(name));
@@ -402,7 +401,6 @@ public class Game {
 		case DOWN:
 			player.getLocation().moveDown();
 			piece = this.board.getBoard()[playerY + 1][playerX];
-			System.out.println(piece);
 			if (piece instanceof RoomTile) {
 				Room.Name name = ((RoomTile) piece).getName();
 				player.updateLocation(getRoomTile(name));
@@ -411,7 +409,6 @@ public class Game {
 		case RIGHT:
 			player.getLocation().moveRight();
 			piece = this.board.getBoard()[playerY][playerX + 1];
-			System.out.println(piece);
 			if (piece instanceof RoomTile) {
 				Room.Name name = ((RoomTile) piece).getName();
 				player.updateLocation(getRoomTile(name));
@@ -420,7 +417,6 @@ public class Game {
 		case LEFT:
 			player.getLocation().moveLeft();
 			piece = this.board.getBoard()[playerY][playerX - 1];
-			System.out.println(piece);
 			if (piece instanceof RoomTile) {
 				Room.Name name = ((RoomTile) piece).getName();
 				player.updateLocation(getRoomTile(name));
