@@ -22,6 +22,9 @@ import cluedo.cards.Weapon;
  */
 public class Game {
 	
+	// The gui object for the game
+	private GUI gui;
+	
 	// The board object for this game
 	private Board board;
 	
@@ -69,8 +72,10 @@ public class Game {
 	 * 
 	 * @param board - The board for the game
 	 * @param players - The list of all players
+	 * @param gui 
 	 */
-	public Game(Board board, ArrayList<Player> players) {
+	public Game(Board board, ArrayList<Player> players, GUI gui) {
+		this.gui = gui;
 		this.board = board;
 		this.players = players;
 		this.gameEnd = false;
@@ -87,6 +92,10 @@ public class Game {
 	 */
 	public Board getBoard() {
 		return this.board;
+	}
+	
+	public GUI getGui() {
+		return gui;
 	}
 	
 	/**
@@ -206,12 +215,23 @@ public class Game {
 				// A player is dead if they have made an incorrect accusation
 				if (!p.getDead()) {
 					p.startTurn();
-					if (gameEnd) {break;} // Break the for each loop if a player won the game
+					if (gameEnd) {
+						gui.gameWon(p);
+						break;} // Break the for each loop if a player won the game
 				}
 			}
 		}
-		System.out.println("The game has been won. The solution was:");
-		System.out.println(solution.toString());
+		
+	}
+	
+	/**
+	 * A simple method that will generate two values between 1 and 6, inclusive
+	 * and return their sum.
+	 */
+	public int rollDice() {
+		int roll = (int) (Math.random() * 6) + 1;
+		int roll2 = (int) (Math.random() * 6) + 1;
+		return roll + roll2;
 	}
 
 	/**
@@ -1167,4 +1187,6 @@ public class Game {
 			}
 		}
 	}
+
+	
 }

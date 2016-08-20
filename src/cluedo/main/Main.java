@@ -40,10 +40,6 @@ public class Main {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		System.out.println(""
-				+ "**********************************************************\n"
-				+ "                    Welcome to CLUEDO\n"
-				+ "**********************************************************");
 		makeCharacters();
 		makeWeapons();
 		makeRooms();
@@ -52,12 +48,7 @@ public class Main {
 		GUI GUI = new GUI(board, characters, weapons, rooms);
 		int numPlayers = GUI.getNumPlayers();
 		GUI.pickCharacters(numPlayers);
-		//GUI.prepareGame(characters, weapons, rooms);
-		//setPlayers();
-		
-		//game.createSolution(characters, weapons, rooms);
-		//game.dealCards(characters, weapons, rooms);
-		//game.run();
+	
 	}
 
 	/**

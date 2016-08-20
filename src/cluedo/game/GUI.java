@@ -19,7 +19,6 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import cluedo.boardpieces.Player;
@@ -27,52 +26,58 @@ import cluedo.cards.Character;
 import cluedo.cards.Room;
 import cluedo.cards.Weapon;
 
-public class GUI extends JFrame{
+public class GUI extends JFrame {
 	private static final long serialVersionUID = 1L;
-	
+
 	// The board and game objects, as well as Cards for the game
 	Board board;
 	Game game;
 	ArrayList<Character> characters;
 	ArrayList<Weapon> weapons;
 	ArrayList<Room> rooms;
-	
+
 	// Panels
 	JPanel instructionPanel;
 	JPanel boardPanel;
+	JPanel buttonPanel;
 	JPanel decisionPanel;
 	JPanel feedbackPanel;
 	JPanel[][] boardPanels;
-	
+
 	// JRadioButtons
 	ButtonGroup group;
 	JRadioButton red, yellow, blue, green, purple, white;
-	
+
 	// Labels
 	JLabel decisionLabel;
-	
+	JLabel instructionLabel = new JLabel("Welcome To Cluedo");
+	JLabel instructionLabel2 = new JLabel(" ");
+	JLabel feedbackLabel = new JLabel(" ");
+
 	// Buttons
 	JButton startGame;
 	JButton enter;
-	
+	JButton accuse;
+	JButton suggest;
+	JButton ready;
+	JButton rollDice;
+
 	// JTextFields
 	JTextField names;
-	
+
 	// Listeners
 	ItemListener jRadio;
 	JButtonListener enterListen;
-	
-	
+
 	// Variables for setup of game
 	int numPlayers;
 	int currentPlayer;
-	
+
 	// Players and Characters
 	ArrayList<Player> players;
 	ArrayList<Character> chars;
-	
-	
-	public GUI(Board board, ArrayList<Character> characters, ArrayList<Weapon> weapons, ArrayList<Room> rooms){
+
+	public GUI(Board board, ArrayList<Character> characters, ArrayList<Weapon> weapons, ArrayList<Room> rooms) {
 		this.board = board;
 		this.chars = characters;
 		this.characters = characters;
@@ -82,85 +87,103 @@ public class GUI extends JFrame{
 		drawBoard(this.board);
 		pack();
 	}
-	
+
 	/**
-	 * Called upon creation of the game. Essentially initializes the GUI
-	 * and it's panels to be ready for the user to set up the game.
+	 * Called upon creation of the game. Essentially initializes the GUI and
+	 * it's panels to be ready for the user to set up the game.
 	 */
-	public void setLayout(){
+	public void setLayout() {
 		// Initialize panels
 		instructionPanel = new JPanel();
 		boardPanel = new JPanel();
+		buttonPanel = new JPanel();
 		decisionPanel = new JPanel();
 		feedbackPanel = new JPanel();
 		boardPanels = new JPanel[25][25];
 		
+		// Initialize buttons
+		accuse = new JButton("Accuse");
+		suggest = new JButton("Suggest");
+		ready = new JButton("Ready");
+		rollDice = new JButton("Roll Dice");
+		
+		// Add buttons to the button panel
+		buttonPanel.add(ready);
+		buttonPanel.add(accuse);
+		buttonPanel.add(suggest);
+		buttonPanel.add(rollDice);
+		ready.setVisible(false);
+		accuse.setVisible(false);
+		suggest.setVisible(false);
+		rollDice.setVisible(false);
+
 		// Sets Layout / Size of JFrame, and adds our 4 panels
 		setLayout(new BorderLayout(0, 0));
-		setPreferredSize(new Dimension(700, 600));
+		setPreferredSize(new Dimension(800, 600));
 		add(instructionPanel, BorderLayout.NORTH);
 		add(feedbackPanel, BorderLayout.SOUTH);
 		add(boardPanel, BorderLayout.CENTER);
 		add(decisionPanel, BorderLayout.EAST);
+		add(buttonPanel, BorderLayout.WEST);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setVisible(true);
-		
+
 		// Setting up layout for boardPanel
 		GridLayout bpLayout = new GridLayout(25, 25, 0, 0);
 		boardPanel.setLayout(bpLayout);
-		
+
 		// Setting up layout for decisionPanel
-		decisionPanel.setLayout(new FlowLayout() );
-		
+		decisionPanel.setLayout(new FlowLayout());
+
 		// Sets the size and color of the border layout panels
 		instructionPanel.setPreferredSize(new Dimension(700, 75));
 		feedbackPanel.setPreferredSize(new Dimension(700, 75));
 		decisionPanel.setPreferredSize(new Dimension(300, 400));
-		instructionPanel.setBackground(Color.magenta);
-		feedbackPanel.setBackground(Color.green);
-		decisionPanel.setBackground(Color.yellow);
-		
+		buttonPanel.setPreferredSize(new Dimension(100, 400));
+
+		feedbackPanel.add(feedbackLabel);
+		instructionPanel.add(instructionLabel);
 		validate();
 	}
-	
+
 	/**
-	 * Draws the board on the screen in the boardPanel JPanel
-	 * Uses a GridLayout(25, 25).  
+	 * Draws the board on the screen in the boardPanel JPanel Uses a
+	 * GridLayout(25, 25).
 	 * 
-	 * @param boardObj - The board object we want to draw
+	 * @param boardObj
+	 *            - The board object we want to draw
 	 */
 	public void drawBoard(Board boardObj) {
 		for (int row = 0; row <= 24; row++) {
 			for (int col = 0; col <= 24; col++) {
-				boardPanels[row][col] = new JPanel(new GridLayout() );
-				
+				boardPanels[row][col] = new JPanel(new GridLayout());
+
 				JLabel label = new JLabel();
 				boardPanel.add(boardPanels[row][col].add(label));
 				if (boardObj.getBoard()[row][col] == null) {
 					label.setIcon(new ImageIcon("black.png"));
-				} 
-				else {
-					label.setIcon(boardObj.getBoard()[row][col].getImageIcon() );
+				} else {
+					label.setIcon(boardObj.getBoard()[row][col].getImageIcon());
 				}
 				label.setVisible(true);
 			}
 		}
-		
+
 		boardPanel.validate();
 	}
-	
+
 	/**
-	 * Called to allow the user's to select which character they wish to play as.
-	 * Uses RadioButtons.
+	 * Called to allow the user's to select which character they wish to play
+	 * as. Uses RadioButtons.
 	 */
-	public void pickCharacters(int numPlayers){
+	public void pickCharacters(int numPlayers) {
 		players = new ArrayList<Player>();
 		jRadio = new JRadioListener();
 		// Make our label for the panel
 		currentPlayer = 0;
 		decisionLabel = new JLabel("Player " + (currentPlayer + 1) + ", select the player you wish to play as.");
 		decisionPanel.add(decisionLabel);
-		
+
 		// Make all the JRadioButtons
 		red = new JRadioButton("Miss Scarlett");
 		yellow = new JRadioButton("Colonel Mustard");
@@ -168,7 +191,7 @@ public class GUI extends JFrame{
 		green = new JRadioButton("Reverend Green");
 		purple = new JRadioButton("Professor Plum");
 		white = new JRadioButton("Mrs. White");
-		
+
 		// Add the listener to all the JRadioButtons
 		red.addItemListener(jRadio);
 		yellow.addItemListener(jRadio);
@@ -176,7 +199,7 @@ public class GUI extends JFrame{
 		green.addItemListener(jRadio);
 		purple.addItemListener(jRadio);
 		white.addItemListener(jRadio);
-		
+
 		// Add all of the JRadioButtons to a group
 		group = new ButtonGroup();
 		group.add(red);
@@ -185,7 +208,7 @@ public class GUI extends JFrame{
 		group.add(green);
 		group.add(purple);
 		group.add(white);
-		
+
 		// Add all the buttons to the decisionPanel
 		decisionPanel.add(red);
 		decisionPanel.add(yellow);
@@ -193,162 +216,159 @@ public class GUI extends JFrame{
 		decisionPanel.add(green);
 		decisionPanel.add(purple);
 		decisionPanel.add(white);
-		
+
 		decisionPanel.validate();
 	}
-	
+
 	/**
-	 * Displays an OptionPane to the user to get input on how many
-	 * players will be taking part.
-	 * If the user selects cancel, the game will exit.
+	 * Displays an OptionPane to the user to get input on how many players will
+	 * be taking part. If the user selects cancel, the game will exit.
 	 * 
 	 * @return - The number of players between 3 and 6, inclusive.
 	 */
 	public int getNumPlayers() {
 		Object[] nums = { 3, 4, 5, 6 };
-		Object input =  JOptionPane.showInputDialog(this, "How many players are in this game", "Number of players",
+		Object input = JOptionPane.showInputDialog(this, "How many players are in this game", "Number of players",
 				JOptionPane.QUESTION_MESSAGE, null, nums, nums[0]);
-		
-		if(input == null){
+
+		if (input == null) {
 			System.exit(0);
 			return -1; // Shouldn't happen, needed to compile
-		}
-		else{
+		} else {
 			numPlayers = (int) input;
 			currentPlayer = 0;
 			return numPlayers;
 		}
 	}
-	
+
 	/**
 	 * Called when the JRadioListener detects a state change amongst the buttons
 	 * 
-	 * @param o - The object that was the source of the state change
+	 * @param o
+	 *            - The object that was the source of the state change
 	 */
-	public void setPlayer(Object o){
-		if(o == red){
-			players.add(new Player(getCharacter(Character.Colour.RED), true) );
+	public void setPlayer(Object o) {
+		if (o == red) {
+			players.add(new Player(getCharacter(Character.Colour.RED), true));
 			decisionPanel.remove(red);
 			currentPlayer++;
-		}
-		else if(o == yellow){
-			players.add(new Player(getCharacter(Character.Colour.YELLOW), true) );
+		} else if (o == yellow) {
+			players.add(new Player(getCharacter(Character.Colour.YELLOW), true));
 			decisionPanel.remove(yellow);
 			currentPlayer++;
-		}
-		else if(o == blue){
-			players.add(new Player(getCharacter(Character.Colour.BLUE), true) );
+		} else if (o == blue) {
+			players.add(new Player(getCharacter(Character.Colour.BLUE), true));
 			decisionPanel.remove(blue);
 			currentPlayer++;
-		}
-		else if(o == green){
-			players.add(new Player(getCharacter(Character.Colour.GREEN), true) );
+		} else if (o == green) {
+			players.add(new Player(getCharacter(Character.Colour.GREEN), true));
 			decisionPanel.remove(green);
 			currentPlayer++;
-		}
-		else if(o == purple){
-			players.add(new Player(getCharacter(Character.Colour.PURPLE), true) );
+		} else if (o == purple) {
+			players.add(new Player(getCharacter(Character.Colour.PURPLE), true));
 			decisionPanel.remove(purple);
 			currentPlayer++;
-		}
-		else if(o == white){
-			players.add(new Player(getCharacter(Character.Colour.WHITE), true) );
+		} else if (o == white) {
+			players.add(new Player(getCharacter(Character.Colour.WHITE), true));
 			decisionPanel.remove(white);
 			currentPlayer++;
 		}
-		
-		if(currentPlayer != numPlayers){
+
+		if (currentPlayer != numPlayers) {
 			decisionLabel.setText("Player " + (currentPlayer + 1) + ", select the player you wish to play as.");
 			decisionPanel.validate();
-		}
-		else{
+		} else {
 			// Fill the non human players
 			fillRemainingPlayers();
 			resetDecisionPanel();
 		}
 	}
-	
+
 	/**
-	 * Fills the players array with the remaining characters that have not been chosen
+	 * Fills the players array with the remaining characters that have not been
+	 * chosen
 	 */
-	public void fillRemainingPlayers(){
-		if(numPlayers == 6){return;}
-		
-		for(Character c : chars){
-			players.add(new Player(c, false) );
+	public void fillRemainingPlayers() {
+		if (numPlayers == 6) {
+			return;
+		}
+
+		for (Character c : chars) {
+			players.add(new Player(c, false));
 		}
 	}
-	
-	public void resetDecisionPanel(){
+
+	public void resetDecisionPanel() {
 		// Reset boardPanel and redraw with player locations
 		boardPanel.removeAll();
 		board = new Board(players);
 		drawBoard(board);
-		
+
 		// Remove the decisionPanel from our components
 		// Initalize our startGame button!
 		remove(decisionPanel);
 		decisionPanel.removeAll();
 		setLayout();
 		chooseNames();
-		//prepareGame();
+		// prepareGame();
 	}
-	
+
 	/**
 	 * Creates the Text area and button for the user's to input their names
 	 */
-	public void chooseNames(){
+	public void chooseNames() {
 		currentPlayer = 0;
-		
+
 		// Set the label
 		decisionLabel.setText("Player " + (currentPlayer + 1) + ", enter your name and click enter.");
 		decisionPanel.add(decisionLabel);
-		
+
 		// Set the JTextArea
-		names = new JTextField();
-		names.setPreferredSize(new Dimension(150, 28) );
+		names = new JTextField(" ");
+		names.setPreferredSize(new Dimension(150, 28));
 		decisionPanel.add(names);
 		names.setVisible(true);
-		
+
 		// Set the button
 		enter = new JButton("Enter");
 		decisionPanel.add(enter);
-		
+
 		// Set the button listener
 		enterListen = new JButtonListener();
 		enter.addActionListener(enterListen);
 	}
-	
+
 	/**
-	 * Gets a character and then removes it from our ArrayList as it has been used
+	 * Gets a character and then removes it from our ArrayList as it has been
+	 * used
 	 * 
 	 * @param col
 	 * @return
 	 */
-	private Character getCharacter(Character.Colour col){
+	private Character getCharacter(Character.Colour col) {
 		Character toReturn = null;
-		for(Character c : chars){
-			if(c.colour == col){
+		for (Character c : chars) {
+			if (c.colour == col) {
 				toReturn = c;
 			}
 		}
 		chars.remove(toReturn);
 		return toReturn;
 	}
-	
+
 	/**
-	 * Called after players have chosen their names, creates the game, the solution
-	 * and deals the cards
+	 * Called after players have chosen their names, creates the game, the
+	 * solution and deals the cards
 	 */
-	public void prepareGame(){
-		game = new Game(board, players);
+	public void prepareGame() {
+		game = new Game(board, players, this);
 		game.createSolution(characters, weapons, rooms);
 		game.dealCards(characters, weapons, rooms);
-		
+
 		startLabel();
 	}
-	
-	public void startLabel(){
+
+	public void startLabel() {
 		decisionLabel.setText("Press the button to start the game!");
 		decisionPanel.add(decisionLabel);
 		startGame = new JButton("Start");
@@ -356,42 +376,72 @@ public class GUI extends JFrame{
 		validate();
 	}
 	
-	// ============================================================================================================================================
-	//                                                LISTENER CLASSES LAY BEYOND THIS POINT
-	// ============================================================================================================================================
+	public void takeTurn(Player player) {
+		instructionLabel.setText("It is time to move " +player.getCharacter().name +" on the board");
+		instructionLabel2.setText("Roll the dice");
+		instructionPanel.add(instructionLabel);
+		instructionPanel.add(instructionLabel2);
+		rollDice.setVisible(true);
+		validate();
+		
+	}
 	
+	public void gameWon(Player winner) {
+		decisionPanel.removeAll();
+		
+		// Set the label
+		decisionLabel.setText(winner.getName() +" has won the game");
+		decisionPanel.add(decisionLabel);
+	}
+
+	// ============================================================================================================================================
+	// LISTENER CLASSES LAY BEYOND THIS POINT
+	// ============================================================================================================================================
+
 	/**
 	 * A listener for the JRadioButtons
 	 */
-	private class JRadioListener implements ItemListener{
+	private class JRadioListener implements ItemListener {
 
 		@Override
 		public void itemStateChanged(ItemEvent e) {
-			if(e.getStateChange() == ItemEvent.SELECTED){
-				setPlayer(e.getSource() );
+			if (e.getStateChange() == ItemEvent.SELECTED) {
+				setPlayer(e.getSource());
 			}
 		}
 	}
-	
-	private class JButtonListener implements ActionListener{
+
+	private class JButtonListener implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			if(e.getSource() == startGame){
-				
+			if (e.getSource() == startGame) {
+				game.run();
 			}
-			else if(e.getSource() == enter){
-				players.get(currentPlayer).setName(names.getText() );
-				currentPlayer++;
-				decisionLabel.setText("Player " + (currentPlayer + 1) + ", enter your name and click enter.");
-				
-				if(currentPlayer == numPlayers){
-					decisionPanel.removeAll();
-					decisionPanel.repaint(); // Repaints the panel to remove the JTextArea / Button
-					prepareGame();
+			if (e.getSource() == rollDice){
+				int roll = game.rollDice();
+				rollDice.setVisible(false);
+				instructionLabel2.setText(" ");
+				feedbackLabel.setText("You rolled "+ roll);
+			}
+			if (e.getSource() == enter) {
+				if (!names.getText().equals(" ")) {
+					players.get(currentPlayer).setName(names.getText());
+					currentPlayer++;
+					decisionLabel.setText("Player " + (currentPlayer + 1) + ", enter your name and click enter.");
+					names.setText(" ");
+					if (currentPlayer == numPlayers) {
+						decisionPanel.removeAll();
+						decisionPanel.repaint(); // Repaints the panel to remove
+													// the JTextArea / Button
+						prepareGame();
+					}
+				}else{
+					decisionLabel.setText("Please enter a name before clicking enter.");
 				}
 			}
 		}
 	}
+
 	
 }

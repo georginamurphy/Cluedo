@@ -87,6 +87,14 @@ public class Player implements BoardPiece {
 	}
 	
 	/**
+	 * Getter method for the name of this player
+	 * @return the name
+	 */
+	public String getName() {
+		return name;
+	}
+	
+	/**
 	 * A method which removes the player from the game because they have lost
 	 */
 	public void removeFromGame() {
@@ -176,23 +184,14 @@ public class Player implements BoardPiece {
 		this.location = location;
 	}
 
-	/**
-	 * A simple method that will generate two values between 1 and 6, inclusive
-	 * and return their sum.
-	 */
-	public int rollDice() {
-		int roll = (int) (Math.random() * 6) + 1;
-		int roll2 = (int) (Math.random() * 6) + 1;
-		return roll + roll2;
-	}
+	
 
 	/**
 	 * Initiates the player's turn, starts a chain of method calls that will
 	 * play out everything the player must do to complete their turn.
 	 */
 	public void startTurn() {
-		System.out.println("_________________________________________________________ " + this.character.name
-				+ " _________________________________________________________");
+		game.getGui().takeTurn(this);
 		Scanner input = new Scanner(System.in);
 		boolean turnSkipped = false;
 		// Is the player starting their turn in a room?
@@ -209,7 +208,7 @@ public class Player implements BoardPiece {
 		System.out.println("\nPress 1 to roll the dice");
 		waitForOne(input);
 
-		int roll = rollDice();
+		int roll = game.rollDice();
 		// int roll = 12;
 		System.out.println("You rolled " + roll + "!");
 		game.printBoard();
