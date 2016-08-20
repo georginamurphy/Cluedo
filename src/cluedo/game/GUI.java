@@ -30,6 +30,7 @@ import cluedo.boardpieces.Player;
 import cluedo.cards.Character;
 import cluedo.cards.Room;
 import cluedo.cards.Weapon;
+import cluedo.game.Game.Direction;
 
 public class GUI extends JFrame {
 	private static final long serialVersionUID = 1L;
@@ -41,6 +42,7 @@ public class GUI extends JFrame {
 	ArrayList<Weapon> weapons;
 	ArrayList<Room> rooms;
 	Player focusPlayer;
+	int movesLeft;
 
 	// Panels
 	JPanel instructionPanel;
@@ -84,6 +86,7 @@ public class GUI extends JFrame {
 	int currentPlayer;
 
 	// Players and Characters
+	ArrayList<Player> humanPlayers;
 	ArrayList<Player> players;
 	ArrayList<Character> chars;
 
@@ -207,6 +210,7 @@ public class GUI extends JFrame {
 	 *            - The board object we want to draw
 	 */
 	public void drawBoard(Board boardObj) {
+		boardPanel.removeAll();
 		for (int row = 0; row <= 24; row++) {
 			for (int col = 0; col <= 24; col++) {
 				boardPanels[row][col] = new JPanel(new GridLayout());
@@ -223,6 +227,7 @@ public class GUI extends JFrame {
 		}
 
 		boardPanel.validate();
+		boardPanel.repaint();
 	}
 
 	/**
@@ -332,7 +337,13 @@ public class GUI extends JFrame {
 			decisionPanel.validate();
 			decisionPanel.repaint();
 		} else {
+			// Record the non human players then
 			// Fill the non human players
+			humanPlayers = new ArrayList<Player>();
+			humanPlayers.addAll(players);
+			for(Player p : humanPlayers){
+				System.out.println(p);
+			}
 			fillRemainingPlayers();
 			resetDecisionPanel();
 		}
@@ -440,16 +451,36 @@ public class GUI extends JFrame {
 		decisionPanel.removeAll();
 		decisionPanel.validate();
 		decisionPanel.repaint();
+		
+		
+		boardPanel.removeKeyListener(moveListen);
 
 		// Setup the instruction panel
-		instructionLabel.setText("It is time to move " + player.getCharacter().name + " on the board. Roll the dice");
+		instructionLabel.setText("It is time to move " + player.getName() + " on the board. Roll the dice");
 		instructionPanel.add(instructionLabel);
+		
+		feedbackLabel.setVisible(false);
 		
 		// Show the rollDice button to the user
 		rollDice.setVisible(true);
 		rollListen = new JButtonListener();
 		rollDice.addActionListener(rollListen);
 		validate();
+	}
+	
+	public Player getNextPlayer(){
+		int index = humanPlayers.indexOf(focusPlayer);
+		index++;
+		if(index == humanPlayers.size() ) {index = 0;}
+		while(index < humanPlayers.size() ){
+			if(!humanPlayers.get(index).getDead() ){
+				return humanPlayers.get(index);
+			}
+			if(index == humanPlayers.size() - 1){
+				index = 0;
+			}
+		}
+		return null; // hELLO?
 	}
 
 	public void gameWon(Player winner) {
@@ -483,26 +514,30 @@ public class GUI extends JFrame {
 		public void actionPerformed(ActionEvent e) {
 			// If the user hit the startGame button
 			if (e.getSource() == startGame) {
-				System.out.println("hello");
 				game.run();
 			}
 			
 			// If the user hit the rollDice button
 			if (e.getSource() == rollDice) {
 				int roll = game.rollDice();
+				movesLeft = roll;
 				// Remove rollDice button from view
 				rollDice.setVisible(false);
+				feedbackLabel.setVisible(true);
 				feedbackLabel.setText("You rolled " + roll);
 				feedbackPanel.validate();
 				feedbackPanel.repaint();
 				
 				// Let the user begin to move
 				moveListen = new JKeyListener();
-				buttonPanel.addKeyListener(moveListen);
+				for(KeyListener k : boardPanel.getKeyListeners() ){
+					boardPanel.removeKeyListener(k);
+				}
+				boardPanel.addKeyListener(moveListen);
 				
 				// Set our buttonPanel to have focus so keyListener triggers events
-				buttonPanel.setFocusable(true);
-				buttonPanel.requestFocus();
+				boardPanel.setFocusable(true);
+				boardPanel.requestFocus();
 			}
 			if(e.getSource() == accuse){
 				int r = (int) JOptionPane.showConfirmDialog(null, "Are you sure you want to submit an accusation?\n"
@@ -547,18 +582,44 @@ public class GUI extends JFrame {
 		
 		@Override
 		public void keyReleased(KeyEvent e) {
-			
 			if(e.getKeyCode() == KeyEvent.VK_W){
-				
+				if(game.checkValidMove(focusPlayer, Direction.UP) ){
+					game.applyMove(focusPlayer, Direction.UP);
+					movesLeft--;
+					feedbackLabel.setText("You have " + movesLeft + " moves remaining.");
+				}
 			}
 			else if(e.getKeyCode() == KeyEvent.VK_S){
-				
+				if(game.checkValidMove(focusPlayer, Direction.DOWN) ){
+					game.applyMove(focusPlayer, Direction.DOWN);
+					movesLeft--;
+					feedbackLabel.setText("You have " + movesLeft + " moves remaining.");
+				}
 			}
 			else if(e.getKeyCode() == KeyEvent.VK_A){
-				
+				if(game.checkValidMove(focusPlayer, Direction.LEFT) ){
+					game.applyMove(focusPlayer, Direction.LEFT);
+					movesLeft--;
+					feedbackLabel.setText("You have " + movesLeft + " moves remaining.");
+				}
 			}
 			else if(e.getKeyCode() == KeyEvent.VK_D){
+				if(game.checkValidMove(focusPlayer, Direction.RIGHT) ){
+					game.applyMove(focusPlayer, Direction.RIGHT);
+					movesLeft--;
+					feedbackLabel.setText("You have " + movesLeft + " moves remaining.");
+				}
+			}
+			
+			// Has the user entered a room?
+			if(game.isInRoom(focusPlayer) ){
 				
+			}
+			// Else have they ended their turn not in a room? Move onto next player  
+			else if(movesLeft == 0 && !game.isInRoom(focusPlayer) ){
+				Player nextPlayer = getNextPlayer();
+				if(nextPlayer == null){System.out.println("NEXT PLAYER WAS NULL???");}
+				else{takeTurn(nextPlayer);}
 			}
 		}
 		
