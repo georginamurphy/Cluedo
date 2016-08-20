@@ -570,7 +570,6 @@ public class GUI extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				Room room = new Room(game.getRoomName((String) roomComboBox.getSelectedItem()));
 				Weapon weapon = new Weapon(game.getWeaponName((String) weaponComboBox.getSelectedItem()));
-				System.out.println((String) characterComboBox.getSelectedItem());
 				Character character = new Character(
 						game.getCharacterColour((String) characterComboBox.getSelectedItem()));
 				if (game.checkSolution(new Solution(weapon, character, room), focusPlayer)) {
@@ -711,7 +710,7 @@ public class GUI extends JFrame {
 								+ "If you are incorrect you will be removed from the game",
 						"Accuse?", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 				if (r == JOptionPane.YES_OPTION) {
-					game.constructGuess(focusPlayer, true);
+					makeGuess(focusPlayer);
 				}
 
 			}
