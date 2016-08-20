@@ -209,7 +209,9 @@ public class Game {
 	 * a series of methods that sequence the game.
 	 */
 	public void run() {
+		humanPlayers.get(0).startTurn();
 		// This while loop keeps the game running until someone wins
+		/**
 		while (!gameEnd) {
 			for (Player p : humanPlayers) {
 				// A player is dead if they have made an incorrect accusation
@@ -221,6 +223,7 @@ public class Game {
 				}
 			}
 		}
+		**/
 		
 	}
 	
