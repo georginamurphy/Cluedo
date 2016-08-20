@@ -287,6 +287,7 @@ public class GUI extends JFrame {
 		if (currentPlayer != numPlayers) {
 			decisionLabel.setText("Player " + (currentPlayer + 1) + ", select the player you wish to play as.");
 			decisionPanel.validate();
+			decisionPanel.repaint();
 		} else {
 			// Fill the non human players
 			fillRemainingPlayers();
