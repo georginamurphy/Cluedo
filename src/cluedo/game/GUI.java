@@ -18,6 +18,9 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
@@ -54,7 +57,6 @@ public class GUI extends JFrame {
 	// Labels
 	JLabel decisionLabel;
 	JLabel instructionLabel = new JLabel("Welcome To Cluedo");
-	JLabel instructionLabel2 = new JLabel(" ");
 	JLabel feedbackLabel = new JLabel(" ");
 
 	// Buttons
@@ -70,6 +72,7 @@ public class GUI extends JFrame {
 
 	// Listeners
 	ItemListener jRadio;
+
 	JButtonListener enterListen;
 	JButtonListener startListen;
 	JButtonListener rollListen;
@@ -116,9 +119,9 @@ public class GUI extends JFrame {
 
 		// Add buttons to the button panel
 		buttonPanel.add(ready);
-		buttonPanel.add(accuse);
 		buttonPanel.add(suggest);
 		buttonPanel.add(rollDice);
+		buttonPanel.add(accuse);
 		ready.setVisible(false);
 		accuse.setVisible(false);
 		suggest.setVisible(false);
@@ -153,7 +156,47 @@ public class GUI extends JFrame {
 
 		feedbackPanel.add(feedbackLabel);
 		instructionPanel.add(instructionLabel);
+
+		makeMenu();
 		validate();
+	}
+
+	public void makeMenu() {
+		JMenuBar menuBar = new JMenuBar();
+		JMenu menu = new JMenu("Options");
+		JMenuItem help = new JMenuItem("Help");
+		JMenuItem exit = new JMenuItem("Exit");
+
+		menu.add(help);
+		menu.add(exit);
+		menuBar.add(menu);
+		this.setJMenuBar(menuBar);
+		
+		exit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.exit(0);
+			}
+		});
+		
+		help.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+//				JFrame helpFrame = new JFrame("Help");
+//				JPanel helpPanel = new JPanel();
+//				JLabel helpLabel = new JLabel();
+//				JButton 
+//				helpLabel.setText("Help info here");
+//				helpFrame.setPreferredSize(new Dimension(100, 100));
+				
+				JOptionPane.showMessageDialog(null, "It is a long established fact that a reader will be distracted by the readable \n"
+						+ "content of a page when looking at its layout. The point of using Lorem Ipsum is \n"
+						+ "that it has a more-or-less normal distribution of letters, as opposed to using \n"
+						+ "'Content here, content here', making it look like readable English. Many desktop \n"
+						+ "publishing packages and web page editors now use Lorem Ipsum as their default model\n"
+						+ " text, and a search for 'lorem ipsum' will uncover many web sites still in their \n"
+						+ "infancy. Various versions have evolved over the years, sometimes by accident, \n"
+						+ "sometimes on purpose (injected humour and the like).", "Cluedo For Dummies", JOptionPane.INFORMATION_MESSAGE);
+			}
+		});
 	}
 
 	/**
@@ -344,6 +387,7 @@ public class GUI extends JFrame {
 		enter = new JButton("Enter");
 		decisionPanel.add(enter);
 
+
 		// Set the button listener
 		enterListen = new JButtonListener();
 		enter.addActionListener(enterListen);
@@ -390,6 +434,7 @@ public class GUI extends JFrame {
 	}
 
 	public void takeTurn(Player player) {
+		accuse.setVisible(true);
 		focusPlayer = player;
 		// Reset the decision panel
 		decisionPanel.removeAll();
@@ -397,10 +442,8 @@ public class GUI extends JFrame {
 		decisionPanel.repaint();
 
 		// Setup the instruction panel
-		instructionLabel.setText("It is time to move " + player.getCharacter().name + " on the board.");
-		instructionLabel2.setText("Roll the dice");
+		instructionLabel.setText("It is time to move " + player.getCharacter().name + " on the board. Roll the dice");
 		instructionPanel.add(instructionLabel);
-		instructionPanel.add(instructionLabel2);
 		
 		// Show the rollDice button to the user
 		rollDice.setVisible(true);
@@ -449,7 +492,6 @@ public class GUI extends JFrame {
 				int roll = game.rollDice();
 				// Remove rollDice button from view
 				rollDice.setVisible(false);
-				instructionLabel2.setText(" ");
 				feedbackLabel.setText("You rolled " + roll);
 				feedbackPanel.validate();
 				feedbackPanel.repaint();
@@ -462,8 +504,13 @@ public class GUI extends JFrame {
 				buttonPanel.setFocusable(true);
 				buttonPanel.requestFocus();
 			}
-			
-			// If the user hit the enter button
+			if(e.getSource() == accuse){
+				int r = (int) JOptionPane.showConfirmDialog(null, "Are you sure you want to submit an accusation?\n"
+						+ "If you are incorrect you will be removed from the game", "Accuse?",
+						JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+				
+				
+			}
 			if (e.getSource() == enter) {
 				if (!names.getText().equals(" ")) {
 					players.get(currentPlayer).setName(names.getText());
