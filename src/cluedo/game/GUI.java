@@ -133,7 +133,6 @@ public class GUI extends JFrame{
 		for (int row = 0; row <= 24; row++) {
 			for (int col = 0; col <= 24; col++) {
 				boardPanels[row][col] = new JPanel(new GridLayout() );
-				
 				JLabel label = new JLabel();
 				boardPanel.add(boardPanels[row][col].add(label));
 				if (boardObj.getBoard()[row][col] == null) {
