@@ -18,6 +18,7 @@ import javax.swing.ButtonGroup;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -83,11 +84,8 @@ public class GUI extends JFrame {
 	ButtonGroup characterGroup;
 	ButtonGroup roomGroup;
 	ButtonGroup weaponGroup;
-	JRadioButton red, yellow, blue, green, purple, white, leadpipe, candlestick, dagger, rope, revolver, spanner;
-	JRadioButton[] roomRadioButton = { new JRadioButton(loungeIcon), new JRadioButton(studyIcon),
-			new JRadioButton(kitchenIcon), new JRadioButton(libraryIcon), new JRadioButton(conservertoryIcon),
-			new JRadioButton(diningIcon), new JRadioButton(hallIcon), new JRadioButton(ballroomIcon),
-			new JRadioButton(billiardIcon), };
+	JRadioButton lounge, study, kitchen, library, conservertory, dining, hall, ballroom, billiard, red, yellow, blue,
+			green, purple, white, leadpipe, candlestick, dagger, rope, revolver, spanner;
 
 	// Labels
 	JLabel decisionLabel;
@@ -101,13 +99,13 @@ public class GUI extends JFrame {
 	JButton suggest;
 	JButton ready;
 	JButton rollDice;
+	JButton submitGuessButton;
 
 	// JTextFields
 	JTextField names;
 
 	// Listeners
 	ItemListener jRadio;
-
 	JButtonListener enterListen;
 	JButtonListener accuseListen;
 	JButtonListener startListen;
@@ -122,6 +120,10 @@ public class GUI extends JFrame {
 	ArrayList<Player> humanPlayers;
 	ArrayList<Player> players;
 	ArrayList<Character> chars;
+
+	JComboBox<String> roomComboBox;
+	JComboBox<String> characterComboBox;
+	JComboBox<String> weaponComboBox;
 
 	public GUI(Board board, ArrayList<Character> characters, ArrayList<Weapon> weapons, ArrayList<Room> rooms) {
 		this.board = board;
@@ -372,7 +374,7 @@ public class GUI extends JFrame {
 			// Fill the non human players
 			humanPlayers = new ArrayList<Player>();
 			humanPlayers.addAll(players);
-			for(Player p : humanPlayers){
+			for (Player p : humanPlayers) {
 				System.out.println(p);
 			}
 			fillRemainingPlayers();
@@ -481,8 +483,7 @@ public class GUI extends JFrame {
 		decisionPanel.removeAll();
 		decisionPanel.validate();
 		decisionPanel.repaint();
-		
-		
+
 		boardPanel.removeKeyListener(moveListen);
 
 		// Setup the instruction panel
@@ -490,7 +491,7 @@ public class GUI extends JFrame {
 		instructionPanel.add(instructionLabel);
 
 		feedbackLabel.setVisible(false);
-		
+
 		// Show the rollDice button to the user
 		rollDice.setVisible(true);
 		rollListen = new JButtonListener();
@@ -498,35 +499,101 @@ public class GUI extends JFrame {
 		validate();
 	}
 
-	public JFrame makeGuess(Player player) {
-		JFrame guess = new JFrame("Construct Guess");
-		guess.setLayout(new GridLayout(2, 1));
-		guess.setVisible(true);
-		guess.validate();
-		return guess;
+	public void makeGuess(Player player) {
+		JFrame guessFrame = new JFrame("Construct Guess");
+		guessFrame.setPreferredSize(new Dimension(200, 200));
+		guessFrame.setLayout(new GridLayout(5, 1));
+		guessFrame.setVisible(true);
+		guessFrame.validate();
+		JPanel panelOne = new JPanel();
+		JPanel panelTwo = addRooms();
+		JPanel panelThree = addCharacters();
+		JPanel panelFour = addWeapons();
+		decisionLabel = new JLabel("Construct your guess");
+		panelOne.add(decisionLabel);
+		guessFrame.add(panelOne);
+		guessFrame.add(panelTwo);
+		guessFrame.add(panelThree);
+		guessFrame.add(panelFour);
+		submitGuessButton = new JButton("Submit Guess");
+		guessFrame.add(submitGuessButton);
+		guessFrame.validate();
+
+		submitGuessButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Room room = new Room(game.getRoomName((String) roomComboBox.getSelectedItem()));
+				Weapon weapon = new Weapon(game.getWeaponName((String) weaponComboBox.getSelectedItem()));
+				System.out.println((String) characterComboBox.getSelectedItem());
+				Character character = new Character(
+						game.getCharacterColour((String) characterComboBox.getSelectedItem()));
+				if (game.checkSolution(new Solution(weapon, character, room), focusPlayer)) {
+					gameWon(focusPlayer);
+				} else {
+					feedbackLabel.setText("Your guess was incorrect. You have been removed from the game");
+					validate();
+				}
+				guessFrame.dispose();
+			}
+		});
+
 	}
 
-	public Room getRoom(JFrame currentFrame) {
+	public JPanel addRooms() {
 		JPanel panel = new JPanel();
-		currentFrame.add(panel);
-		currentFrame.setPreferredSize(new Dimension(400, 400));
-		panel.setBackground(Color.CYAN);
-		decisionLabel = new JLabel("Select the room you are accusing then press done");
-		panel.add(decisionLabel);
+		panel.setPreferredSize(new Dimension(200, 50));
 
-		return new Room(null);
+		String[] items = new String[9];
+		for (int i = 0; i < 8; i++) {
+			items[i] = rooms.get(i).toString();
+		}
+		roomComboBox = new JComboBox<String>(items);
+		panel.add(roomComboBox);
+
+		panel.validate();
+		return panel;
 	}
 
-	
-	public Player getNextPlayer(){
+	public JPanel addCharacters() {
+		JPanel panel = new JPanel();
+		panel.setPreferredSize(new Dimension(200, 50));
+
+		String[] items = new String[6];
+		for (int i = 0; i < 2; i++) {
+			items[i] = characters.get(i).toString();
+		}
+		roomComboBox = new JComboBox<String>(items);
+		panel.add(roomComboBox);
+
+		panel.validate();
+		return panel;
+	}
+
+	public JPanel addWeapons() {
+		JPanel panel = new JPanel();
+		panel.setPreferredSize(new Dimension(200, 50));
+
+		String[] items = new String[6];
+		for (int i = 0; i < 5; i++) {
+			items[i] = weapons.get(i).toString();
+		}
+		weaponComboBox = new JComboBox<String>(items);
+		panel.add(weaponComboBox);
+
+		panel.validate();
+		return panel;
+	}
+
+	public Player getNextPlayer() {
 		int index = humanPlayers.indexOf(focusPlayer);
 		index++;
-		if(index == humanPlayers.size() ) {index = 0;}
-		while(index < humanPlayers.size() ){
-			if(!humanPlayers.get(index).getDead() ){
+		if (index == humanPlayers.size()) {
+			index = 0;
+		}
+		while (index < humanPlayers.size()) {
+			if (!humanPlayers.get(index).getDead()) {
 				return humanPlayers.get(index);
 			}
-			if(index == humanPlayers.size() - 1){
+			if (index == humanPlayers.size() - 1) {
 				index = 0;
 			}
 		}
@@ -544,6 +611,7 @@ public class GUI extends JFrame {
 	// ============================================================================================================================================
 	// LISTENER CLASSES LAY BEYOND THIS POINT
 	// ============================================================================================================================================
+
 
 	/**
 	 * A listener for the JRadioButtons
@@ -588,12 +656,13 @@ public class GUI extends JFrame {
 				buttonPanel.setFocusable(true);
 				buttonPanel.requestFocus();
 
-				for(KeyListener k : boardPanel.getKeyListeners() ){
+				for (KeyListener k : boardPanel.getKeyListeners()) {
 					boardPanel.removeKeyListener(k);
 				}
 				boardPanel.addKeyListener(moveListen);
-				
-				// Set our buttonPanel to have focus so keyListener triggers events
+
+				// Set our buttonPanel to have focus so keyListener triggers
+				// events
 				boardPanel.setFocusable(true);
 				boardPanel.requestFocus();
 			}
@@ -642,44 +711,45 @@ public class GUI extends JFrame {
 
 		@Override
 		public void keyReleased(KeyEvent e) {
-			if(e.getKeyCode() == KeyEvent.VK_W){
-				if(game.checkValidMove(focusPlayer, Direction.UP) ){
+			if (e.getKeyCode() == KeyEvent.VK_W) {
+				if (game.checkValidMove(focusPlayer, Direction.UP)) {
 					game.applyMove(focusPlayer, Direction.UP);
 					movesLeft--;
 					feedbackLabel.setText("You have " + movesLeft + " moves remaining.");
 				}
-			}
-			else if(e.getKeyCode() == KeyEvent.VK_S){
-				if(game.checkValidMove(focusPlayer, Direction.DOWN) ){
+			} else if (e.getKeyCode() == KeyEvent.VK_S) {
+				if (game.checkValidMove(focusPlayer, Direction.DOWN)) {
 					game.applyMove(focusPlayer, Direction.DOWN);
 					movesLeft--;
 					feedbackLabel.setText("You have " + movesLeft + " moves remaining.");
 				}
-			}
-			else if(e.getKeyCode() == KeyEvent.VK_A){
-				if(game.checkValidMove(focusPlayer, Direction.LEFT) ){
+			} else if (e.getKeyCode() == KeyEvent.VK_A) {
+				if (game.checkValidMove(focusPlayer, Direction.LEFT)) {
 					game.applyMove(focusPlayer, Direction.LEFT);
 					movesLeft--;
 					feedbackLabel.setText("You have " + movesLeft + " moves remaining.");
 				}
-			}
-			else if(e.getKeyCode() == KeyEvent.VK_D){
-				if(game.checkValidMove(focusPlayer, Direction.RIGHT) ){
+			} else if (e.getKeyCode() == KeyEvent.VK_D) {
+				if (game.checkValidMove(focusPlayer, Direction.RIGHT)) {
 					game.applyMove(focusPlayer, Direction.RIGHT);
 					movesLeft--;
 					feedbackLabel.setText("You have " + movesLeft + " moves remaining.");
 				}
 			}
-			
+
 			// Has the user entered a room?
-			if(game.isInRoom(focusPlayer) ){
-	
+			if (game.isInRoom(focusPlayer)) {
+
 			}
-			// Else have they ended their turn not in a room? Move onto next player  
-			else if(movesLeft == 0 && !game.isInRoom(focusPlayer) ){
+			// Else have they ended their turn not in a room? Move onto next
+			// player
+			else if (movesLeft == 0 && !game.isInRoom(focusPlayer)) {
 				Player nextPlayer = getNextPlayer();
-				if(nextPlayer == null){System.out.println("NEXT PLAYER WAS NULL???");}
-				else{takeTurn(nextPlayer);}
+				if (nextPlayer == null) {
+					System.out.println("NEXT PLAYER WAS NULL???");
+				} else {
+					takeTurn(nextPlayer);
+				}
 			}
 		}
 

@@ -758,6 +758,30 @@ public class Game {
 		}
 		return null; // Should never return null
 	}
+	
+	/**
+	 * Returns a character color given an String
+	 * 
+	 * @param num
+	 * @return
+	 */
+	public Character.Colour getCharacterColour(String rm) {
+		switch (rm) {
+		case "Mrs White":
+			return Character.Colour.WHITE;
+		case "Reverend Green":
+			return Character.Colour.GREEN;
+		case "Mrs Peacock":
+			return Character.Colour.BLUE;
+		case "Professor Plum":
+			return Character.Colour.PURPLE;
+		case "Miss Scarlett":
+			return Character.Colour.RED;
+		case "Colonel Mustard":
+			return Character.Colour.YELLOW;
+		}
+		return null;
+	}
 
 	/**
 	 * Returns a character color given an integer
@@ -809,6 +833,60 @@ public class Game {
 			return Room.Name.HALL;
 		case 9:
 			return Room.Name.STUDY;
+		}
+		return null;
+	}
+	
+	/**
+	 * Returns a room name given an String
+	 * 
+	 * @param num
+	 * @return
+	 */
+	public Room.Name getRoomName(String rm) {
+		switch (rm) {
+		case "KITCHEN":
+			return Room.Name.KITCHEN;
+		case "BALLROOM":
+			return Room.Name.BALLROOM;
+		case "CONSERVATORY":
+			return Room.Name.CONSERVATORY;
+		case "DININGROOM":
+			return Room.Name.DININGROOM;
+		case "BILLIARD":
+			return Room.Name.BILLIARD;
+		case "LIBRARY":
+			return Room.Name.LIBRARY;
+		case "LOUNGE":
+			return Room.Name.LOUNGE;
+		case "HALL":
+			return Room.Name.HALL;
+		case "STUDY":
+			return Room.Name.STUDY;
+		}
+		return null;
+	}
+	
+	/**
+	 * Returns a weapon name given an string
+	 * 
+	 * @param num
+	 * @return
+	 */
+	public Weapon.Type getWeaponName(String rm) {
+		switch (rm) {
+		case "CANDLESTICK":
+			return Weapon.Type.CANDLESTICK;
+		case "DAGGER":
+			return Weapon.Type.DAGGER;
+		case "LEADPIPE":
+			return Weapon.Type.LEADPIPE;
+		case "ROPE":
+			return Weapon.Type.ROPE;
+		case "SPANNER":
+			return Weapon.Type.SPANNER;
+		case "REVOLVER":
+			return Weapon.Type.REVOLVER;
 		}
 		return null;
 	}
@@ -954,18 +1032,18 @@ public class Game {
 	 * @return Solution
 	 */
 	public Solution constructGuess(Player player, boolean accusation) {
-
-		JFrame guessWindow = gui.makeGuess(player);
-		Room room;
-		if (accusation) {
-			room = gui.getRoom(guessWindow);
-
-		} else {
-			room = new Room(inRoom(player));
-		}
-
-		Character character = null;//gui.getCharacter(guessWindow);
-		Weapon weapon = null;//gui.getWeapon(guessWindow);
+		gui.makeGuess(player);
+//		JFrame guessWindow = gui.makeGuess(player);
+//		Room room;
+//		if (accusation) {
+//			room = gui.getRoom(guessWindow);
+//
+//		} else {
+//			room = new Room(inRoom(player));
+//		}
+//
+//		Character character = null;//gui.getCharacter(guessWindow);
+//		Weapon weapon = null;//gui.getWeapon(guessWindow);
 
 		
 
@@ -987,7 +1065,7 @@ public class Game {
 		//number = "";
 		//userInput = getValidOneToSix(number, input);
 		//Weapon weapon = new Weapon(getWeaponName(userInput));
-		return new Solution(weapon, character, room);
+		return null ;//new Solution(weapon, character, room);
 	}
 
 	/**
