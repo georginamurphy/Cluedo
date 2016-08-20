@@ -100,13 +100,13 @@ public class GUI extends JFrame {
 		decisionPanel = new JPanel();
 		feedbackPanel = new JPanel();
 		boardPanels = new JPanel[25][25];
-		
+
 		// Initialize buttons
 		accuse = new JButton("Accuse");
 		suggest = new JButton("Suggest");
 		ready = new JButton("Ready");
 		rollDice = new JButton("Roll Dice");
-		
+
 		// Add buttons to the button panel
 		buttonPanel.add(ready);
 		buttonPanel.add(accuse);
@@ -375,22 +375,22 @@ public class GUI extends JFrame {
 		decisionPanel.add(startGame);
 		validate();
 	}
-	
+
 	public void takeTurn(Player player) {
-		instructionLabel.setText("It is time to move " +player.getCharacter().name +" on the board");
+		instructionLabel.setText("It is time to move " + player.getCharacter().name + " on the board");
 		instructionLabel2.setText("Roll the dice");
 		instructionPanel.add(instructionLabel);
 		instructionPanel.add(instructionLabel2);
 		rollDice.setVisible(true);
 		validate();
-		
+
 	}
-	
+
 	public void gameWon(Player winner) {
 		decisionPanel.removeAll();
-		
+
 		// Set the label
-		decisionLabel.setText(winner.getName() +" has won the game");
+		decisionLabel.setText(winner.getName() + " has won the game");
 		decisionPanel.add(decisionLabel);
 	}
 
@@ -418,11 +418,11 @@ public class GUI extends JFrame {
 			if (e.getSource() == startGame) {
 				game.run();
 			}
-			if (e.getSource() == rollDice){
+			if (e.getSource() == rollDice) {
 				int roll = game.rollDice();
 				rollDice.setVisible(false);
 				instructionLabel2.setText(" ");
-				feedbackLabel.setText("You rolled "+ roll);
+				feedbackLabel.setText("You rolled " + roll);
 			}
 			if (e.getSource() == enter) {
 				if (!names.getText().equals(" ")) {
@@ -436,12 +436,11 @@ public class GUI extends JFrame {
 													// the JTextArea / Button
 						prepareGame();
 					}
-				}else{
+				} else {
 					decisionLabel.setText("Please enter a name before clicking enter.");
 				}
 			}
 		}
 	}
 
-	
 }

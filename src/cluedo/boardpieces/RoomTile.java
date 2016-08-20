@@ -47,6 +47,7 @@ public class RoomTile implements BoardPiece {
 	
 	@Override
 	public ImageIcon getImageIcon() {
+		if(door){return new ImageIcon("Door.png");}
 		return roomTile;
 	}
 	
