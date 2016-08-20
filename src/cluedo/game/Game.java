@@ -1,8 +1,11 @@
 package cluedo.game;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.InputMismatchException;
 import java.util.Scanner;
+
+import javax.swing.JFrame;
 
 import cluedo.boardpieces.BoardPiece;
 import cluedo.boardpieces.Hallway;
@@ -15,29 +18,29 @@ import cluedo.cards.Room;
 import cluedo.cards.Weapon;
 
 /**
- * The game class is what ties everything together and holds a lot
- * of game logic, and information about the board.  Player's have
- * a reference to an instance of this game so that they can access
- * information about the board.
+ * The game class is what ties everything together and holds a lot of game
+ * logic, and information about the board. Player's have a reference to an
+ * instance of this game so that they can access information about the board.
  */
 public class Game {
-	
+
 	// The gui object for the game
 	private GUI gui;
-	
+
 	// The board object for this game
 	private Board board;
-	
+
 	// The solution to this game
 	private Solution solution;
-	
+
 	// An ArrayList oh players in the game, including non-humans
 	private ArrayList<Player> players;
-	
+
 	// An ArrayList of only human players
 	public ArrayList<Player> humanPlayers;
-	
-	// A boolean to catch when the game ends, and the loop in run() should terminate
+
+	// A boolean to catch when the game ends, and the loop in run() should
+	// terminate
 	private boolean gameEnd;
 
 	// Array Lists of tiles where players sit for each room
@@ -70,9 +73,11 @@ public class Game {
 	/**
 	 * The constructor for a game, takes a board and an ArrayList of players
 	 * 
-	 * @param board - The board for the game
-	 * @param players - The list of all players
-	 * @param gui 
+	 * @param board
+	 *            - The board for the game
+	 * @param players
+	 *            - The list of all players
+	 * @param gui
 	 */
 	public Game(Board board, ArrayList<Player> players, GUI gui) {
 		this.gui = gui;
@@ -80,47 +85,51 @@ public class Game {
 		this.players = players;
 		this.gameEnd = false;
 
-		// These two method calls initialize information about the board that never changes between games
+		// These two method calls initialize information about the board that
+		// never changes between games
 		// The information helps when moving player's into and out of rooms
-		initialiseRoomTileLists(); 
+		initialiseRoomTileLists();
 		initialiseDoorLocations();
 	}
-	
+
 	/**
 	 * Getter for the board field
+	 * 
 	 * @return
 	 */
 	public Board getBoard() {
 		return this.board;
 	}
-	
+
 	public GUI getGui() {
 		return gui;
 	}
-	
+
 	/**
 	 * Getter for the solution
+	 * 
 	 * @return
 	 */
 	public Solution getSolution() {
 		return this.solution;
 	}
-	
+
 	/**
 	 * Getter for the gameEnd field
+	 * 
 	 * @return
 	 */
-	public boolean getGameEnd(){
+	public boolean getGameEnd() {
 		return this.gameEnd;
 	}
-	
+
 	/**
 	 * Setter for the humanPlayers field
 	 */
-	public void setHumanPlayers(ArrayList<Player> humanPlayers){
+	public void setHumanPlayers(ArrayList<Player> humanPlayers) {
 		this.humanPlayers = humanPlayers;
 	}
-	
+
 	/**
 	 * Prints the board
 	 */
@@ -167,7 +176,7 @@ public class Game {
 	public void dealCards(ArrayList<Character> chars, ArrayList<Weapon> weapons, ArrayList<Room> rooms) {
 		ArrayList<Card> cards = new ArrayList<Card>();
 		ArrayList<Player> realPlayers = new ArrayList<Player>();
-		
+
 		// Get the real players, and add them to an ArrayList
 		int numOfPlayers = 0;
 		for (Player p : players) {
@@ -176,11 +185,13 @@ public class Game {
 				numOfPlayers++;
 			}
 		}
-		
-		// Set the field that holds all the human players to be the array we just calculated
+
+		// Set the field that holds all the human players to be the array we
+		// just calculated
 		setHumanPlayers(realPlayers);
-		
-		// Also, initialize the game field for each player to be this game object
+
+		// Also, initialize the game field for each player to be this game
+		// object
 		for (Player p : players) {
 			p.setGame(this);
 		}
@@ -212,21 +223,14 @@ public class Game {
 		humanPlayers.get(0).startTurn();
 		// This while loop keeps the game running until someone wins
 		/**
-		while (!gameEnd) {
-			for (Player p : humanPlayers) {
-				// A player is dead if they have made an incorrect accusation
-				if (!p.getDead()) {
-					p.startTurn();
-					if (gameEnd) {
-						gui.gameWon(p);
-						break;} // Break the for each loop if a player won the game
-				}
-			}
-		}
-		**/
-		
+		 * while (!gameEnd) { for (Player p : humanPlayers) { // A player is
+		 * dead if they have made an incorrect accusation if (!p.getDead()) {
+		 * p.startTurn(); if (gameEnd) { gui.gameWon(p); break;} // Break the
+		 * for each loop if a player won the game } } }
+		 **/
+
 	}
-	
+
 	/**
 	 * A simple method that will generate two values between 1 and 6, inclusive
 	 * and return their sum.
@@ -253,82 +257,105 @@ public class Game {
 		int playerX = player.getLocation().x;
 		int playerY = player.getLocation().y;
 
-		// A series of 4 if statements will catch what direction we are needing to check
-		// Appropriate checks will then be made that apply to the piece in that direction from the player
-		
+		// A series of 4 if statements will catch what direction we are needing
+		// to check
+		// Appropriate checks will then be made that apply to the piece in that
+		// direction from the player
+
 		if (direction == Direction.UP) {
-			if (playerY == 0) {return false;} // Player can't move off the board
+			if (playerY == 0) {
+				return false;
+			} // Player can't move off the board
 			BoardPiece piece = gameBoard[playerY - 1][playerX];
 
-			if (piece instanceof Hallway) {return true;} // The tile in the given direction is available to move into
-			
-			// If the piece is a RoomTile, they may only move onto it if it is a door that does not belong to the room they were in last turn
+			if (piece instanceof Hallway) {
+				return true;
+			} // The tile in the given direction is available to move into
+
+			// If the piece is a RoomTile, they may only move onto it if it is a
+			// door that does not belong to the room they were in last turn
 			if (piece instanceof RoomTile) {
 				if (piece != null) {
 					if (((RoomTile) piece).getName().equals(player.getRoomLastTurn())) {
 						System.out.println("You can't enter that room! You were there during your last turn");
 						return false;
-					} 
-					else {return isRoomDoor(player, direction);}
+					} else {
+						return isRoomDoor(player, direction);
+					}
 				}
 			}
-		} 
-		
-		
+		}
+
 		else if (direction == Direction.DOWN) {
-			if (playerY == 24) {return false;} // Player can't move off the board
+			if (playerY == 24) {
+				return false;
+			} // Player can't move off the board
 			BoardPiece piece = gameBoard[playerY + 1][playerX];
 
-			if (piece instanceof Hallway) {return true;} // The tile in the given direction is available to move into
-			
-			// If the piece is a RoomTile, they may only move onto it if it is a door that does not belong to the room they were in last turn
+			if (piece instanceof Hallway) {
+				return true;
+			} // The tile in the given direction is available to move into
+
+			// If the piece is a RoomTile, they may only move onto it if it is a
+			// door that does not belong to the room they were in last turn
 			if (piece instanceof RoomTile) {
 				if (piece != null) {
 					if (((RoomTile) piece).getName().equals(player.getRoomLastTurn())) {
 						System.out.println("You can't enter that room! You were there during your last turn");
 						return false;
-					} 
-					else {return isRoomDoor(player, direction);}
+					} else {
+						return isRoomDoor(player, direction);
+					}
 				}
-			} 
-		} 
-		
-		
+			}
+		}
+
 		else if (direction == Direction.LEFT) {
-			if (playerX == 0) {return false;} // Player can't move off the board
+			if (playerX == 0) {
+				return false;
+			} // Player can't move off the board
 			BoardPiece piece = gameBoard[playerY][playerX - 1];
 
-			if (piece instanceof Hallway) {return true;}
-			
-			// If the piece is a RoomTile, they may only move onto it if it is a door that does not belong to the room they were in last turn
+			if (piece instanceof Hallway) {
+				return true;
+			}
+
+			// If the piece is a RoomTile, they may only move onto it if it is a
+			// door that does not belong to the room they were in last turn
 			if (piece instanceof RoomTile) {
 				if (piece != null) {
 					if (((RoomTile) piece).getName().equals(player.getRoomLastTurn())) {
 						System.out.println("You can't enter that room! You were there during your last turn");
 						return false;
-					} 
-					else {return isRoomDoor(player, direction);}
+					} else {
+						return isRoomDoor(player, direction);
+					}
 				}
-			} 
-		} 
-		
-		
+			}
+		}
+
 		else if (direction == Direction.RIGHT) {
-			if (playerX == 24) {return false;} // Player can't move off the board
+			if (playerX == 24) {
+				return false;
+			} // Player can't move off the board
 			BoardPiece piece = gameBoard[playerY][playerX + 1];
 
-			if (piece instanceof Hallway) {return true;}
-			
-			// If the piece is a RoomTile, they may only move onto it if it is a door that does not belong to the room they were in last turn
+			if (piece instanceof Hallway) {
+				return true;
+			}
+
+			// If the piece is a RoomTile, they may only move onto it if it is a
+			// door that does not belong to the room they were in last turn
 			if (piece instanceof RoomTile) {
 				if (piece != null) {
 					if (((RoomTile) piece).getName().equals(player.getRoomLastTurn())) {
 						System.out.println("You can't enter that room! You were there during your last turn");
 						return false;
-					} 
-					else {return isRoomDoor(player, direction);}
+					} else {
+						return isRoomDoor(player, direction);
+					}
 				}
-			} 
+			}
 		}
 		return false;
 	}
@@ -336,28 +363,37 @@ public class Game {
 	/**
 	 * Applies a given move to the board
 	 * 
-	 * @param player - The player to apply the move to
-	 * @param direction - The direction a player must move
+	 * @param player
+	 *            - The player to apply the move to
+	 * @param direction
+	 *            - The direction a player must move
 	 */
 	public void applyMove(Player player, Direction direction) {
 		int playerX = player.getLocation().x;
 		int playerY = player.getLocation().y;
 		BoardPiece piece;
 
-		// Given a Direction the player is moving in, it will shift the player on the board
-		// It detects if the player has just moved onto a door, meaning they now need to be
-		// moved to one of the designated locations within the room for players to sit
-		// The 2D Array that represents the board is only updated at the end of this method
-		
+		// Given a Direction the player is moving in, it will shift the player
+		// on the board
+		// It detects if the player has just moved onto a door, meaning they now
+		// need to be
+		// moved to one of the designated locations within the room for players
+		// to sit
+		// The 2D Array that represents the board is only updated at the end of
+		// this method
+
 		// The first case's comment apply to the remaining cases as well
-		
+
 		switch (direction) {
 		case UP:
-			// Shift the player's location in the appropriate direction, note the board is not physically updated yet
+			// Shift the player's location in the appropriate direction, note
+			// the board is not physically updated yet
 			player.getLocation().moveUp();
-			
-			// If the player moved onto a RoomTile that is a door, update their location to a designated spot in the room
-			piece = this.board.getBoard()[playerY - 1][playerX]; System.out.println(piece);
+
+			// If the player moved onto a RoomTile that is a door, update their
+			// location to a designated spot in the room
+			piece = this.board.getBoard()[playerY - 1][playerX];
+			System.out.println(piece);
 			if (piece instanceof RoomTile) {
 				Room.Name name = ((RoomTile) piece).getName();
 				player.updateLocation(getRoomTile(name));
@@ -365,7 +401,8 @@ public class Game {
 			break;
 		case DOWN:
 			player.getLocation().moveDown();
-			piece = this.board.getBoard()[playerY + 1][playerX]; System.out.println(piece);
+			piece = this.board.getBoard()[playerY + 1][playerX];
+			System.out.println(piece);
 			if (piece instanceof RoomTile) {
 				Room.Name name = ((RoomTile) piece).getName();
 				player.updateLocation(getRoomTile(name));
@@ -373,7 +410,8 @@ public class Game {
 			break;
 		case RIGHT:
 			player.getLocation().moveRight();
-			piece = this.board.getBoard()[playerY][playerX + 1]; System.out.println(piece);
+			piece = this.board.getBoard()[playerY][playerX + 1];
+			System.out.println(piece);
 			if (piece instanceof RoomTile) {
 				Room.Name name = ((RoomTile) piece).getName();
 				player.updateLocation(getRoomTile(name));
@@ -381,7 +419,8 @@ public class Game {
 			break;
 		case LEFT:
 			player.getLocation().moveLeft();
-			piece = this.board.getBoard()[playerY][playerX - 1]; System.out.println(piece);
+			piece = this.board.getBoard()[playerY][playerX - 1];
+			System.out.println(piece);
 			if (piece instanceof RoomTile) {
 				Room.Name name = ((RoomTile) piece).getName();
 				player.updateLocation(getRoomTile(name));
@@ -396,8 +435,10 @@ public class Game {
 	 * Checks if a given tile in the direction FROM the player is a room tile
 	 * that represents a door
 	 * 
-	 * @param player - The player we are checking for a door from
-	 * @param direction - The direction from the player where we want to check
+	 * @param player
+	 *            - The player we are checking for a door from
+	 * @param direction
+	 *            - The direction from the player where we want to check
 	 * @return
 	 */
 	public boolean isRoomDoor(Player player, Direction direction) {
@@ -408,28 +449,28 @@ public class Game {
 		if (direction == Direction.UP) {
 			tile = this.board.getBoard()[playerY - 1][playerX];
 			if (tile instanceof RoomTile) {
-				if (((RoomTile) tile).isDoor() ) {
+				if (((RoomTile) tile).isDoor()) {
 					return true;
 				}
 			}
 		} else if (direction == Direction.DOWN) {
 			tile = this.board.getBoard()[playerY + 1][playerX];
 			if (tile instanceof RoomTile) {
-				if (((RoomTile) tile).isDoor() ) {
+				if (((RoomTile) tile).isDoor()) {
 					return true;
 				}
 			}
 		} else if (direction == Direction.LEFT) {
 			tile = this.board.getBoard()[playerY][playerX - 1];
 			if (tile instanceof RoomTile) {
-				if (((RoomTile) tile).isDoor() ) {
+				if (((RoomTile) tile).isDoor()) {
 					return true;
 				}
 			}
 		} else if (direction == Direction.RIGHT) {
 			tile = this.board.getBoard()[playerY][playerX + 1];
 			if (tile instanceof RoomTile) {
-				if (((RoomTile) tile).isDoor() ) {
+				if (((RoomTile) tile).isDoor()) {
 					return true;
 				}
 			}
@@ -540,7 +581,7 @@ public class Game {
 		roomTileLists.add(loungeTiles);
 		roomTileLists.add(diningRoomTiles);
 
-		// Will return true if a player's location is equal to one of 
+		// Will return true if a player's location is equal to one of
 		// the 6 designated spots in each room for players to sit in.
 		for (ArrayList<Location> list : roomTileLists) {
 			if (list.contains(p.getLocation())) {
@@ -582,54 +623,73 @@ public class Game {
 	/**
 	 * Checks whether a room has a free door to exit from
 	 * 
-	 * @param name - The name of the room we wish to inspect
+	 * @param name
+	 *            - The name of the room we wish to inspect
 	 * @return
 	 */
 	public boolean hasFreeDoor(Room.Name name) {
 		switch (name) {
 		case KITCHEN:
 			for (Location l : kitchenDoors) {
-				if (isFreeDoor(l) != null) {return true;}
+				if (isFreeDoor(l) != null) {
+					return true;
+				}
 			}
 			return false;
 		case BALLROOM:
 			for (Location l : ballRoomDoors) {
-				if (isFreeDoor(l) != null) {return true;}
+				if (isFreeDoor(l) != null) {
+					return true;
+				}
 			}
 			return false;
 		case CONSERVATORY:
 			for (Location l : conservatoryDoors) {
-				if (isFreeDoor(l) != null) {return true;}
+				if (isFreeDoor(l) != null) {
+					return true;
+				}
 			}
 			return false;
 		case BILLIARD:
 			for (Location l : billiardDoors) {
-				if (isFreeDoor(l) != null) {return true;}
+				if (isFreeDoor(l) != null) {
+					return true;
+				}
 			}
 			return false;
 		case LIBRARY:
 			for (Location l : libraryDoors) {
-				if (isFreeDoor(l) != null) {return true;}
+				if (isFreeDoor(l) != null) {
+					return true;
+				}
 			}
 			return false;
 		case STUDY:
 			for (Location l : studyDoors) {
-				if (isFreeDoor(l) != null) {return true;}
+				if (isFreeDoor(l) != null) {
+					return true;
+				}
 			}
 			return false;
 		case HALL:
 			for (Location l : hallDoors) {
-				if (isFreeDoor(l) != null) {return true;}
+				if (isFreeDoor(l) != null) {
+					return true;
+				}
 			}
 			return false;
 		case LOUNGE:
 			for (Location l : loungeDoors) {
-				if (isFreeDoor(l) != null) {return true;}
+				if (isFreeDoor(l) != null) {
+					return true;
+				}
 			}
 			return false;
 		case DININGROOM:
 			for (Location l : diningRoomDoors) {
-				if (isFreeDoor(l) != null) {return true;}
+				if (isFreeDoor(l) != null) {
+					return true;
+				}
 			}
 			return false;
 		}
@@ -637,7 +697,8 @@ public class Game {
 	}
 
 	/**
-	 * Will check if the given door is not blocked by a player and can be moved through
+	 * Will check if the given door is not blocked by a player and can be moved
+	 * through
 	 * 
 	 * @param doorLocation
 	 * @return
@@ -720,7 +781,7 @@ public class Game {
 		}
 		return null;
 	}
-	
+
 	/**
 	 * Returns a room name given an integer
 	 * 
@@ -776,9 +837,11 @@ public class Game {
 	}
 
 	/**
-	 * The initial method that starts the suggestion / accusation phase of a player's turn.
+	 * The initial method that starts the suggestion / accusation phase of a
+	 * player's turn.
 	 * 
-	 * @param p - The player who's turn it is currently
+	 * @param p
+	 *            - The player who's turn it is currently
 	 */
 	public void makeSuggestionDecisions(Player p) {
 		Scanner input = new Scanner(System.in);
@@ -792,14 +855,13 @@ public class Game {
 		switch (userInput) {
 		case 1:
 			p.printCards();
-			Solution guess = constructGuess(p, input, false);
+			Solution guess = constructGuess(p, false);
 			Card c = makeSuggestion(p, guess);
-			if(c != null){
+			if (c != null) {
 				System.out.println("");
 				System.out.println(p.getCharacter().name + " has the card \n" + "\n*******************\n* "
 						+ c.toString() + " *\n*******************\n");
-			}
-			else{
+			} else {
 				System.out.println("\n   None of the other players had any of the cards in your suggestion\n");
 			}
 			break;
@@ -847,31 +909,30 @@ public class Game {
 
 		if (input.next().equals("1")) {
 			p.printCards();
-			Solution guess = constructGuess(p, input, true);
+			Solution guess = constructGuess(p, true);
 			System.out.println("Guess:");
 			System.out.println(guess.toString());
 			System.out.println("Solution:");
 			System.out.println(solution.toString());
-			
-			if(checkSolution(guess, p) ){
+
+			if (checkSolution(guess, p)) {
 				System.out.println("\n  Congratualtions " + p.getCharacter().name + " you solved the murder\n");
-			}
-			else{
+			} else {
 				System.out.println("\n  Your guess was incorrect, you have been removed from the game\n");
 			}
 		}
 	}
-	
+
 	/**
-	 * Checks a guess against this game's solution and returns the result
-	 * Will also set the gameEnd field to true if the solution was correct
-	 * Will remove the player from the game if their guess was incorrect
+	 * Checks a guess against this game's solution and returns the result Will
+	 * also set the gameEnd field to true if the solution was correct Will
+	 * remove the player from the game if their guess was incorrect
 	 * 
 	 * @param guess
 	 * @param p
 	 * @return
 	 */
-	public boolean checkSolution(Solution guess, Player p){
+	public boolean checkSolution(Solution guess, Player p) {
 		if (guess.equals(solution)) {
 			gameEnd = true;
 			return true;
@@ -891,52 +952,43 @@ public class Game {
 	 *            - the current player that is making the guess
 	 * @return Solution
 	 */
-	public Solution constructGuess(Player player, Scanner input, boolean accusation) {
-		String number = "";
-		int userInput;
-		Room room;
-		if(accusation){
-			System.out.println("Room:  1: Kitchen\n       2: Ball Room\n       3: Conservatory\n       4: Dining Room\n       5: Billiard Room\n       6: Library\n       7: Lounge\n       8: Hall\n       9: Study");
-			System.out.println("Select a number for the room you are accusing");
+	public Solution constructGuess(Player player, boolean accusation) {
 
-			number = "";
-			userInput = getValidOneToNine(number, input);
-			room = new Room(getRoomName(userInput));
-		}else{
+		JFrame guessWindow = gui.makeGuess(player);
+		Room room;
+		if (accusation) {
+			room = gui.getRoom(guessWindow);
+
+		} else {
 			room = new Room(inRoom(player));
 		}
 
-		System.out.println("Room: " + room.toString());
-		System.out.println("Character:  1: Mrs White\n            2: Reverend Green\n"
-				+ "            3: Mrs Peacock\n            4: Professor Plum\n            5: Miss Scarlett\n"
-				+ "            6: Colonel Mustard\n");
-		System.out.println("Select a number for the character you are accusing");
+		Character character = null;//gui.getCharacter(guessWindow);
+		Weapon weapon = null;//gui.getWeapon(guessWindow);
 
-		number = "";
-		userInput = getValidOneToSix(number, input);
-		Character character = new Character(getCharacterColour(userInput));
+		
 
-		for (Player p : players) {
+	/*	for (Player p : players) {
 			if (p.getCharacter().equals(character)) {
 				Location newPlayerLocation = getRoomTile(room.name);
 				p.updateLocation(newPlayerLocation);
 				this.board.updateBoard(humanPlayers);
 			}
-		}
+		}*/
 
-		System.out.println("Room: " + room.toString());
-		System.out.println("Character: " + character.toString());
-		System.out.println("Weapon:  1: Candlestick\n         2: Dagger\n"
-				+ "         3: Leadpipe\n         4: Rope\n         5: Spanner\n" + "         6: Revolver\n");
+		//System.out.println("Room: " + room.toString());
+		//System.out.println("Character: " + character.toString());
+		//System.out.println("Weapon:  1: Candlestick\n         2: Dagger\n"
+		//		+ "         3: Leadpipe\n         4: Rope\n         5: Spanner\n" + "         6: Revolver\n");
 
-		System.out.println("Select a number for the weapon you are using");
+		//System.out.println("Select a number for the weapon you are using");
 
-		number = "";
-		userInput = getValidOneToSix(number, input);
-		Weapon weapon = new Weapon(getWeaponName(userInput));
+		//number = "";
+		//userInput = getValidOneToSix(number, input);
+		//Weapon weapon = new Weapon(getWeaponName(userInput));
 		return new Solution(weapon, character, room);
 	}
-	
+
 	/**
 	 * Will repeatedly ask a user for an input until it is either 1 or 2
 	 * 
@@ -944,19 +996,21 @@ public class Game {
 	 * @param input
 	 * @return
 	 */
-	public int getValidOneOrTwo(String number, Scanner input){
+	public int getValidOneOrTwo(String number, Scanner input) {
 		boolean countFound = false;
-		while(!countFound){
-			if(number.equals("1") ){return 1;}
-			else if(number.equals("2") ){return 2;}
-			else{
+		while (!countFound) {
+			if (number.equals("1")) {
+				return 1;
+			} else if (number.equals("2")) {
+				return 2;
+			} else {
 				System.out.println("Please enter either 1 or 2.");
 				number = input.next();
 			}
 		}
 		return 0; // Shouldnt happen
 	}
-	
+
 	/**
 	 * Will repeatedly ask a user for an input until it is number from 1-6
 	 * 
@@ -964,23 +1018,29 @@ public class Game {
 	 * @param input
 	 * @return
 	 */
-	public int getValidOneToSix(String number, Scanner input){
+	public int getValidOneToSix(String number, Scanner input) {
 		boolean countFound = false;
-		while(!countFound){
-			if(number.equals("1") ){return 1;}
-			else if(number.equals("2") ){return 2;}
-			else if(number.equals("3") ){return 3;}
-			else if(number.equals("4") ){return 4;}
-			else if(number.equals("5") ){return 5;}
-			else if(number.equals("6") ){return 6;}
-			else{
+		while (!countFound) {
+			if (number.equals("1")) {
+				return 1;
+			} else if (number.equals("2")) {
+				return 2;
+			} else if (number.equals("3")) {
+				return 3;
+			} else if (number.equals("4")) {
+				return 4;
+			} else if (number.equals("5")) {
+				return 5;
+			} else if (number.equals("6")) {
+				return 6;
+			} else {
 				System.out.println("Please enter either 1, 2, 3, 4, 5 or 6.");
 				number = input.next();
 			}
 		}
 		return 0; // Shouldnt happen
 	}
-	
+
 	/**
 	 * Will repeatedly ask a user for an input until it is a number from 1-9
 	 * 
@@ -988,26 +1048,35 @@ public class Game {
 	 * @param input
 	 * @return
 	 */
-	public int getValidOneToNine(String number, Scanner input){
+	public int getValidOneToNine(String number, Scanner input) {
 		boolean countFound = false;
-		while(!countFound){
-			if(number.equals("1") ){return 1;}
-			else if(number.equals("2") ){return 2;}
-			else if(number.equals("3") ){return 3;}
-			else if(number.equals("4") ){return 4;}
-			else if(number.equals("5") ){return 5;}
-			else if(number.equals("6") ){return 6;}
-			else if(number.equals("7") ){return 7;}
-			else if(number.equals("8") ){return 8;}
-			else if(number.equals("9") ){return 9;}
-			else{
+		while (!countFound) {
+			if (number.equals("1")) {
+				return 1;
+			} else if (number.equals("2")) {
+				return 2;
+			} else if (number.equals("3")) {
+				return 3;
+			} else if (number.equals("4")) {
+				return 4;
+			} else if (number.equals("5")) {
+				return 5;
+			} else if (number.equals("6")) {
+				return 6;
+			} else if (number.equals("7")) {
+				return 7;
+			} else if (number.equals("8")) {
+				return 8;
+			} else if (number.equals("9")) {
+				return 9;
+			} else {
 				System.out.println("Please enter either 1, 2, 3, 4, 5, 6, 7, 8 or 9.");
 				number = input.next();
 			}
 		}
 		return 0; // Shouldnt happen
 	}
-	
+
 	/**
 	 * gets the users input from the console. expects a integer between the low
 	 * and high bounds (inclusive)
@@ -1039,12 +1108,13 @@ public class Game {
 		}
 		return userInput;
 	}
-	
-	
+
 	// ===================================================================================================================================================================
 	//
-	//                  The methods beyond this point are to initialize specific information about the board that does not change between games.
-	//                      They provide information that is mainly used when moving players to and from the different rooms in the game.
+	// The methods beyond this point are to initialize specific information
+	// about the board that does not change between games.
+	// They provide information that is mainly used when moving players to and
+	// from the different rooms in the game.
 	//
 	// ===================================================================================================================================================================
 
@@ -1154,7 +1224,7 @@ public class Game {
 				// If it is a RoomTile and represents a door, add it's location
 				// to the respective array
 				if (piece instanceof RoomTile) {
-					if (((RoomTile) piece).isDoor() ) {
+					if (((RoomTile) piece).isDoor()) {
 						Room.Name name = ((RoomTile) piece).getName();
 						switch (name) {
 						case KITCHEN:
@@ -1191,5 +1261,4 @@ public class Game {
 		}
 	}
 
-	
 }

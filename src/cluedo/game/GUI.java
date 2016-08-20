@@ -13,7 +13,9 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
 
+import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -30,6 +32,7 @@ import cluedo.boardpieces.Player;
 import cluedo.cards.Character;
 import cluedo.cards.Room;
 import cluedo.cards.Weapon;
+import javafx.scene.image.Image;
 
 public class GUI extends JFrame {
 	private static final long serialVersionUID = 1L;
@@ -42,6 +45,30 @@ public class GUI extends JFrame {
 	ArrayList<Room> rooms;
 	Player focusPlayer;
 
+	Icon redIcon = new ImageIcon("MissScarlett.png");
+	Icon yellowIcon = new ImageIcon("ColonelMustard.png");
+	Icon blueIcon = new ImageIcon("MrsPeacock.png");
+	Icon greenIcon = new ImageIcon("MrGreen.png");
+	Icon purpleIcon = new ImageIcon("ProfessorPlum.png");
+	Icon whiteIcon = new ImageIcon("MrsWhite.png");
+
+	Icon ropeIcon = new ImageIcon("Rope.png");
+	Icon candlestickIcon = new ImageIcon("Candelstick.png");
+	Icon knifeIcon = new ImageIcon("Knife.png");
+	Icon revolverIcon = new ImageIcon("Revolver.png");
+	Icon spannerIcon = new ImageIcon("Wrench.png");
+	Icon leadpipeIcon = new ImageIcon("LeadPipe.png");
+
+	Icon loungeIcon = new ImageIcon("Lounge.png");
+	Icon studyIcon = new ImageIcon("Study.png");
+	Icon kitchenIcon = new ImageIcon("Kitchen.png");
+	Icon libraryIcon = new ImageIcon("Library.png");
+	Icon conservertoryIcon = new ImageIcon("Observertory.png");
+	Icon diningIcon = new ImageIcon("DiningRoom.png");
+	Icon hallIcon = new ImageIcon("Hall.png");
+	Icon ballroomIcon = new ImageIcon("Ballroom.png");
+	Icon billiardIcon = new ImageIcon("BilliardRoom.png");
+
 	// Panels
 	JPanel instructionPanel;
 	JPanel boardPanel;
@@ -51,8 +78,14 @@ public class GUI extends JFrame {
 	JPanel[][] boardPanels;
 
 	// JRadioButtons
-	ButtonGroup group;
-	JRadioButton red, yellow, blue, green, purple, white;
+	ButtonGroup characterGroup;
+	ButtonGroup roomGroup;
+	ButtonGroup weaponGroup;
+	JRadioButton red, yellow, blue, green, purple, white, leadpipe, candlestick, dagger, rope, revolver, spanner;
+	JRadioButton[] roomRadioButton = { new JRadioButton(loungeIcon), new JRadioButton(studyIcon),
+			new JRadioButton(kitchenIcon), new JRadioButton(libraryIcon), new JRadioButton(conservertoryIcon),
+			new JRadioButton(diningIcon), new JRadioButton(hallIcon), new JRadioButton(ballroomIcon),
+			new JRadioButton(billiardIcon), };
 
 	// Labels
 	JLabel decisionLabel;
@@ -74,10 +107,10 @@ public class GUI extends JFrame {
 	ItemListener jRadio;
 
 	JButtonListener enterListen;
+	JButtonListener accuseListen;
 	JButtonListener startListen;
 	JButtonListener rollListen;
 	JKeyListener moveListen;
-	
 
 	// Variables for setup of game
 	int numPlayers;
@@ -124,6 +157,8 @@ public class GUI extends JFrame {
 		buttonPanel.add(accuse);
 		ready.setVisible(false);
 		accuse.setVisible(false);
+		accuseListen = new JButtonListener();
+		accuse.addActionListener(accuseListen);
 		suggest.setVisible(false);
 		rollDice.setVisible(false);
 
@@ -144,9 +179,9 @@ public class GUI extends JFrame {
 
 		// Setting up layout for decisionPanel
 		decisionPanel.setLayout(new FlowLayout());
-		
+
 		// Set up the layout for feedbackPanel
-		feedbackPanel.setLayout(new FlowLayout() );
+		feedbackPanel.setLayout(new FlowLayout());
 
 		// Sets the size and color of the border layout panels
 		instructionPanel.setPreferredSize(new Dimension(700, 75));
@@ -171,30 +206,26 @@ public class GUI extends JFrame {
 		menu.add(exit);
 		menuBar.add(menu);
 		this.setJMenuBar(menuBar);
-		
+
 		exit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.exit(0);
 			}
 		});
-		
+
 		help.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-//				JFrame helpFrame = new JFrame("Help");
-//				JPanel helpPanel = new JPanel();
-//				JLabel helpLabel = new JLabel();
-//				JButton 
-//				helpLabel.setText("Help info here");
-//				helpFrame.setPreferredSize(new Dimension(100, 100));
-				
-				JOptionPane.showMessageDialog(null, "It is a long established fact that a reader will be distracted by the readable \n"
-						+ "content of a page when looking at its layout. The point of using Lorem Ipsum is \n"
-						+ "that it has a more-or-less normal distribution of letters, as opposed to using \n"
-						+ "'Content here, content here', making it look like readable English. Many desktop \n"
-						+ "publishing packages and web page editors now use Lorem Ipsum as their default model\n"
-						+ " text, and a search for 'lorem ipsum' will uncover many web sites still in their \n"
-						+ "infancy. Various versions have evolved over the years, sometimes by accident, \n"
-						+ "sometimes on purpose (injected humour and the like).", "Cluedo For Dummies", JOptionPane.INFORMATION_MESSAGE);
+
+				JOptionPane.showMessageDialog(null,
+						"It is a long established fact that a reader will be distracted by the readable \n"
+								+ "content of a page when looking at its layout. The point of using Lorem Ipsum is \n"
+								+ "that it has a more-or-less normal distribution of letters, as opposed to using \n"
+								+ "'Content here, content here', making it look like readable English. Many desktop \n"
+								+ "publishing packages and web page editors now use Lorem Ipsum as their default model\n"
+								+ " text, and a search for 'lorem ipsum' will uncover many web sites still in their \n"
+								+ "infancy. Various versions have evolved over the years, sometimes by accident, \n"
+								+ "sometimes on purpose (injected humour and the like).",
+						"Cluedo For Dummies", JOptionPane.INFORMATION_MESSAGE);
 			}
 		});
 	}
@@ -238,12 +269,12 @@ public class GUI extends JFrame {
 		decisionPanel.add(decisionLabel);
 
 		// Make all the JRadioButtons
-		red = new JRadioButton("Miss Scarlett");
-		yellow = new JRadioButton("Colonel Mustard");
-		blue = new JRadioButton("Miss Peacock");
-		green = new JRadioButton("Reverend Green");
-		purple = new JRadioButton("Professor Plum");
-		white = new JRadioButton("Mrs. White");
+		red = new JRadioButton(redIcon);
+		yellow = new JRadioButton(yellowIcon);
+		blue = new JRadioButton(blueIcon);
+		green = new JRadioButton(greenIcon);
+		purple = new JRadioButton(purpleIcon);
+		white = new JRadioButton(whiteIcon);
 
 		// Add the listener to all the JRadioButtons
 		red.addItemListener(jRadio);
@@ -254,13 +285,13 @@ public class GUI extends JFrame {
 		white.addItemListener(jRadio);
 
 		// Add all of the JRadioButtons to a group
-		group = new ButtonGroup();
-		group.add(red);
-		group.add(yellow);
-		group.add(blue);
-		group.add(green);
-		group.add(purple);
-		group.add(white);
+		characterGroup = new ButtonGroup();
+		characterGroup.add(red);
+		characterGroup.add(yellow);
+		characterGroup.add(blue);
+		characterGroup.add(green);
+		characterGroup.add(purple);
+		characterGroup.add(white);
 
 		// Add all the buttons to the decisionPanel
 		decisionPanel.add(red);
@@ -387,7 +418,6 @@ public class GUI extends JFrame {
 		enter = new JButton("Enter");
 		decisionPanel.add(enter);
 
-
 		// Set the button listener
 		enterListen = new JButtonListener();
 		enter.addActionListener(enterListen);
@@ -444,12 +474,32 @@ public class GUI extends JFrame {
 		// Setup the instruction panel
 		instructionLabel.setText("It is time to move " + player.getCharacter().name + " on the board. Roll the dice");
 		instructionPanel.add(instructionLabel);
-		
+
 		// Show the rollDice button to the user
 		rollDice.setVisible(true);
 		rollListen = new JButtonListener();
 		rollDice.addActionListener(rollListen);
 		validate();
+	}
+
+	public JFrame makeGuess(Player player) {
+		JFrame guess = new JFrame("Construct Guess");
+		guess.setLayout(new GridLayout(2, 1));
+		guess.setVisible(true);
+		guess.validate();
+		return guess;
+	}
+
+	public Room getRoom(JFrame currentFrame) {
+		JPanel panel = new JPanel();
+		currentFrame.add(panel);
+		currentFrame.setPreferredSize(new Dimension(400, 400));
+		panel.setBackground(Color.CYAN);
+		decisionLabel = new JLabel("Select the room you are accusing then press done");
+		panel.add(decisionLabel);
+
+		return new Room(null);
+
 	}
 
 	public void gameWon(Player winner) {
@@ -486,7 +536,7 @@ public class GUI extends JFrame {
 				System.out.println("hello");
 				game.run();
 			}
-			
+
 			// If the user hit the rollDice button
 			if (e.getSource() == rollDice) {
 				int roll = game.rollDice();
@@ -495,21 +545,25 @@ public class GUI extends JFrame {
 				feedbackLabel.setText("You rolled " + roll);
 				feedbackPanel.validate();
 				feedbackPanel.repaint();
-				
+
 				// Let the user begin to move
 				moveListen = new JKeyListener();
 				buttonPanel.addKeyListener(moveListen);
-				
-				// Set our buttonPanel to have focus so keyListener triggers events
+
+				// Set our buttonPanel to have focus so keyListener triggers
+				// events
 				buttonPanel.setFocusable(true);
 				buttonPanel.requestFocus();
 			}
-			if(e.getSource() == accuse){
-				int r = (int) JOptionPane.showConfirmDialog(null, "Are you sure you want to submit an accusation?\n"
-						+ "If you are incorrect you will be removed from the game", "Accuse?",
-						JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-				
-				
+			if (e.getSource() == accuse) {
+				int r = (int) JOptionPane.showConfirmDialog(null,
+						"Are you sure you want to submit an accusation?\n"
+								+ "If you are incorrect you will be removed from the game",
+						"Accuse?", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+				if (r == JOptionPane.YES_OPTION) {
+					game.constructGuess(focusPlayer, true);
+				}
+
 			}
 			if (e.getSource() == enter) {
 				if (!names.getText().equals(" ")) {
@@ -523,45 +577,41 @@ public class GUI extends JFrame {
 													// the JTextArea / Button
 						prepareGame();
 					}
-				}
-				else {
+				} else {
 					decisionLabel.setText((currentPlayer + 1) + ", please enter a name before clicking enter.");
 				}
 			}
 		}
 	}
-	
-	private class JKeyListener implements KeyListener{
+
+	private class JKeyListener implements KeyListener {
 
 		@Override
 		public void keyTyped(KeyEvent e) {
 			// TODO Auto-generated method stub
-			
+
 		}
 
 		@Override
 		public void keyPressed(KeyEvent e) {
 			// TODO Auto-generated method stub
-			
+
 		}
-		
+
 		@Override
 		public void keyReleased(KeyEvent e) {
-			
-			if(e.getKeyCode() == KeyEvent.VK_W){
-				
-			}
-			else if(e.getKeyCode() == KeyEvent.VK_S){
-				
-			}
-			else if(e.getKeyCode() == KeyEvent.VK_A){
-				
-			}
-			else if(e.getKeyCode() == KeyEvent.VK_D){
-				
+
+			if (e.getKeyCode() == KeyEvent.VK_W) {
+
+			} else if (e.getKeyCode() == KeyEvent.VK_S) {
+
+			} else if (e.getKeyCode() == KeyEvent.VK_A) {
+
+			} else if (e.getKeyCode() == KeyEvent.VK_D) {
+
 			}
 		}
-		
+
 	}
 
 }
