@@ -108,6 +108,7 @@ public class Player implements BoardPiece {
 	 * @return the name
 	 */
 	public String getName() {
+		if(name == null){return this.character.toString();}
 		return name;
 	}
 	

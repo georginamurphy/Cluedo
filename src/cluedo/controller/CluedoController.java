@@ -271,7 +271,7 @@ public class CluedoController {
 				if(focusPlayer == null){System.out.println("NEXT PLAYER WAS NULL???");} // shouldn't happen
 				else{
 					if(game.isInRoom(focusPlayer) ){
-						GUI.updateLabelsEnteredRoom();
+						GUI.updateLabelsLeavingRoom();
 						GUI.leaveRoom();
 					}
 					else{

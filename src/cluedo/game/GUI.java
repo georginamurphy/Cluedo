@@ -5,12 +5,15 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 
@@ -28,7 +31,10 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
+import cluedo.boardpieces.BoardPiece;
+import cluedo.boardpieces.Hallway;
 import cluedo.boardpieces.Player;
+import cluedo.boardpieces.RoomTile;
 import cluedo.cards.Card;
 import cluedo.cards.Character.Colour;
 import cluedo.controller.CluedoController;
@@ -85,6 +91,8 @@ public class GUI extends JFrame{
 	JButtonListener weaponListen;
 	JKeyListener moveListen;
 	JWindowListener windowListen;
+	JMouseListener mouseListen;
+	ShortCutListener shortcut;
 	
 	// Image Icons
 	Icon redIcon = new ImageIcon("MissScarlett.png");
@@ -169,6 +177,8 @@ public class GUI extends JFrame{
 		GridLayout bpLayout = new GridLayout(25, 25, 0, 0);
 		boardPanel.setLayout(bpLayout);
 		boardPanel.setBackground(Color.LIGHT_GRAY);
+		mouseListen = new JMouseListener();
+		boardPanel.addMouseListener(mouseListen);
 
 		// Setting up layout for decisionPanel
 		decisionPanel.setLayout(new FlowLayout());
@@ -247,15 +257,19 @@ public class GUI extends JFrame{
 			public void actionPerformed(ActionEvent e) {
 
 				JOptionPane.showMessageDialog(null,
-						"It is a long established fact that a reader will be distracted by the readable \n"
-								+ "content of a page when looking at its layout. The point of using Lorem Ipsum is \n"
-								+ "that it has a more-or-less normal distribution of letters, as opposed to using \n"
-								+ "'Content here, content here', making it look like readable English. Many desktop \n"
-								+ "publishing packages and web page editors now use Lorem Ipsum as their default model\n"
-								+ " text, and a search for 'lorem ipsum' will uncover many web sites still in their \n"
-								+ "infancy. Various versions have evolved over the years, sometimes by accident, \n"
-								+ "sometimes on purpose (injected humour and the like).",
-						"Cluedo For Dummies", JOptionPane.INFORMATION_MESSAGE);
+						"Welcome to Cluedo!\n"
+						+ "The aim of the game is make an accusation that correctly matches the solution for\n"
+						+ "this game.  Be careful though!  Making an incorrect accusation will result in you\n"
+						+ "losing the game.  In order to deduce the correct solution, you should move around\n"
+						+ "the map to different rooms and make suggestions.  At any point during your suggestion\n"
+						+ "or accusation, if you close the popup window you will void your turn!  Below are is a\n"
+						+ "shortcut or two that you may find useful while playing,\n"
+						+ "Good luck detectives!\n"
+						+ "\n"
+						+ "WASD Keys - Move your player around the map\n"
+						+ "F Key - Starts a suggestion\n"
+						+ "G Key - Starts an accusation\n"
+						+ "R Key - Rolls the dice", "Important Information!", JOptionPane.INFORMATION_MESSAGE);
 			}
 		});
 	}
@@ -423,6 +437,9 @@ public class GUI extends JFrame{
 		setLayout();
 		
 		decisionLabel.setText("Press the button to start the game.");
+		JOptionPane.showMessageDialog(null, "We strongly advise that all players read the help tab"
+				+ " in the options menu.  It displays some useful shortcut keys and\n"
+				+ "the basic rules of Cluedo.  Good luck players!", "Read me please!", JOptionPane.INFORMATION_MESSAGE);
 		startGame = new JButton("Start");
 		startListen = new JButtonListener();
 		startGame.addActionListener(startListen);
@@ -430,6 +447,7 @@ public class GUI extends JFrame{
 		decisionPanel.add(decisionLabel);
 		decisionPanel.add(startGame);
 		
+		repaint();
 		validate();
 	}
 	
@@ -454,6 +472,44 @@ public class GUI extends JFrame{
 		decisionPanel.removeAll();
 		decisionPanel.validate();
 		decisionPanel.repaint();
+	}
+	
+	/**
+	 * Called when the rollDice button is clicked or called
+	 * Rolls the dice, displays a users hand and sets up listeners / buttons
+	 * for the players turn
+	 */
+	public void rollDice(){
+		controller.rollDice();
+		// Remove rollDice button from view
+		rollDice.setVisible(false);
+		feedbackLabel.setVisible(true);
+		feedbackLabel.setText("You rolled " + controller.getMovesLeft());
+		feedbackPanel.validate();
+		feedbackPanel.repaint();
+		
+		displayHand();
+
+		// Let the user begin to move
+		moveListen = new JKeyListener();
+		
+		// Set our buttonPanel to have focus so keyListener triggers
+		// events
+		buttonPanel.setFocusable(true);
+		buttonPanel.requestFocus();
+
+		for (KeyListener k : boardPanel.getKeyListeners()) {
+			boardPanel.removeKeyListener(k);
+		}
+		boardPanel.addKeyListener(moveListen);
+
+		// Set our buttonPanel to have focus so keyListener triggers
+		// events
+		boardPanel.setFocusable(true);
+		boardPanel.requestFocus();
+		instructionLabel.setText(controller.getFocus().getName() + ", use the WASD keys to move around the board.");
+		instructionPanel.repaint();
+		validate();
 	}
 	
 	/**
@@ -493,6 +549,11 @@ public class GUI extends JFrame{
 			boardPanel.removeKeyListener(kl);
 		}
 		boardPanel.removeKeyListener(moveListen);
+		boardPanel.removeKeyListener(shortcut);
+		shortcut = new ShortCutListener();
+		boardPanel.addKeyListener(shortcut);
+		boardPanel.requestFocus();
+		
 
 		// Setup the instruction panel
 		instructionLabel.setText(controller.getFocus().getName() + " roll the dice");
@@ -557,9 +618,9 @@ public class GUI extends JFrame{
 	}
 	
 	/**
-	 * Updates the labels in our GUI to display correctly when a user has entered a room
+	 * Updates the labels in our GUI to display correctly when a user needs to leave a room
 	 */
-	public void updateLabelsEnteredRoom(){
+	public void updateLabelsLeavingRoom(){
 		feedbackLabel.setText(" ");
 		feedbackPanel.repaint();
 		instructionLabel.setText(controller.getFocus().getName() + ", you must now leave this room, choose which door you would like to exit from.");
@@ -570,9 +631,10 @@ public class GUI extends JFrame{
 	 * Called when a player enters a room, displays accuse and suggest buttons
 	 */
 	public void enteredRoom(){
+		feedbackLabel.setText(" ");
+		feedbackPanel.repaint();
 		instructionLabel.setText(controller.getFocus().getName() + ", you have entered a room, please make an accusation or a suggestion.");
 		instructionPanel.repaint();
-		feedbackLabel.setVisible(false);
 		suggest.setVisible(true);
 		suggestListen = new JButtonListener();
 		for(ActionListener ls : suggest.getActionListeners() ){
@@ -667,36 +729,7 @@ public class GUI extends JFrame{
 			}
 			
 			else if(e.getSource() == rollDice){
-				controller.rollDice();
-				// Remove rollDice button from view
-				rollDice.setVisible(false);
-				feedbackLabel.setVisible(true);
-				feedbackLabel.setText("You rolled " + controller.getMovesLeft());
-				feedbackPanel.validate();
-				feedbackPanel.repaint();
-				
-				displayHand();
-
-				// Let the user begin to move
-				moveListen = new JKeyListener();
-				
-				// Set our buttonPanel to have focus so keyListener triggers
-				// events
-				buttonPanel.setFocusable(true);
-				buttonPanel.requestFocus();
-
-				for (KeyListener k : boardPanel.getKeyListeners()) {
-					boardPanel.removeKeyListener(k);
-				}
-				boardPanel.addKeyListener(moveListen);
-
-				// Set our buttonPanel to have focus so keyListener triggers
-				// events
-				boardPanel.setFocusable(true);
-				boardPanel.requestFocus();
-				instructionLabel.setText(controller.getFocus().getName() + ", use the WASD keys to move around the board.");
-				instructionPanel.repaint();
-				validate();
+				rollDice();
 			}
 			
 			else if(e.getSource() == startGame){
@@ -715,7 +748,7 @@ public class GUI extends JFrame{
 	}
 	
 	/**
-	 * A listener for the keyboard, responds to WASD keys
+	 * A listener for the keyboard, responds to WASD keys, and accuse / suggest shortcuts
 	 */
 	private class JKeyListener implements KeyListener{
 
@@ -736,6 +769,16 @@ public class GUI extends JFrame{
 			else if (e.getKeyCode() == KeyEvent.VK_D) {
 				controller.doMoveIfValid(Direction.RIGHT);
 			}
+			else if (e.getKeyCode() == KeyEvent.VK_G){
+				if(accuse.isVisible() ){
+					constructAccusation();
+				}
+			}
+			else if (e.getKeyCode() == KeyEvent.VK_F){
+				if(suggest.isVisible() ){
+					constructSuggestion();
+				}
+			}
 			validate();
 		}
 		
@@ -745,6 +788,94 @@ public class GUI extends JFrame{
 
 		@Override
 		public void keyTyped(KeyEvent arg0) {}
+		
+	}
+	
+	/**
+	 * An implementation of KeyListener, used to detect short cuts used by the user
+	 * when buttonPanel does not have focus.
+	 */
+	private class ShortCutListener implements KeyListener{
+
+		@Override
+		public void keyReleased(KeyEvent e) {
+			if (e.getKeyCode() == KeyEvent.VK_G){
+				if(accuse.isVisible() ){
+					constructAccusation();
+				}
+			}
+			else if (e.getKeyCode() == KeyEvent.VK_F){
+				if(suggest.isVisible() ){
+					constructSuggestion();
+				}
+			}
+			else if (e.getKeyCode() == KeyEvent.VK_R){
+				if(rollDice.isVisible() ){
+					rollDice();
+				}
+			}
+		}
+		
+		@Override
+		public void keyPressed(KeyEvent arg0) {}
+
+		@Override
+		public void keyTyped(KeyEvent arg0) {}
+		
+	}
+	
+	/**
+	 * An implementation of MouseListener.
+	 * Used when a user clicks on the Board, will pop-up with 
+	 * a message describing what they clicked on
+	 */
+	private class JMouseListener implements MouseListener{
+
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			Point clicked = e.getPoint();
+			int row = (e.getY() - 10 ) / 15;
+			int col = (e.getX()  - 10 ) / 15;
+			
+			if(row < 0 || row > 24 || col < 0 || col > 24){return;}
+			
+			BoardPiece clickedOn = controller.getBoard().getBoard()[row][col];
+			String start = "That is an ";
+			String descrip = "out of bounds area";
+			if(clickedOn instanceof Player){
+				descrip = ((Player) clickedOn).getName();
+				start = "That is ";
+			}
+			else if(clickedOn instanceof RoomTile){
+				if(((RoomTile) clickedOn).isDoor() ){
+					start = "That door belongs to ";
+					descrip = ((RoomTile) clickedOn).getName().toString();
+				}
+				else{
+					start = "That is a ";
+					descrip = ((RoomTile) clickedOn).getName().toString() + " tile";
+				}
+			}
+			else if(clickedOn instanceof Hallway){
+				start = "That is a ";
+				descrip = "Hallway";
+			}
+			JOptionPane.showMessageDialog(null, start + descrip, "You clicked", JOptionPane.INFORMATION_MESSAGE);
+			
+		}
+
+		// Unimplemented methods required for compilation
+		@Override
+		public void mouseEntered(MouseEvent arg0) {}
+
+		@Override
+		public void mouseExited(MouseEvent arg0) {}
+
+		@Override
+		public void mousePressed(MouseEvent arg0) {}
+
+		@Override
+		public void mouseReleased(MouseEvent arg0) {}
 		
 	}
 	
