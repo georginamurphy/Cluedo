@@ -16,6 +16,7 @@ import cluedo.cards.Card;
 import cluedo.cards.Character;
 import cluedo.cards.Room;
 import cluedo.cards.Weapon;
+import cluedo.controller.CluedoController;
 
 /**
  * The game class is what ties everything together and holds a lot of game
@@ -24,8 +25,8 @@ import cluedo.cards.Weapon;
  */
 public class Game {
 
-	// The gui object for the game
-	private GUI gui;
+	// The controller object for the MVC Model
+	public CluedoController controller;
 
 	// The board object for this game
 	private Board board;
@@ -79,10 +80,11 @@ public class Game {
 	 *            - The list of all players
 	 * @param gui
 	 */
-	public Game(Board board, ArrayList<Player> players, GUI gui) {
-		this.gui = gui;
+	public Game(Board board, ArrayList<Player> humanPlayers, ArrayList<Player> players, CluedoController controller) {
+		this.controller = controller;
 		this.board = board;
 		this.players = players;
+		setHumanPlayers(humanPlayers);
 		this.gameEnd = false;
 
 		// These two method calls initialize information about the board that
@@ -99,10 +101,6 @@ public class Game {
 	 */
 	public Board getBoard() {
 		return this.board;
-	}
-
-	public GUI getGui() {
-		return gui;
 	}
 
 	/**
@@ -158,7 +156,7 @@ public class Game {
 		int roomIndex = (int) (Math.random() * rooms.size());
 
 		this.solution = new Solution(weapons.get(weaponIndex), chars.get(charIndex), rooms.get(roomIndex));
-
+		System.out.println(solution);
 		// Remove the cards from the ArrayLists so they are not dealt to players
 		chars.remove(charIndex);
 		weapons.remove(weaponIndex);
@@ -175,20 +173,6 @@ public class Game {
 	 */
 	public void dealCards(ArrayList<Character> chars, ArrayList<Weapon> weapons, ArrayList<Room> rooms) {
 		ArrayList<Card> cards = new ArrayList<Card>();
-		ArrayList<Player> realPlayers = new ArrayList<Player>();
-
-		// Get the real players, and add them to an ArrayList
-		int numOfPlayers = 0;
-		for (Player p : players) {
-			if (p.getUsed()) {
-				realPlayers.add(p);
-				numOfPlayers++;
-			}
-		}
-
-		// Set the field that holds all the human players to be the array we
-		// just calculated
-		setHumanPlayers(realPlayers);
 
 		// Also, initialize the game field for each player to be this game
 		// object
@@ -207,9 +191,9 @@ public class Game {
 		int playerIndex = 0;
 		for (int i = 0; i < cards.size(); i++) {
 			Card card = cards.get(i);
-			realPlayers.get(playerIndex).dealCard(card);
+			humanPlayers.get(playerIndex).dealCard(card);
 			playerIndex++;
-			if (!(playerIndex < numOfPlayers)) {
+			if (!(playerIndex < controller.getNumPlayers() )) {
 				playerIndex = 0;
 			}
 		}
@@ -425,7 +409,7 @@ public class Game {
 		}
 
 		board.updateBoard(players); // Physically updates the board
-		gui.drawBoard(board);
+		controller.drawBoard();
 	}
 
 	/**
@@ -957,8 +941,7 @@ public class Game {
 	 * @param input
 	 */
 	public Card makeSuggestion(Player player, Solution guess) {
-		System.out.println(guess.toString());
-		for (Player p : humanPlayers) {
+		for (Player p : controller.getHumanPlayers() ) {
 			if (!p.equals(player)) {
 				for (Card c : p.getCards()) {
 					if (guess.checkCard(c)) {
@@ -1029,28 +1012,29 @@ public class Game {
 	 * @return Solution
 	 */
 	public Solution constructGuess(Player player, boolean accusation) {
+		/**
 		gui.makeGuess(player);
-//		JFrame guessWindow = gui.makeGuess(player);
-//		Room room;
-//		if (accusation) {
-//			room = gui.getRoom(guessWindow);
-//
-//		} else {
-//			room = new Room(inRoom(player));
-//		}
-//
-//		Character character = null;//gui.getCharacter(guessWindow);
-//		Weapon weapon = null;//gui.getWeapon(guessWindow);
+		JFrame guessWindow = gui.makeGuess(player);
+		Room room;
+		if (accusation) {
+			room = gui.getRoom(guessWindow);
+
+		} else {
+			room = new Room(inRoom(player));
+		}
+
+		Character character = null;//gui.getCharacter(guessWindow);
+		Weapon weapon = null;//gui.getWeapon(guessWindow);
 
 		
 
-	/*	for (Player p : players) {
+		for (Player p : players) {
 			if (p.getCharacter().equals(character)) {
 				Location newPlayerLocation = getRoomTile(room.name);
 				p.updateLocation(newPlayerLocation);
 				this.board.updateBoard(humanPlayers);
 			}
-		}*/
+		}
 
 		//System.out.println("Room: " + room.toString());
 		//System.out.println("Character: " + character.toString());
@@ -1063,6 +1047,14 @@ public class Game {
 		//userInput = getValidOneToSix(number, input);
 		//Weapon weapon = new Weapon(getWeaponName(userInput));
 		return null ;//new Solution(weapon, character, room);
+		**/
+		return null;
+	}
+	
+	public void movePlayerToRoom(Player p, Room.Name toMoveTo){
+		p.updateLocation(this.getRoomTile(toMoveTo) );
+		this.board.updateBoard(controller.getAllPlayers() );
+		
 	}
 
 	/**

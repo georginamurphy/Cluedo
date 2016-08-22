@@ -1,4 +1,6 @@
 package cluedo.cards;
+import javax.swing.ImageIcon;
+
 import cluedo.boardpieces.Location;
 
 /**
@@ -87,6 +89,25 @@ public class Character implements Card {
 		}
 		return false;
 	}
+	
+	public ImageIcon getImageIcon(){
+		switch(colour){
+		case WHITE:
+			return new ImageIcon("MrsWhite.png");
+		case GREEN:
+			return new ImageIcon("MrGreen.png");
+		case BLUE:
+			return new ImageIcon("MrsPeacock.png");
+		case PURPLE:
+			return new ImageIcon("ProfessorPlum.png");
+		case RED:
+			return new ImageIcon("MissScarlett.png");
+		case YELLOW:
+			return new ImageIcon("ColonelMustard.png");
+		default:
+			return null; // shouldn't happen
+		}
+	}
 
 	/**
 	 * A toString method for a character
@@ -96,3 +117,4 @@ public class Character implements Card {
 		return this.name;
 	}
 }
+

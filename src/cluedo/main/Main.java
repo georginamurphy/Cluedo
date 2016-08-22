@@ -7,8 +7,8 @@ import cluedo.boardpieces.Player;
 import cluedo.cards.Character;
 import cluedo.cards.Room;
 import cluedo.cards.Weapon;
+import cluedo.controller.CluedoController;
 import cluedo.game.Board;
-import cluedo.game.GUI;
 import cluedo.game.Game;
 
 public class Main {
@@ -29,7 +29,6 @@ public class Main {
 	
 	// The game object for the game
 	private static Game game;
-
 	
 	/**
 	 * Responsible for initializing aspects of the game, such as creating the board and game
@@ -40,14 +39,17 @@ public class Main {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		makeCharacters();
-		makeWeapons();
-		makeRooms();
+		//makeCharacters();
+		//makeWeapons();
+		//makeRooms();
 		
-		board = new Board();
-		GUI GUI = new GUI(board, characters, weapons, rooms);
-		int numPlayers = GUI.getNumPlayers();
-		GUI.pickCharacters(numPlayers);
+		//board = new Board();
+		//GUI GUI = new GUI(board, characters, weapons, rooms);
+		//int numPlayers = GUI.getNumPlayers();
+		//GUI.pickCharacters(numPlayers);
+		
+		CluedoController controller = new CluedoController();
+		controller.setupGame();
 	
 	}
 

@@ -1,4 +1,7 @@
 package cluedo.cards;
+
+import javax.swing.ImageIcon;
+
 /**
  * A class that represents a Room in the game.
  * Holds basic information about a room card
@@ -40,6 +43,31 @@ public class Room implements Card {
 	public boolean equals(Room room){
 		if(this.name == room.name){return true;}
 		return false;
+	}
+	
+	public ImageIcon getImageIcon(){
+		switch(name){
+		case KITCHEN:
+			return new ImageIcon("Kitchen.png");
+		case BALLROOM:
+			return new ImageIcon("Ballroom.png");
+		case CONSERVATORY:
+			return new ImageIcon("Conservatory.png");
+		case BILLIARD:
+			return new ImageIcon("BilliardRoom.png");
+		case LIBRARY:
+			return new ImageIcon("Library.png");
+		case STUDY:
+			return new ImageIcon("Study.png");
+		case HALL:
+			return new ImageIcon("Hall.png");
+		case LOUNGE:
+			return new ImageIcon("Lounge.png");
+		case DININGROOM:
+			return new ImageIcon("DiningRoom.png");
+		default:
+			return null; // shouldn't happen
+		}
 	}
 
 	/**

@@ -1,5 +1,7 @@
 package cluedo.cards;
 
+import javax.swing.ImageIcon;
+
 /**
  * A weapon card for the Cluedo game.
  */
@@ -37,6 +39,25 @@ public class Weapon implements Card{
 	public boolean equals(Weapon weapon){
 		if(this.name == weapon.name){return true;}
 		return false;
+	}
+	
+	public ImageIcon getImageIcon(){
+		switch(name){
+		case CANDLESTICK:
+			return new ImageIcon("Candlestick.png");
+		case DAGGER:
+			return new ImageIcon("Dagger.png");
+		case LEADPIPE:
+			return new ImageIcon("LeadPipe.png");
+		case ROPE:
+			return new ImageIcon("Rope.png");
+		case SPANNER:
+			return new ImageIcon("Wrench.png");
+		case REVOLVER:
+			return new ImageIcon("Revolver.png");
+		default:
+			return null; // shouldn't happen
+		}
 	}
 	
 	/**

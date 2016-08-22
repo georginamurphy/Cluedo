@@ -1,7 +1,7 @@
 package cluedo.game;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
@@ -11,14 +11,14 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.util.ArrayList;
 
-import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -30,52 +30,19 @@ import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
 import cluedo.boardpieces.Player;
-import cluedo.boardpieces.RoomTile;
+import cluedo.cards.Card;
 import cluedo.cards.Character;
 import cluedo.cards.Room;
 import cluedo.cards.Weapon;
-import javafx.scene.image.Image;
+import cluedo.cards.Character.Colour;
+import cluedo.controller.CluedoController;
 import cluedo.game.Game.Direction;
 
-public class GUI extends JFrame {
-	private static final long serialVersionUID = 1L;
-
-	// The board and game objects, as well as Cards for the game
-	Board board;
-	Game game;
-	ArrayList<Character> characters;
-	ArrayList<Weapon> weapons;
-	ArrayList<Room> rooms;
-	Player focusPlayer;
-	int movesLeft;
-
-	// Image Icons
-	Icon redIcon = new ImageIcon("MissScarlett.png");
-	Icon yellowIcon = new ImageIcon("ColonelMustard.png");
-	Icon blueIcon = new ImageIcon("MrsPeacock.png");
-	Icon greenIcon = new ImageIcon("MrGreen.png");
-	Icon purpleIcon = new ImageIcon("ProfessorPlum.png");
-	Icon whiteIcon = new ImageIcon("MrsWhite.png");
-
-	Icon ropeIcon = new ImageIcon("Rope.png");
-	Icon candlestickIcon = new ImageIcon("Candelstick.png");
-	Icon knifeIcon = new ImageIcon("Knife.png");
-	Icon revolverIcon = new ImageIcon("Revolver.png");
-	Icon spannerIcon = new ImageIcon("Wrench.png");
-	Icon leadpipeIcon = new ImageIcon("LeadPipe.png");
-
-	Icon loungeIcon = new ImageIcon("Lounge.png");
-	Icon studyIcon = new ImageIcon("Study.png");
-	Icon kitchenIcon = new ImageIcon("Kitchen.png");
-	Icon libraryIcon = new ImageIcon("Library.png");
-	Icon conservertoryIcon = new ImageIcon("Observertory.png");
-	Icon diningIcon = new ImageIcon("DiningRoom.png");
-	Icon hallIcon = new ImageIcon("Hall.png");
-	Icon ballroomIcon = new ImageIcon("Ballroom.png");
-	Icon billiardIcon = new ImageIcon("BilliardRoom.png");
+public class GUI extends JFrame{
 	
-	Icon doorIcon = new ImageIcon("Door.png");
-
+	// The controller
+	CluedoController controller;
+	
 	// Panels
 	JPanel instructionPanel;
 	JPanel boardPanel;
@@ -83,18 +50,18 @@ public class GUI extends JFrame {
 	JPanel decisionPanel;
 	JPanel feedbackPanel;
 	JPanel[][] boardPanels;
-
+	
 	// JRadioButtons
 	ButtonGroup characterGroup;
 	ButtonGroup roomGroup;
 	ButtonGroup weaponGroup;
 	JRadioButton lounge, study, kitchen, library, conservertory, dining, hall, ballroom, billiard, red, yellow, blue,
-			green, purple, white, leadpipe, candlestick, dagger, rope, revolver, spanner;
-
+			green, purple, white, leadpipe, dagger, rope, revolver, wrench;
+	
 	// Labels
 	JLabel decisionLabel;
-	JLabel instructionLabel = new JLabel("Welcome To Cluedo");
-	JLabel feedbackLabel = new JLabel(" ");
+	JLabel instructionLabel;
+	JLabel feedbackLabel;
 
 	// Buttons
 	JButton startGame;
@@ -104,6 +71,7 @@ public class GUI extends JFrame {
 	JButton ready;
 	JButton rollDice;
 	JButton submitGuessButton;
+	JButton submiteAccusationButton;
 
 	// JTextFields
 	JTextField names;
@@ -115,32 +83,46 @@ public class GUI extends JFrame {
 	JButtonListener startListen;
 	JButtonListener rollListen;
 	JButtonListener suggestListen;
+	JButtonListener weaponListen;
 	JKeyListener moveListen;
+	JWindowListener windowListen;
+	
+	// Image Icons
+	Icon redIcon = new ImageIcon("MissScarlett.png");
+	Icon yellowIcon = new ImageIcon("ColonelMustard.png");
+	Icon blueIcon = new ImageIcon("MrsPeacock.png");
+	Icon greenIcon = new ImageIcon("MrGreen.png");
+	Icon purpleIcon = new ImageIcon("ProfessorPlum.png");
+	Icon whiteIcon = new ImageIcon("MrsWhite.png");
 
-	// Variables for setup of game
-	int numPlayers;
-	int currentPlayer;
+	Icon ropeIcon = new ImageIcon("Rope.png");
+	Icon candlestickIcon = new ImageIcon("Candlestick.png");
+	Icon daggerIcon = new ImageIcon("Dagger.png");
+	Icon revolverIcon = new ImageIcon("Revolver.png");
+	Icon wrenchIcon = new ImageIcon("Wrench.png");
+	Icon leadpipeIcon = new ImageIcon("LeadPipe.png");
 
-	// Players and Characters
-	ArrayList<Player> humanPlayers;
-	ArrayList<Player> players;
-	ArrayList<Character> chars;
-
-	JComboBox<String> roomComboBox;
-	JComboBox<String> characterComboBox;
-	JComboBox<String> weaponComboBox;
-
-	public GUI(Board board, ArrayList<Character> characters, ArrayList<Weapon> weapons, ArrayList<Room> rooms) {
-		this.board = board;
-		this.chars = characters;
-		this.characters = characters;
-		this.weapons = weapons;
-		this.rooms = rooms;
+	Icon loungeIcon = new ImageIcon("Lounge.png");
+	Icon studyIcon = new ImageIcon("Study.png");
+	Icon kitchenIcon = new ImageIcon("Kitchen.png");
+	Icon libraryIcon = new ImageIcon("Library.png");
+	Icon conservatoryIcon = new ImageIcon("Conservatory.png");
+	Icon diningIcon = new ImageIcon("DiningRoom.png");
+	Icon hallIcon = new ImageIcon("Hall.png");
+	Icon ballroomIcon = new ImageIcon("Ballroom.png");
+	Icon billiardIcon = new ImageIcon("BilliardRoom.png");
+		
+	Icon doorIcon = new ImageIcon("Door.png");
+	
+	int playerCounter;
+	
+	public GUI(CluedoController controller) {
+		this.controller = controller;
 		setLayout();
-		drawBoard(this.board);
+		drawBoard();
 		pack();
 	}
-
+	
 	/**
 	 * Called upon creation of the game. Essentially initializes the GUI and
 	 * it's panels to be ready for the user to set up the game.
@@ -181,6 +163,7 @@ public class GUI extends JFrame {
 		add(decisionPanel, BorderLayout.EAST);
 		add(buttonPanel, BorderLayout.WEST);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setResizable(false);
 		setVisible(true);
 
 		// Setting up layout for boardPanel
@@ -198,14 +181,49 @@ public class GUI extends JFrame {
 		feedbackPanel.setPreferredSize(new Dimension(700, 75));
 		decisionPanel.setPreferredSize(new Dimension(300, 400));
 		buttonPanel.setPreferredSize(new Dimension(100, 400));
-
+		
+		// Setup feedback / instruction labels and add to appropriate panels
+		feedbackLabel = new JLabel();
+		instructionLabel = new JLabel("Welcome to Cluedo");
 		feedbackPanel.add(feedbackLabel);
 		instructionPanel.add(instructionLabel);
 
 		makeMenu();
 		validate();
 	}
+	
+	/**
+	 * Draws the board on the screen in the boardPanel JPanel Uses a
+	 * GridLayout(25, 25).
+	 * 
+	 * @param boardObj
+	 *            - The board object we want to draw
+	 */
+	public void drawBoard() {
+		Board boardObj = controller.getBoard();
+		boardPanel.removeAll();
+		for (int row = 0; row <= 24; row++) {
+			for (int col = 0; col <= 24; col++) {
+				boardPanels[row][col] = new JPanel(new GridLayout());
 
+				JLabel label = new JLabel();
+				boardPanel.add(boardPanels[row][col].add(label));
+				if (boardObj.getBoard()[row][col] == null) {
+					label.setIcon(new ImageIcon("black.png"));
+				} else {
+					label.setIcon(boardObj.getBoard()[row][col].getImageIcon());
+				}
+				label.setVisible(true);
+			}
+		}
+
+		boardPanel.validate();
+		boardPanel.repaint();
+	}
+	
+	/**
+	 * Makes the Menu for the GUI
+	 */
 	public void makeMenu() {
 		JMenuBar menuBar = new JMenuBar();
 		JMenu menu = new JMenu("Options");
@@ -239,45 +257,64 @@ public class GUI extends JFrame {
 			}
 		});
 	}
-
+	
 	/**
-	 * Draws the board on the screen in the boardPanel JPanel Uses a
-	 * GridLayout(25, 25).
+	 * Displays an OptionPane to the user to get input on how many players will
+	 * be taking part. If the user selects cancel, the game will exit.
 	 * 
-	 * @param boardObj
-	 *            - The board object we want to draw
+	 * @return - The number of players between 3 and 6, inclusive.
 	 */
-	public void drawBoard(Board boardObj) {
-		boardPanel.removeAll();
-		for (int row = 0; row <= 24; row++) {
-			for (int col = 0; col <= 24; col++) {
-				boardPanels[row][col] = new JPanel(new GridLayout());
+	public int getNumPlayers() {
+		Object[] nums = { 3, 4, 5, 6 };
+		Object input = JOptionPane.showInputDialog(this, "How many players are in this game", "Number of players",
+				JOptionPane.QUESTION_MESSAGE, null, nums, nums[0]);
 
-				JLabel label = new JLabel();
-				boardPanel.add(boardPanels[row][col].add(label));
-				if (boardObj.getBoard()[row][col] == null) {
-					label.setIcon(new ImageIcon("black.png"));
-				} else {
-					label.setIcon(boardObj.getBoard()[row][col].getImageIcon());
-				}
-				label.setVisible(true);
-			}
+		if (input == null) {
+			System.exit(0);
+			return -1; // Shouldn't happen, needed to compile
+		} else {
+			return (int) input;
 		}
-
-		boardPanel.validate();
-		boardPanel.repaint();
 	}
+	
+	/**
+	 * Creates the Text area and button for the user's to input their names
+	 */
+	public void chooseNames() {
+		playerCounter = 0;
 
+		// Set the label
+		decisionLabel = new JLabel();
+		decisionLabel.setText("Player " + (playerCounter + 1) + ", enter your name and click enter.");
+		decisionPanel.add(decisionLabel);
+
+		// Set the JTextArea
+		names = new JTextField(" ");
+		names.setPreferredSize(new Dimension(150, 28));
+		decisionPanel.add(names);
+		names.setVisible(true);
+
+		// Set the button
+		enter = new JButton("Enter");
+		decisionPanel.add(enter);
+
+		// Set the button listener
+		enterListen = new JButtonListener();
+		enter.addActionListener(enterListen);
+		
+		validate();
+	}
+	
 	/**
 	 * Called to allow the user's to select which character they wish to play
 	 * as. Uses RadioButtons.
 	 */
-	public void pickCharacters(int numPlayers) {
-		players = new ArrayList<Player>();
+	public void pickCharacters() {
 		jRadio = new JRadioListener();
 		// Make our label for the panel
-		currentPlayer = 0;
-		decisionLabel = new JLabel("Player " + (currentPlayer + 1) + ", select the player you wish to play as.");
+		playerCounter = 0;
+		controller.resetFocus();
+		decisionLabel = new JLabel(controller.getHumanPlayers().get(0).getName() + ", select the character you wish to play as.");
 		decisionPanel.add(decisionLabel);
 
 		// Make all the JRadioButtons
@@ -315,28 +352,7 @@ public class GUI extends JFrame {
 
 		decisionPanel.validate();
 	}
-
-	/**
-	 * Displays an OptionPane to the user to get input on how many players will
-	 * be taking part. If the user selects cancel, the game will exit.
-	 * 
-	 * @return - The number of players between 3 and 6, inclusive.
-	 */
-	public int getNumPlayers() {
-		Object[] nums = { 3, 4, 5, 6 };
-		Object input = JOptionPane.showInputDialog(this, "How many players are in this game", "Number of players",
-				JOptionPane.QUESTION_MESSAGE, null, nums, nums[0]);
-
-		if (input == null) {
-			System.exit(0);
-			return -1; // Shouldn't happen, needed to compile
-		} else {
-			numPlayers = (int) input;
-			currentPlayer = 0;
-			return numPlayers;
-		}
-	}
-
+	
 	/**
 	 * Called when the JRadioListener detects a state change amongst the buttons
 	 * 
@@ -345,167 +361,182 @@ public class GUI extends JFrame {
 	 */
 	public void setPlayer(Object o) {
 		if (o == red) {
-			players.add(new Player(getCharacter(Character.Colour.RED), true));
+			controller.addCharacterToPlayer(controller.getFocus(), controller.getCharacter(Colour.RED) );
 			decisionPanel.remove(red);
-			currentPlayer++;
-		} else if (o == yellow) {
-			players.add(new Player(getCharacter(Character.Colour.YELLOW), true));
+			playerCounter++;
+		} 
+		else if (o == yellow) {
+			controller.addCharacterToPlayer(controller.getFocus(), controller.getCharacter(Colour.YELLOW) );
 			decisionPanel.remove(yellow);
-			currentPlayer++;
-		} else if (o == blue) {
-			players.add(new Player(getCharacter(Character.Colour.BLUE), true));
-			decisionPanel.remove(blue);
-			currentPlayer++;
-		} else if (o == green) {
-			players.add(new Player(getCharacter(Character.Colour.GREEN), true));
-			decisionPanel.remove(green);
-			currentPlayer++;
-		} else if (o == purple) {
-			players.add(new Player(getCharacter(Character.Colour.PURPLE), true));
-			decisionPanel.remove(purple);
-			currentPlayer++;
-		} else if (o == white) {
-			players.add(new Player(getCharacter(Character.Colour.WHITE), true));
-			decisionPanel.remove(white);
-			currentPlayer++;
+			playerCounter++;
 		}
-
-		if (currentPlayer != numPlayers) {
-			decisionLabel.setText("Player " + (currentPlayer + 1) + ", select the player you wish to play as.");
+		else if (o == blue) {
+			controller.addCharacterToPlayer(controller.getFocus(), controller.getCharacter(Colour.BLUE) );
+			decisionPanel.remove(blue);
+			playerCounter++;
+		} 
+		else if (o == green) {
+			controller.addCharacterToPlayer(controller.getFocus(), controller.getCharacter(Colour.GREEN) );
+			decisionPanel.remove(green);
+			playerCounter++;
+		} 
+		else if (o == purple) {
+			controller.addCharacterToPlayer(controller.getFocus(), controller.getCharacter(Colour.PURPLE) );
+			decisionPanel.remove(purple);
+			playerCounter++;
+		} 
+		else if (o == white) {
+			controller.addCharacterToPlayer(controller.getFocus(), controller.getCharacter(Colour.WHITE) );
+			decisionPanel.remove(white);
+			playerCounter++;
+		}
+		
+		controller.setFocus(controller.getNextPlayer() );
+		if (playerCounter != controller.getNumPlayers() ) {
+			decisionLabel.setText(controller.getFocus().getName() +  ", select the character you wish to play as.");
 			decisionPanel.validate();
 			decisionPanel.repaint();
-		} else {
+		} 
+		else {
 			// Record the non human players then
 			// Fill the non human players
-			humanPlayers = new ArrayList<Player>();
-			humanPlayers.addAll(players);
-			for (Player p : humanPlayers) {
-				System.out.println(p);
-			}
-			fillRemainingPlayers();
+			controller.fillRemainingPlayers();
+			controller.createBoardWithPlayers();
 			resetDecisionPanel();
 		}
 	}
-
+	
 	/**
-	 * Fills the players array with the remaining characters that have not been
-	 * chosen
+	 * Reset the decisionPanel and display the start button
 	 */
-	public void fillRemainingPlayers() {
-		if (numPlayers == 6) {
-			return;
-		}
-
-		for (Character c : chars) {
-			players.add(new Player(c, false));
-		}
-	}
-
 	public void resetDecisionPanel() {
 		// Reset boardPanel and redraw with player locations
 		boardPanel.removeAll();
-		board = new Board(players);
-		drawBoard(board);
+		drawBoard();
 
 		// Remove the decisionPanel from our components
-		// Initalize our startGame button!
+		// Initialize our startGame button
 		remove(decisionPanel);
 		decisionPanel.removeAll();
 		setLayout();
-		chooseNames();
-		// prepareGame();
-	}
-
-	/**
-	 * Creates the Text area and button for the user's to input their names
-	 */
-	public void chooseNames() {
-		currentPlayer = 0;
-
-		// Set the label
-		decisionLabel.setText("Player " + (currentPlayer + 1) + ", enter your name and click enter.");
-		decisionPanel.add(decisionLabel);
-
-		// Set the JTextArea
-		names = new JTextField(" ");
-		names.setPreferredSize(new Dimension(150, 28));
-		decisionPanel.add(names);
-		names.setVisible(true);
-
-		// Set the button
-		enter = new JButton("Enter");
-		decisionPanel.add(enter);
-
-		// Set the button listener
-		enterListen = new JButtonListener();
-		enter.addActionListener(enterListen);
-	}
-
-	/**
-	 * Gets a character and then removes it from our ArrayList as it has been
-	 * used
-	 * 
-	 * @param col
-	 * @return
-	 */
-	private Character getCharacter(Character.Colour col) {
-		Character toReturn = null;
-		for (Character c : chars) {
-			if (c.colour == col) {
-				toReturn = c;
-			}
-		}
-		chars.remove(toReturn);
-		return toReturn;
-	}
-
-	/**
-	 * Called after players have chosen their names, creates the game, the
-	 * solution and deals the cards
-	 */
-	public void prepareGame() {
-		game = new Game(board, players, this);
-		game.createSolution(characters, weapons, rooms);
-		game.dealCards(characters, weapons, rooms);
-
-		startLabel();
-	}
-
-	public void startLabel() {
-		decisionLabel.setText("Press the button to start the game!");
-		decisionPanel.add(decisionLabel);
+		
+		decisionLabel.setText("Press the button to start the game.");
 		startGame = new JButton("Start");
-		decisionPanel.add(startGame);
 		startListen = new JButtonListener();
 		startGame.addActionListener(startListen);
+		decisionLabel.add(startGame);
+		decisionPanel.add(decisionLabel);
+		decisionPanel.add(startGame);
+		
 		validate();
 	}
-
-	public void takeTurn(Player player) {
+	
+	/**
+	 * Displays the focusPlayer's hand in the decisionPanel
+	 */
+	public void displayHand(){
+		decisionPanel.removeAll();
+		decisionPanel.setLayout(new GridLayout(3, 2) );
+		
+		for(Card c : controller.getFocus().getCards() ){
+			JLabel label = new JLabel();
+			label.setIcon(c.getImageIcon() );
+			decisionPanel.add(label);
+		}
+		decisionPanel.validate();
+		decisionPanel.repaint();
+	}
+	
+	public void unDisplayHand(){
+		decisionPanel.removeAll();
+		decisionPanel.validate();
+		decisionPanel.repaint();
+	}
+	
+	public void takeTurn() {
+		if(controller.isInRoom(controller.getFocus() ) ){
+			leaveRoom();
+		}
+		
+		suggest.setVisible(false);
 		accuse.setVisible(true);
-		focusPlayer = player;
 		// Reset the decision panel
 		decisionPanel.removeAll();
 		decisionPanel.validate();
 		decisionPanel.repaint();
-
+		
+		for(KeyListener kl : boardPanel.getKeyListeners() ){
+			boardPanel.removeKeyListener(kl);
+		}
 		boardPanel.removeKeyListener(moveListen);
 
 		// Setup the instruction panel
-		instructionLabel.setText("It is time to move " + player.getName() + " on the board. Roll the dice");
+		instructionLabel.setText("It is time to move " + controller.getFocus().getName() + " on the board. Roll the dice");
 		instructionPanel.add(instructionLabel);
-
 		feedbackLabel.setVisible(false);
+		
+		drawBoard();
 
 		// Show the rollDice button to the user
+		rollDice.removeActionListener(rollListen);
 		rollDice.setVisible(true);
 		rollListen = new JButtonListener();
 		rollDice.addActionListener(rollListen);
 		validate();
 	}
 	
-	public void enteredRoom(Player player){
-		instructionLabel.setText(focusPlayer.getName() + ", you have entered a room, please make an accusation or a suggestion.");
+	/**
+	 * Prompts user input to select the door they wish to exit their room from
+	 * @param numOfDoors
+	 * @return
+	 */
+	public int getDoorNumber(int numOfDoors){
+		Object[] nums = new Object[numOfDoors];
+		int i = 1;
+		for(int x = 0; x < numOfDoors; x++){
+			nums[x] = i;
+			i++;
+		}
+		Object input = JOptionPane.showInputDialog(this, "Doors are ordered left to right, top to bottom.\n"
+				+ "Please select a door to leave from.", controller.getFocus().getName() + ", you need to leave this room!",
+				JOptionPane.QUESTION_MESSAGE, null, nums, nums[0]);
+		
+		if (input == null) {
+			System.exit(0);
+			return -1; // Shouldn't happen, needed to compile
+		} else {
+			return (int) input;
+		}
+	}
+	
+	/**
+	 * Updates the feedbackPanel with the correct message for making moves
+	 * @param successfulMove - if the move was successful
+	 */
+	public void updateFeedbackMoves(boolean successfulMove){
+		if(successfulMove){
+			feedbackLabel.setText("You have " + controller.getMovesLeft() + " moves remaining.");
+		}
+		else{
+			feedbackLabel.setText("That was an invalid move! Try again " + controller.getFocus().getName() );
+		}
+		feedbackLabel.validate();
+		feedbackLabel.repaint();
+	}
+	
+	/**
+	 * Updates the labels in our GUI to display correctly when a user has entered a room
+	 */
+	public void updateLabelsEnteredRoom(){
+		feedbackLabel.setText(" ");
+		instructionLabel.setText(controller.getFocus().getName() + ", you must now leave this room, choose which door you would like to exit from.");
+	}
+	
+	/**
+	 * Called when a player enters a room, displays accuse and suggest buttons
+	 */
+	public void enteredRoom(){
+		instructionLabel.setText(controller.getFocus().getName() + ", you have entered a room, please make an accusation or a suggestion.");
 		feedbackLabel.setVisible(false);
 		suggest.setVisible(true);
 		suggestListen = new JButtonListener();
@@ -516,140 +547,36 @@ public class GUI extends JFrame {
 		validate();
 	}
 	
-	public void leaveRoom(Player player){
-		focusPlayer = player;
-		boolean cantLeaveRoom = focusPlayer.startTurnInRoom();
-		drawBoard(board);
-		if(!cantLeaveRoom){
-			takeTurn(focusPlayer);
-		}
-		else{
-			
-		}
+	public void leaveRoom(){
+		unDisplayHand();
+		drawBoard();
+		controller.startTurnInRoom();
+		drawBoard();
 	}
 	
-	public int getDoorNumber(int numOfDoors){
-		Object[] nums = new Object[numOfDoors];
-		int i = 1;
-		for(int x = 0; x < numOfDoors; x++){
-			nums[x] = i;
-			i++;
-		}
-		Object input = JOptionPane.showInputDialog(this, "Choose the door number you wish to exit from", "Choose door number",
-				JOptionPane.QUESTION_MESSAGE, null, nums, nums[0]);
-		
-		if (input == null) {
-			System.exit(0);
-			return -1; // Shouldn't happen, needed to compile
-		} else {
-			return (int) input;
-		}
+	public void displaySkippedTurn(Player player) {
+		JOptionPane.showMessageDialog(null, player.getName() + ", all your exit doors are blocked, you cannot leave!\n"
+				+ "It is now " + controller.getFocus().getName() + "'s turn.");
 	}
-
-	public void makeGuess(Player player) {
-		JFrame guessFrame = new JFrame("Construct Guess");
-		guessFrame.setPreferredSize(new Dimension(200, 200));
-		guessFrame.setLayout(new GridLayout(5, 1));
-		guessFrame.setVisible(true);
-		guessFrame.validate();
-		JPanel panelOne = new JPanel();
-		JPanel panelTwo = addRooms();
-		JPanel panelThree = addCharacters();
-		JPanel panelFour = addWeapons();
-		decisionLabel = new JLabel("Construct your guess");
-		panelOne.add(decisionLabel);
-		guessFrame.add(panelOne);
-		guessFrame.add(panelTwo);
-		guessFrame.add(panelThree);
-		guessFrame.add(panelFour);
-		submitGuessButton = new JButton("Submit Guess");
-		guessFrame.add(submitGuessButton);
-		guessFrame.validate();
-
-		submitGuessButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				Room room = new Room(game.getRoomName((String) roomComboBox.getSelectedItem()));
-				Weapon weapon = new Weapon(game.getWeaponName((String) weaponComboBox.getSelectedItem()));
-				Character character = new Character(
-						game.getCharacterColour((String) characterComboBox.getSelectedItem()));
-				if (game.checkSolution(new Solution(weapon, character, room), focusPlayer)) {
-					gameWon(focusPlayer);
-				} else {
-					feedbackLabel.setText("Your guess was incorrect. You have been removed from the game");
-					validate();
-				}
-				guessFrame.dispose();
-			}
-		});
-
+	
+	public void constructSuggestion(){
+		GuessWindow guessFrame = new GuessWindow("Pick your suggestions", controller);
+		windowListen = new JWindowListener();
+		guessFrame.addWindowListener(windowListen);
+		guessFrame.startChoices(true);
 	}
-
-	public JPanel addRooms() {
-		JPanel panel = new JPanel();
-		panel.setPreferredSize(new Dimension(200, 50));
-
-		String[] items = {"BALLROOM", "BILLIARD", "CONSERVATORY", "DININGROOM", "HALL", "KITCHEN", "LIBRARY", "LOUNGE", "STUDY"};
-		roomComboBox = new JComboBox<String>(items);
-		panel.add(roomComboBox);
-
-		panel.validate();
-		return panel;
+	
+	public void constructAccusation(){
+		GuessWindow guessFrame = new GuessWindow("Pick your accusations", controller);
+		windowListen = new JWindowListener();
+		guessFrame.addWindowListener(windowListen);
+		guessFrame.startChoices(false);
 	}
-
-	public JPanel addCharacters() {
-		JPanel panel = new JPanel();
-		panel.setPreferredSize(new Dimension(200, 50));
-
-		String[] items = {"Mrs White", "Reverend Green", "Mrs Peacock", "Professor Plum", "Miss Scarlett", "Colonel Mustard"};
-		characterComboBox = new JComboBox<String>(items);
-		panel.add(characterComboBox);
-
-		panel.validate();
-		return panel;
-	}
-
-	public JPanel addWeapons() {
-		JPanel panel = new JPanel();
-		panel.setPreferredSize(new Dimension(200, 50));
-
-		String[] items = {"CANDLESTICK", "DAGGER", "LEADPIPE", "REVOLVER", "ROPE", "SPANNER"};
-		weaponComboBox = new JComboBox<String>(items);
-		panel.add(weaponComboBox);
-
-		panel.validate();
-		return panel;
-	}
-
-	public Player getNextPlayer() {
-		int index = humanPlayers.indexOf(focusPlayer);
-		index++;
-		if (index == humanPlayers.size()) {
-			index = 0;
-		}
-		while (index < humanPlayers.size()) {
-			if (!humanPlayers.get(index).getDead()) {
-				return humanPlayers.get(index);
-			}
-			if (index == humanPlayers.size() - 1) {
-				index = 0;
-			}
-		}
-		return null; // hELLO?
-	}
-
-	public void gameWon(Player winner) {
-		decisionPanel.removeAll();
-
-		// Set the label
-		decisionLabel.setText(winner.getName() + " has won the game");
-		decisionPanel.add(decisionLabel);
-	}
-
-	// ============================================================================================================================================
-	// LISTENER CLASSES LAY BEYOND THIS POINT
-	// ============================================================================================================================================
-
-
+	
+	// =========================================================================================================================
+	//                                                    PRIVATE CLASSES
+	// =========================================================================================================================
+	
 	/**
 	 * A listener for the JRadioButtons
 	 */
@@ -662,32 +589,44 @@ public class GUI extends JFrame {
 			}
 		}
 	}
-
-	private class JButtonListener implements ActionListener {
+	
+	
+	private class JButtonListener implements ActionListener{
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			// If the user hit the startGame button
-			if (e.getSource() == startGame) {
-				game.run();
+			// If the button clicked was the enter button
+			if(e.getSource() == enter){
+				if (!names.getText().equals(" ")) {
+					controller.addPlayer(new Player(names.getText(), true) );
+					playerCounter++;
+					decisionLabel.setText("Player " + (playerCounter + 1) + ", enter your name and click enter.");
+					names.setText(" ");
+					if (playerCounter == controller.getNumPlayers() ) {
+						decisionPanel.removeAll();
+						decisionPanel.repaint();
+						pickCharacters();
+					}
+				} 
+				else {
+					decisionLabel.setText((playerCounter + 1) + ", please enter a name before clicking enter.");
+				}
 			}
-
-			// If the user hit the rollDice button
-			if (e.getSource() == rollDice) {
-				int roll = game.rollDice();
-				movesLeft = roll;
+			
+			else if(e.getSource() == rollDice){
+				controller.rollDice();
 				// Remove rollDice button from view
 				rollDice.setVisible(false);
 				feedbackLabel.setVisible(true);
-				feedbackLabel.setText("You rolled " + roll);
+				feedbackLabel.setText("You rolled " + controller.getMovesLeft());
 				feedbackPanel.validate();
 				feedbackPanel.repaint();
+				
+				displayHand();
 
 				// Let the user begin to move
 				moveListen = new JKeyListener();
-
-				buttonPanel.addKeyListener(moveListen);
-
+				
 				// Set our buttonPanel to have focus so keyListener triggers
 				// events
 				buttonPanel.setFocusable(true);
@@ -702,107 +641,85 @@ public class GUI extends JFrame {
 				// events
 				boardPanel.setFocusable(true);
 				boardPanel.requestFocus();
+				instructionLabel.setText(controller.getFocus().getName() + ", use the WASD keys to move around the board.");
+				validate();
 			}
 			
-			if (e.getSource() == accuse) {
-				int r = (int) JOptionPane.showConfirmDialog(null,
-						"Are you sure you want to submit an accusation?\n"
-								+ "If you are incorrect you will be removed from the game",
-						"Accuse?", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-				if (r == JOptionPane.YES_OPTION) {
-					makeGuess(focusPlayer);
-				}
+			else if(e.getSource() == startGame){
+				controller.startGame();
+			}
+			
+			else if(e.getSource() == suggest){
+				constructSuggestion();
+			}
+			
+			else if(e.getSource() == accuse){
+				constructAccusation();
+			}
 
-			}
-			
-			if(e.getSource() == suggest){
-				 //game.constructGuess(focusPlayer, false);
-				takeTurn(getNextPlayer() );
-			}
-			
-			if (e.getSource() == enter) {
-				if (!names.getText().equals(" ")) {
-					players.get(currentPlayer).setName(names.getText());
-					currentPlayer++;
-					decisionLabel.setText("Player " + (currentPlayer + 1) + ", enter your name and click enter.");
-					names.setText(" ");
-					if (currentPlayer == numPlayers) {
-						decisionPanel.removeAll();
-						decisionPanel.repaint(); // Repaints the panel to remove
-													// the JTextArea / Button
-						prepareGame();
-					}
-				} else {
-					decisionLabel.setText((currentPlayer + 1) + ", please enter a name before clicking enter.");
-				}
-			}
 		}
 	}
-
-	private class JKeyListener implements KeyListener {
-
-		@Override
-		public void keyTyped(KeyEvent e) {
-			// TODO Auto-generated method stub
-
-		}
-
-		@Override
-		public void keyPressed(KeyEvent e) {
-			// TODO Auto-generated method stub
-
-		}
+	
+	private class JKeyListener implements KeyListener{
 
 		@Override
 		public void keyReleased(KeyEvent e) {
 			if (e.getKeyCode() == KeyEvent.VK_W) {
-				if (game.checkValidMove(focusPlayer, Direction.UP)) {
-					game.applyMove(focusPlayer, Direction.UP);
-					movesLeft--;
-					feedbackLabel.setText("You have " + movesLeft + " moves remaining.");
-				}
-			} else if (e.getKeyCode() == KeyEvent.VK_S) {
-				if (game.checkValidMove(focusPlayer, Direction.DOWN)) {
-					game.applyMove(focusPlayer, Direction.DOWN);
-					movesLeft--;
-					feedbackLabel.setText("You have " + movesLeft + " moves remaining.");
-				}
-			} else if (e.getKeyCode() == KeyEvent.VK_A) {
-				if (game.checkValidMove(focusPlayer, Direction.LEFT)) {
-					game.applyMove(focusPlayer, Direction.LEFT);
-					movesLeft--;
-					feedbackLabel.setText("You have " + movesLeft + " moves remaining.");
-				}
-			} else if (e.getKeyCode() == KeyEvent.VK_D) {
-				if (game.checkValidMove(focusPlayer, Direction.RIGHT)) {
-					game.applyMove(focusPlayer, Direction.RIGHT);
-					movesLeft--;
-					feedbackLabel.setText("You have " + movesLeft + " moves remaining.");
-				}
+				controller.doMoveIfValid(Direction.UP);
+			} 
+			else if (e.getKeyCode() == KeyEvent.VK_S) {
+				controller.doMoveIfValid(Direction.DOWN);
+			} 
+			else if (e.getKeyCode() == KeyEvent.VK_A) {
+				controller.doMoveIfValid(Direction.LEFT);
+			} 
+			else if (e.getKeyCode() == KeyEvent.VK_D) {
+				controller.doMoveIfValid(Direction.RIGHT);
 			}
+			validate();
+		}
+		
+		// Unimplemented methods required for compilation
+		@Override
+		public void keyPressed(KeyEvent arg0) {}
 
-			// Has the user entered a room?
-			if(game.isInRoom(focusPlayer) ){
-				enteredRoom(focusPlayer);
-			}
-			// Else have they ended their turn not in a room? Move onto next
-			// player
-			else if (movesLeft == 0 && !game.isInRoom(focusPlayer)) {
-				Player nextPlayer = getNextPlayer();
-				if(nextPlayer == null){System.out.println("NEXT PLAYER WAS NULL???");}
-				else{
-					if(game.isInRoom(nextPlayer) ){
-						feedbackLabel.setText(" ");
-						instructionLabel.setText(nextPlayer.getName() + ", you must now leave this room, choose which door you would like to exit from.");
-						leaveRoom(nextPlayer);
-					}
-					else{
-						takeTurn(nextPlayer);
-					}
-				}
-			}
+		@Override
+		public void keyTyped(KeyEvent arg0) {}
+		
+	}
+	
+	private class JWindowListener implements WindowListener{
+
+		/**
+		 * Responds to a user closing their suggestion window, either intentionally
+		 * by completing their suggestion.
+		 * Or unintentionally, in which they will void their suggestion and the game
+		 * will skip to the next player's turn
+		 */
+		@Override
+		public void windowClosed(WindowEvent e) {
+			drawBoard();
+			controller.setFocus(controller.getNextPlayer() );
+			takeTurn();
 		}
 
-	}
+		// These are all unimplemented methods that are required for compilation
+		@Override
+		public void windowActivated(WindowEvent e) {}
+		
+		@Override
+		public void windowClosing(WindowEvent e) {}
 
+		@Override
+		public void windowDeactivated(WindowEvent e) {}
+
+		@Override
+		public void windowDeiconified(WindowEvent e) {}
+
+		@Override
+		public void windowIconified(WindowEvent e) {}
+
+		@Override
+		public void windowOpened(WindowEvent e) {}
+	}
 }
