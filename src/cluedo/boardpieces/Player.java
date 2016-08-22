@@ -225,8 +225,9 @@ public class Player implements BoardPiece {
 				if (desiredDoor != null) { // If the door the user wants to
 											// exit is not blocked
 					this.location = desiredDoor;
-					this.game.getBoard().updateBoard(this.game.humanPlayers);
+					this.game.getBoard().updateBoard(this.game.controller.getAllPlayers() );
 					exitedRoom = true;
+					this.game.controller.drawBoard();
 				} else { // The door the user wants to exit IS blocked
 					doorNumber = game.controller.getDoorNumber(doorLocations.size() );
 					desiredDoor = doorLocations.get(doorNumber - 1);

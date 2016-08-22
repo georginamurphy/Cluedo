@@ -274,7 +274,7 @@ public class GUI extends JFrame{
 						+ "this game.  Be careful though!  Making an incorrect accusation will result in you\n"
 						+ "losing the game.  In order to deduce the correct solution, you should move around\n"
 						+ "the map to different rooms and make suggestions.  At any point during your suggestion\n"
-						+ "or accusation, if you close the popup window you will void your turn!  Below are is a\n"
+						+ "or accusation, if you close the popup window you will void your turn!  Below are a\n"
 						+ "shortcut or two that you may find useful while playing,\n"
 						+ "Good luck detectives!\n"
 						+ "\n"
