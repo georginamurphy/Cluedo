@@ -183,8 +183,11 @@ public class CluedoController {
 			if (!humanPlayers.get(index).getDead()) {
 				return humanPlayers.get(index);
 			}
-			if (index == humanPlayers.size() - 1) {
+			else if (index == humanPlayers.size() - 1) {
 				index = 0;
+			}
+			else{
+				index++;
 			}
 		}
 		return null; // shouldn't happen

@@ -56,10 +56,10 @@ public class GuessWindow extends JFrame{
 	JButton red, yellow, blue, green, purple, white;
 	JButton lounge, study, kitchen, library, conservatory, dining, hall, ballroom, billiard;
 	JButton noted;
-	JButton exit;
+	JButton ok;
 	
 	// Listeners
-	JButtonListener weaponListen, roomListen, characterListen, notedListen, exitListen;
+	JButtonListener weaponListen, roomListen, characterListen, notedListen, okListen;
 	
 	// Variables to hold user selections
 	Weapon weaponChoice;
@@ -147,8 +147,9 @@ public class GuessWindow extends JFrame{
 	}
 	
 	public void showRoomButtons(){
+		selectionPanel.setPreferredSize(new Dimension(650, 500) );
 		selectionPanel.removeAll();
-		selectionPanel.setPreferredSize(new Dimension(560, 435) );
+		selectionPanel.setLayout(new GridLayout(2, 5));
 		
 		lounge = new JButton(loungeIcon);
 		study = new JButton(studyIcon);
@@ -161,15 +162,15 @@ public class GuessWindow extends JFrame{
 		billiard = new JButton(billiardIcon);
 		
 		roomListen = new JButtonListener();
-		lounge.addActionListener(characterListen);
-		study.addActionListener(characterListen);
-		kitchen.addActionListener(characterListen);
-		library.addActionListener(characterListen);
-		conservatory.addActionListener(characterListen);
-		dining.addActionListener(characterListen);
-		hall.addActionListener(characterListen);
-		ballroom.addActionListener(characterListen);
-		billiard.addActionListener(characterListen);
+		lounge.addActionListener(roomListen);
+		study.addActionListener(roomListen);
+		kitchen.addActionListener(roomListen);
+		library.addActionListener(roomListen);
+		conservatory.addActionListener(roomListen);
+		dining.addActionListener(roomListen);
+		hall.addActionListener(roomListen);
+		ballroom.addActionListener(roomListen);
+		billiard.addActionListener(roomListen);
 		
 		selectionPanel.add(lounge);
 		selectionPanel.add(study);
@@ -243,7 +244,6 @@ public class GuessWindow extends JFrame{
 			selectionPanel.validate();
 			
 			controller.movePlayerToRoom(characterChoice, roomChoice.name);
-			pack();
 		}
 	}
 	
@@ -251,15 +251,25 @@ public class GuessWindow extends JFrame{
 		Solution suggestion = new Solution(weaponChoice, characterChoice, roomChoice);
 		boolean correct = controller.makeAccusation(suggestion);
 		if(correct){
+			selectionPanel.setPreferredSize(new Dimension(250, 100));
 			selectionPanel.removeAll();
+			setTitle("Winner!");
 			selectionPanel.add(new JLabel("Congratulations " + controller.getFocus().getName() + ", you won the game!"));
 			this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+			selectionPanel.validate();
+			selectionPanel.repaint();
+			pack();
 		}
 		else{
 			selectionPanel.removeAll();
-			selectionPanel.add(new JLabel("That accusation was incorrect, you have lost the game.\n Better luck next time!") );
-			exit = new JButton("OK");
-			exitListen = new JButtonListener();
+			selectionPanel.setLayout(new FlowLayout() );
+			selectionPanel.add(new JLabel("That accusation was incorrect.\nYou have lost the game.") );
+			ok = new JButton("OK");
+			okListen = new JButtonListener();
+			ok.addActionListener(okListen);
+			selectionPanel.add(ok);
+			selectionPanel.validate();
+			selectionPanel.repaint();
 		}
 	}
 	
@@ -307,34 +317,39 @@ public class GuessWindow extends JFrame{
 			}
 			
 			if(e.getSource() == lounge){
-				setCharacter(new Character(Character.Colour.RED) );
+				setRoom(new Room(Room.Name.LOUNGE) );
 			}
 			else if(e.getSource() == study){
-				setCharacter(new Character(Character.Colour.YELLOW) );
+				setRoom(new Room(Room.Name.STUDY) );
 			}
 			else if(e.getSource() == kitchen){
-				setCharacter(new Character(Character.Colour.BLUE) );
+				setRoom(new Room(Room.Name.KITCHEN) );
 			}
 			else if(e.getSource() == library){
-				setCharacter(new Character(Character.Colour.GREEN) );
+				setRoom(new Room(Room.Name.LIBRARY) );
 			}
 			else if(e.getSource() == conservatory){
-				setCharacter(new Character(Character.Colour.PURPLE) );
+				setRoom(new Room(Room.Name.CONSERVATORY) );
 			}
 			else if(e.getSource() == dining){
-				setCharacter(new Character(Character.Colour.WHITE) );
+				setRoom(new Room(Room.Name.DININGROOM) );
 			}
 			else if(e.getSource() == hall){
-				setCharacter(new Character(Character.Colour.GREEN) );
+				setRoom(new Room(Room.Name.HALL) );
 			}
 			else if(e.getSource() == ballroom){
-				setCharacter(new Character(Character.Colour.PURPLE) );
+				setRoom(new Room(Room.Name.BALLROOM) );
 			}
 			else if(e.getSource() == billiard){
-				setCharacter(new Character(Character.Colour.WHITE) );
+				setRoom(new Room(Room.Name.BILLIARD) );
 			}
 			
 			if(e.getSource() == noted){
+				dispose();
+			}
+			
+			if(e.getSource() == ok){
+				setDefaultCloseOperation(EXIT_ON_CLOSE);
 				dispose();
 			}
 		}
