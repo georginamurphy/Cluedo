@@ -1,4 +1,4 @@
-package cluedo.game;
+package cluedo.gui;
 
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -16,6 +16,7 @@ import javax.swing.JPanel;
 import cluedo.cards.Card;
 import cluedo.cards.Weapon;
 import cluedo.controller.CluedoController;
+import cluedo.game.Solution;
 import cluedo.cards.Character;
 import cluedo.cards.Room;
 

@@ -39,7 +39,6 @@ import cluedo.cards.Card;
 import cluedo.cards.Character.Colour;
 import cluedo.controller.CluedoController;
 import cluedo.game.Board;
-import cluedo.game.GuessWindow;
 import cluedo.game.Game.Direction;
 
 public class GUI extends JFrame{
@@ -122,8 +121,13 @@ public class GUI extends JFrame{
 		
 	Icon doorIcon = new ImageIcon("Door.png");
 	
+	// Variable to help with initialization
 	int playerCounter;
 	
+	/**
+	 * Constructor for a GUI 
+	 * @param controller - The controller coordinating our interaction with Game
+	 */
 	public GUI(CluedoController controller) {
 		this.controller = controller;
 		setLayout();
@@ -215,6 +219,10 @@ public class GUI extends JFrame{
 	public void drawBoard() {
 		Board boardObj = controller.getBoard();
 		boardPanel.removeAll();
+		
+		// Loop over each cell in board and create a JPanel for it
+		// Add a JLabel with an ImageIcon to that panel
+		// Update and display the panel
 		for (int row = 0; row <= 24; row++) {
 			for (int col = 0; col <= 24; col++) {
 				boardPanels[row][col] = new JPanel(new GridLayout());
@@ -250,7 +258,10 @@ public class GUI extends JFrame{
 
 		exit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				System.exit(0);
+				int input = JOptionPane.showConfirmDialog(null, "Do you really want to close the game?", "Are you sure", JOptionPane.OK_CANCEL_OPTION);
+				if(input == 0){
+					System.exit(0);
+				}
 			}
 		});
 
@@ -742,7 +753,11 @@ public class GUI extends JFrame{
 			}
 			
 			else if(e.getSource() == accuse){
-				constructAccusation();
+				int input = JOptionPane.showConfirmDialog(null, "Making an incorrect accusation loses you the game.\n"
+						+ "Are you sure you want to make an accusation?", "Are you sure", JOptionPane.OK_CANCEL_OPTION);
+				if(input == 0){
+					constructAccusation();
+				}
 			}
 
 		}
@@ -802,7 +817,11 @@ public class GUI extends JFrame{
 		public void keyReleased(KeyEvent e) {
 			if (e.getKeyCode() == KeyEvent.VK_G){
 				if(accuse.isVisible() ){
-					constructAccusation();
+					int input = JOptionPane.showConfirmDialog(null, "Making an incorrect accusation loses you the game.\n"
+							+ "Are you sure you want to make an accusation?", "Are you sure", JOptionPane.OK_CANCEL_OPTION);
+					if(input == 0){
+						constructAccusation();
+					}
 				}
 			}
 			else if (e.getKeyCode() == KeyEvent.VK_F){
