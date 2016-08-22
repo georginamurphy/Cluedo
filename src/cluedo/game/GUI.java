@@ -1,6 +1,7 @@
 package cluedo.game;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -36,6 +37,7 @@ import cluedo.cards.Room;
 import cluedo.cards.Weapon;
 import cluedo.cards.Character.Colour;
 import cluedo.controller.CluedoController;
+import cluedo.controller.ImagePanel;
 import cluedo.game.Game.Direction;
 
 public class GUI extends JFrame{
@@ -44,11 +46,11 @@ public class GUI extends JFrame{
 	CluedoController controller;
 	
 	// Panels
-	JPanel instructionPanel;
+	ImagePanel instructionPanel;
 	JPanel boardPanel;
 	JPanel buttonPanel;
 	JPanel decisionPanel;
-	JPanel feedbackPanel;
+	ImagePanel feedbackPanel;
 	JPanel[][] boardPanels;
 	
 	// JRadioButtons
@@ -129,11 +131,11 @@ public class GUI extends JFrame{
 	 */
 	public void setLayout() {
 		// Initialize panels
-		instructionPanel = new JPanel();
+		instructionPanel = new ImagePanel(new ImageIcon("InstructionPanel.png").getImage() );
 		boardPanel = new JPanel();
 		buttonPanel = new JPanel();
 		decisionPanel = new JPanel();
-		feedbackPanel = new JPanel();
+		feedbackPanel = new ImagePanel(new ImageIcon("FeedbackPanel.png").getImage() );
 		boardPanels = new JPanel[25][25];
 
 		// Initialize buttons
@@ -169,13 +171,16 @@ public class GUI extends JFrame{
 		// Setting up layout for boardPanel
 		GridLayout bpLayout = new GridLayout(25, 25, 0, 0);
 		boardPanel.setLayout(bpLayout);
+		boardPanel.setBackground(Color.LIGHT_GRAY);
 
 		// Setting up layout for decisionPanel
 		decisionPanel.setLayout(new FlowLayout());
-
+		decisionPanel.setBackground(Color.LIGHT_GRAY);
+		
 		// Set up the layout for feedbackPanel
 		feedbackPanel.setLayout(new FlowLayout());
-
+		
+		buttonPanel.setBackground(Color.LIGHT_GRAY);
 		// Sets the size and color of the border layout panels
 		instructionPanel.setPreferredSize(new Dimension(700, 75));
 		feedbackPanel.setPreferredSize(new Dimension(700, 75));
@@ -472,7 +477,7 @@ public class GUI extends JFrame{
 
 		// Setup the instruction panel
 		instructionLabel.setText("It is time to move " + controller.getFocus().getName() + " on the board. Roll the dice");
-		instructionPanel.add(instructionLabel);
+		instructionPanel.repaint();
 		feedbackLabel.setVisible(false);
 		
 		drawBoard();
@@ -516,9 +521,17 @@ public class GUI extends JFrame{
 	public void updateFeedbackMoves(boolean successfulMove){
 		if(successfulMove){
 			feedbackLabel.setText("You have " + controller.getMovesLeft() + " moves remaining.");
+			if(controller.getMovesLeft() != 0){
+				feedbackPanel.repaint();
+			}
+			else{
+				feedbackLabel.setText(" ");
+				feedbackPanel.repaint();
+			}
 		}
 		else{
 			feedbackLabel.setText("That was an invalid move! Try again " + controller.getFocus().getName() );
+			feedbackPanel.repaint();
 		}
 		feedbackLabel.validate();
 		feedbackLabel.repaint();
@@ -529,7 +542,9 @@ public class GUI extends JFrame{
 	 */
 	public void updateLabelsEnteredRoom(){
 		feedbackLabel.setText(" ");
+		feedbackPanel.repaint();
 		instructionLabel.setText(controller.getFocus().getName() + ", you must now leave this room, choose which door you would like to exit from.");
+		instructionPanel.repaint();
 	}
 	
 	/**
@@ -537,6 +552,7 @@ public class GUI extends JFrame{
 	 */
 	public void enteredRoom(){
 		instructionLabel.setText(controller.getFocus().getName() + ", you have entered a room, please make an accusation or a suggestion.");
+		instructionPanel.repaint();
 		feedbackLabel.setVisible(false);
 		suggest.setVisible(true);
 		suggestListen = new JButtonListener();
@@ -642,6 +658,7 @@ public class GUI extends JFrame{
 				boardPanel.setFocusable(true);
 				boardPanel.requestFocus();
 				instructionLabel.setText(controller.getFocus().getName() + ", use the WASD keys to move around the board.");
+				instructionPanel.repaint();
 				validate();
 			}
 			
