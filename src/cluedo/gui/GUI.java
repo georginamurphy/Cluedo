@@ -1,4 +1,4 @@
-package cluedo.game;
+package cluedo.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -38,7 +38,8 @@ import cluedo.boardpieces.RoomTile;
 import cluedo.cards.Card;
 import cluedo.cards.Character.Colour;
 import cluedo.controller.CluedoController;
-import cluedo.controller.ImagePanel;
+import cluedo.game.Board;
+import cluedo.game.GuessWindow;
 import cluedo.game.Game.Direction;
 
 public class GUI extends JFrame{

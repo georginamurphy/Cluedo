@@ -9,9 +9,9 @@ import cluedo.cards.Character.Colour;
 import cluedo.cards.Room;
 import cluedo.cards.Weapon;
 import cluedo.game.Board;
-import cluedo.game.GUI;
 import cluedo.game.Game;
 import cluedo.game.Game.Direction;
+import cluedo.gui.GUI;
 import cluedo.game.Solution;
 
 /**

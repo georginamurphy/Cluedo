@@ -1,4 +1,4 @@
-package cluedo.controller;
+package cluedo.gui;
 
 import java.awt.Color;
 import java.awt.Dimension;

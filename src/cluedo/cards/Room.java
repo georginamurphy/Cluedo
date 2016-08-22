@@ -45,6 +45,9 @@ public class Room implements Card {
 		return false;
 	}
 	
+	/**
+	 * Returns the ImageIcon associated with this Room
+	 */
 	public ImageIcon getImageIcon(){
 		switch(name){
 		case KITCHEN:
