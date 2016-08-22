@@ -2,7 +2,6 @@ package cluedo.game;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
@@ -14,7 +13,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.util.ArrayList;
 
 import javax.swing.ButtonGroup;
 import javax.swing.Icon;
@@ -32,9 +30,6 @@ import javax.swing.JTextField;
 
 import cluedo.boardpieces.Player;
 import cluedo.cards.Card;
-import cluedo.cards.Character;
-import cluedo.cards.Room;
-import cluedo.cards.Weapon;
 import cluedo.cards.Character.Colour;
 import cluedo.controller.CluedoController;
 import cluedo.controller.ImagePanel;
@@ -51,6 +46,7 @@ public class GUI extends JFrame{
 	JPanel boardPanel;
 	JPanel buttonPanel;
 	JPanel decisionPanel;
+	JPanel decisionBottom;
 	JPanel[][] boardPanels;
 	
 	// JRadioButtons
@@ -64,6 +60,7 @@ public class GUI extends JFrame{
 	JLabel decisionLabel;
 	JLabel instructionLabel;
 	JLabel feedbackLabel;
+	
 
 	// Buttons
 	JButton startGame;
@@ -440,13 +437,11 @@ public class GUI extends JFrame{
 	 * Displays the focusPlayer's hand in the decisionPanel
 	 */
 	public void displayHand(){
-		decisionPanel.removeAll();
-		decisionPanel.setLayout(new GridLayout(3, 2) );
 		
 		for(Card c : controller.getFocus().getCards() ){
 			JLabel label = new JLabel();
 			label.setIcon(c.getImageIcon() );
-			decisionPanel.add(label);
+			decisionBottom.add(label);
 		}
 		decisionPanel.validate();
 		decisionPanel.repaint();
@@ -473,6 +468,24 @@ public class GUI extends JFrame{
 		accuse.setVisible(true);
 		// Reset the decision panel
 		decisionPanel.removeAll();
+		decisionPanel.setLayout(new BorderLayout());
+		JLabel one = new JLabel(controller.getFocus().getName() +  " it is your turn.");
+		JLabel two = new JLabel(" Your character: " + controller.getFocus().getCharacter().name);
+		JLabel three = new JLabel(" Your characters colour: " + controller.getFocus().getCharacter().colour.toString());
+		JPanel decisionTop = new JPanel();
+		JPanel decisionLeft = new JPanel();
+		decisionBottom = new JPanel();
+		decisionLeft.setBackground(Color.LIGHT_GRAY);
+		decisionTop.setBackground(Color.LIGHT_GRAY);
+		decisionBottom.setBackground(Color.LIGHT_GRAY);
+		decisionPanel.add(decisionTop, BorderLayout.NORTH);
+		decisionPanel.add(decisionLeft, BorderLayout.WEST);
+		decisionPanel.add(decisionBottom, BorderLayout.CENTER);
+		decisionLeft.setPreferredSize(new Dimension(10, 300));
+		decisionTop.setLayout(new GridLayout(3, 1));
+		decisionTop.add(one);
+		decisionTop.add(two);
+		decisionTop.add(three);
 		decisionPanel.validate();
 		decisionPanel.repaint();
 		
@@ -482,7 +495,7 @@ public class GUI extends JFrame{
 		boardPanel.removeKeyListener(moveListen);
 
 		// Setup the instruction panel
-		instructionLabel.setText("It is time to move " + controller.getFocus().getName() + " on the board. Roll the dice");
+		instructionLabel.setText(controller.getFocus().getName() + " roll the dice");
 		instructionPanel.repaint();
 		feedbackLabel.setVisible(false);
 		
