@@ -19,7 +19,11 @@ import cluedo.cards.Room;
  */
 public class Board {
 	private BoardPiece[][] board;
-
+	
+	/**
+	 * Constructor for a board that 
+	 * @param players
+	 */
 	public Board(ArrayList<Player> players) {
 		this.board = new BoardPiece[25][25];
 		readBoard();

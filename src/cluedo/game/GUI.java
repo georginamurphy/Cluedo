@@ -47,10 +47,10 @@ public class GUI extends JFrame{
 	
 	// Panels
 	ImagePanel instructionPanel;
+	ImagePanel feedbackPanel;
 	JPanel boardPanel;
 	JPanel buttonPanel;
 	JPanel decisionPanel;
-	ImagePanel feedbackPanel;
 	JPanel[][] boardPanels;
 	
 	// JRadioButtons
@@ -452,12 +452,18 @@ public class GUI extends JFrame{
 		decisionPanel.repaint();
 	}
 	
+	/**
+	 * Resets the decisionPanel so it no longer display's focusPlayer's hand
+	 */
 	public void unDisplayHand(){
 		decisionPanel.removeAll();
 		decisionPanel.validate();
 		decisionPanel.repaint();
 	}
 	
+	/**
+	 * Start's the focusPlayer's turn, sets up rollDice and accusation buttons
+	 */
 	public void takeTurn() {
 		if(controller.isInRoom(controller.getFocus() ) ){
 			leaveRoom();
@@ -563,6 +569,9 @@ public class GUI extends JFrame{
 		validate();
 	}
 	
+	/**
+	 * Sets the GUI to display the correct information when a player leaves a room
+	 */
 	public void leaveRoom(){
 		unDisplayHand();
 		drawBoard();
@@ -570,11 +579,18 @@ public class GUI extends JFrame{
 		drawBoard();
 	}
 	
+	/**
+	 * When a player's turn has been skipped because they can't leave a room, this notifies them
+	 * @param player
+	 */
 	public void displaySkippedTurn(Player player) {
 		JOptionPane.showMessageDialog(null, player.getName() + ", all your exit doors are blocked, you cannot leave!\n"
 				+ "It is now " + controller.getFocus().getName() + "'s turn.");
 	}
 	
+	/**
+	 * Sets up a GuessWindow to allow the user to make a suggestion
+	 */
 	public void constructSuggestion(){
 		GuessWindow guessFrame = new GuessWindow("Pick your suggestions", controller);
 		windowListen = new JWindowListener();
@@ -582,6 +598,9 @@ public class GUI extends JFrame{
 		guessFrame.startChoices(true);
 	}
 	
+	/**
+	 * Sets up a GuessWindow to all the user to make an accusation
+	 */
 	public void constructAccusation(){
 		GuessWindow guessFrame = new GuessWindow("Pick your accusations", controller);
 		windowListen = new JWindowListener();
@@ -594,7 +613,7 @@ public class GUI extends JFrame{
 	// =========================================================================================================================
 	
 	/**
-	 * A listener for the JRadioButtons
+	 * A listener for the JRadioButtons in the GUI
 	 */
 	private class JRadioListener implements ItemListener {
 
@@ -606,9 +625,14 @@ public class GUI extends JFrame{
 		}
 	}
 	
-	
+	/**
+	 * A listener for the buttons in the GUI
+	 */
 	private class JButtonListener implements ActionListener{
-
+		
+		/**
+		 * Responds to buttons within the GUI being pressed
+		 */
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			// If the button clicked was the enter button
@@ -677,8 +701,14 @@ public class GUI extends JFrame{
 		}
 	}
 	
+	/**
+	 * A listener for the keyboard, responds to WASD keys
+	 */
 	private class JKeyListener implements KeyListener{
 
+		/**
+		 * Responds to the keyListener when WASD are pressed
+		 */
 		@Override
 		public void keyReleased(KeyEvent e) {
 			if (e.getKeyCode() == KeyEvent.VK_W) {
@@ -705,6 +735,9 @@ public class GUI extends JFrame{
 		
 	}
 	
+	/**
+	 *	A listener for the GuessWindow, responds to the window closing
+	 */
 	private class JWindowListener implements WindowListener{
 
 		/**

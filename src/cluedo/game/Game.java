@@ -200,22 +200,6 @@ public class Game {
 	}
 
 	/**
-	 * The looping method that keeps the game running, player.startTurn() starts
-	 * a series of methods that sequence the game.
-	 */
-	public void run() {
-		humanPlayers.get(0).startTurn();
-		// This while loop keeps the game running until someone wins
-		/**
-		 * while (!gameEnd) { for (Player p : humanPlayers) { // A player is
-		 * dead if they have made an incorrect accusation if (!p.getDead()) {
-		 * p.startTurn(); if (gameEnd) { gui.gameWon(p); break;} // Break the
-		 * for each loop if a player won the game } } }
-		 **/
-
-	}
-
-	/**
 	 * A simple method that will generate two values between 1 and 6, inclusive
 	 * and return their sum.
 	 */

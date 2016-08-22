@@ -19,6 +19,9 @@ import cluedo.controller.CluedoController;
 import cluedo.cards.Character;
 import cluedo.cards.Room;
 
+/**
+ * A specific JFrame that is used to help the user declare suggestions and accusations
+ */
 public class GuessWindow extends JFrame{
 	
 	private static final long serialVersionUID = 1L;
@@ -72,6 +75,11 @@ public class GuessWindow extends JFrame{
 	// Is this window for an accusation? Or a suggestion?
 	boolean isSuggestion;
 	
+	/**
+	 * Constructor for a GuessWindow
+	 * @param text - The tile for the window
+	 * @param controller - The controller for the game
+	 */
 	public GuessWindow(String text, CluedoController controller){
 		this.controller = controller;
 		
@@ -87,11 +95,20 @@ public class GuessWindow extends JFrame{
 		setVisible(true);
 	}
 	
+	/**
+	 * starts the chain of method calls to guide the user through their
+	 * declaration of their suggestion or accusation 
+	 * 
+	 * @param suggestion - Is this window for a suggestion
+	 */
 	public void startChoices(boolean suggestion){
 		isSuggestion = suggestion;
 		showWeaponButtons();
 	}
 	
+	/**
+	 * Displays the weapon buttons to the user
+	 */
 	public void showWeaponButtons(){
 		candlestick = new JButton(candlestickIcon);
 		rope = new JButton(ropeIcon);
@@ -116,6 +133,9 @@ public class GuessWindow extends JFrame{
 		selectionPanel.add(wrench);
 	}
 	
+	/**
+	 * Displays the character buttons to the user
+	 */
 	public void showCharacterButtons(){
 		selectionPanel.removeAll();
 		selectionPanel.setPreferredSize(new Dimension(560, 435) );
@@ -146,6 +166,9 @@ public class GuessWindow extends JFrame{
 		selectionPanel.repaint();
 	}
 	
+	/**
+	 * Displays the room buttons to the user
+	 */
 	public void showRoomButtons(){
 		selectionPanel.setPreferredSize(new Dimension(650, 500) );
 		selectionPanel.removeAll();
@@ -186,6 +209,10 @@ public class GuessWindow extends JFrame{
 		selectionPanel.repaint();
 	}
 	
+	/**
+	 * Sets the chosen weapon
+	 * @param weapon - the weapon chosen
+	 */
 	public void setWeapon(Weapon weapon){
 		weaponChoice = weapon;
 		showCharacterButtons();
@@ -201,11 +228,18 @@ public class GuessWindow extends JFrame{
 		}
 	}
 	
+	/**
+	 * Sets the chosen room
+	 * @param room - The chosen room
+	 */
 	public void setRoom(Room room){
 		roomChoice = room;
 		displayAccusationResult();
 	}
 	
+	/**
+	 * Displays to the user the result of their suggestion
+	 */
 	public void displaySuggestionResult(){
 		roomChoice = new Room(controller.getRoom() );
 		System.out.println(roomChoice);
@@ -247,6 +281,9 @@ public class GuessWindow extends JFrame{
 		}
 	}
 	
+	/**
+	 * Displays to the user the result of their accusation
+	 */
 	public void displayAccusationResult(){
 		Solution suggestion = new Solution(weaponChoice, characterChoice, roomChoice);
 		boolean correct = controller.makeAccusation(suggestion);
@@ -273,6 +310,13 @@ public class GuessWindow extends JFrame{
 		}
 	}
 	
+	// ============================================================================================================================
+	//                                          LISTENER IMPLEMENTATION
+	// ============================================================================================================================
+	
+	/**
+	 * Listener for the JButtons
+	 */
 	private class JButtonListener implements ActionListener{
 
 		@Override

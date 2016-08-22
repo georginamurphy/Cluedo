@@ -14,23 +14,41 @@ import cluedo.game.Game;
 import cluedo.game.Game.Direction;
 import cluedo.game.Solution;
 
+/**
+ * A controller is an object that coordinates interactions between the GUI and the Game
+ * Essentially serves as a middle man so that game logic and game visuals can remain largely 
+ * separated and more organized.
+ */
 public class CluedoController {
 	
+	// The GUI for the game
 	private GUI GUI;
+	
+	// The game responsible for logic
 	private Game game;
+	
+	// The board for the game
 	private Board board;
 	
+	// ArrayLists for players
 	private ArrayList<Player> humanPlayers;
 	private ArrayList<Player> allPlayers;
 	
+	// Variables for initialization
 	int numPlayers;
 	int movesLeft;
+	
+	// The player who's turn it is currently
 	Player focusPlayer;
 	
+	// ArrayLists to hold cards, used for initialization
 	ArrayList<Character> characters;
 	ArrayList<Weapon> weapons;
 	ArrayList<Room> rooms;
 	
+	/**
+	 * Constructor for a Controller
+	 */
 	public CluedoController(){
 		makeCharacters();
 		makeRooms();
@@ -39,6 +57,10 @@ public class CluedoController {
 		this.GUI = new GUI(this);
 	}
 	
+	/**
+	 * Returns the board
+	 * @return
+	 */
 	public Board getBoard(){
 		return this.board;
 	}

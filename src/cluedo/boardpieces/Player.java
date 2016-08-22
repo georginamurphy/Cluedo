@@ -60,6 +60,11 @@ public class Player implements BoardPiece {
 		roomLastTurn = null;
 	}
 	
+	/**
+	 * Constructor for a player that takes a user defined name
+	 * @param name - user's defined name
+	 * @param used - true if this is a human player
+	 */
 	public Player(String name, boolean used){
 		this.name = name;
 		this.used = used;
@@ -197,99 +202,6 @@ public class Player implements BoardPiece {
 	}
 
 	/**
-	 * Initiates the player's turn, starts a chain of method calls that will
-	 * play out everything the player must do to complete their turn.
-	 */
-	public void startTurn() {
-		//game.getGui().takeTurn(this);
-		//Scanner input = new Scanner(System.in);
-		//boolean turnSkipped = false;
-		// Is the player starting their turn in a room?
-		// If so, move them to the first free door and start their turn from the
-		// door
-		// (They will only be able to move out of the door, into a hallway)
-		//if (this.game.isInRoom(this)) {
-		//	turnSkipped = startTurnInRoom();
-		//}
-
-		// The user is ready to make their moves
-		//System.out.println("\nIt is time to move " + this.character.name + " on the board.");
-		//printCards();
-		//System.out.println("\nPress 1 to roll the dice");
-		//waitForOne(input);
-
-		//int roll = game.rollDice();
-		// int roll = 12;
-		//System.out.println("You rolled " + roll + "!");
-		//game.printBoard();
-		//makeMovementDecisions(turnSkipped, roll);
-	}
-
-	/**
-	 * A method to handle how a player moves during their turn. A player moves
-	 * by entering in each direction they wish to move one by one, until they
-	 * either run out of moves or move into a room.
-	 * 
-	 * If a player moves into a room, they forfeit any remaining moves they have
-	 * left.
-	 */
-	public void makeMovementDecisions(boolean turnSkipped, int roll) {
-		Scanner input = new Scanner(System.in);
-		boolean enteredRoom = false;
-		
-		while (roll != 0 && !enteredRoom & !turnSkipped) {
-			this.game.initialiseDoorLocations();
-			System.out.println("You have " + roll + " moves remaining ");
-			System.out.println(this.character.name + " where would you like to move? (up, down, left, right or accuse)");
-
-			int userInput = getInputDirection(input);
-			Game.Direction direction = null;
-
-			// Check they have entered a valid direction
-			boolean validMove = false;
-			if (userInput == 1) {
-				direction = Game.Direction.UP;
-				validMove = this.game.checkValidMove(this, direction);
-				roll = applyValidMove(validMove, direction, roll);
-			} else if (userInput == 2) {
-				direction = Game.Direction.DOWN;
-				validMove = this.game.checkValidMove(this, direction);
-				roll = applyValidMove(validMove, direction, roll);
-			} else if (userInput == 3) {
-				direction = Game.Direction.LEFT;
-				validMove = this.game.checkValidMove(this, direction);
-				roll = applyValidMove(validMove, direction, roll);
-			} else if (userInput == 4) {
-				direction = Game.Direction.RIGHT;
-				validMove = this.game.checkValidMove(this, direction);
-				roll = applyValidMove(validMove, direction, roll);
-			} else if (userInput == 5) {
-				// make accusation
-				game.makeAccusation(this, input);
-				roll = 0;
-				
-			}
-		}
-
-		// If the user cannot leave a room because the only exit is blocked
-		if (turnSkipped) {
-			System.out.println("Unforunately, a player is blocking your only exit.");
-			System.out.println("Your turn will now end.");
-		}
-
-		if(!game.getGameEnd() ){
-			if (!enteredRoom) {
-				this.roomLastTurn = null;
-			}
-
-			System.out.println(this.character.name + " your turn is over.\n"
-					+ "Next Player enter 1 when you are ready to start your turn");
-
-			waitForOne(input);
-		}
-	}
-
-	/**
 	 * Performs actions that are required for the player starting their turn in a room.
 	 * For example, choosing what door they would like to leave from,
 	 * checking if the room they are in is blocked off,
@@ -297,7 +209,6 @@ public class Player implements BoardPiece {
 	 * will return a boolean representing whether a player's turn is being skipped.
 	 * @return
 	 */
-	@SuppressWarnings("resource")
 	public boolean startTurnInRoom() {
 		Room.Name roomName = this.game.inRoom(this);
 		//Scanner input = new Scanner(System.in);
@@ -368,46 +279,6 @@ public class Player implements BoardPiece {
 		game.printBoard();
 		System.out.println(invalid);
 		return roll;
-	}
-
-	/**
-	 * gets the users input from the console. expects a integer between the low
-	 * and high bounds (inclusive)
-	 * 
-	 * @param input
-	 *            - scanner
-	 * @return the users valid input
-	 */
-	public int getInputDirection(Scanner input) {
-		String userInput = "";
-
-		while (true) {
-			userInput = input.next();
-			if (userInput.equals("up"))
-				return 1;
-			else if (userInput.equals("down"))
-				return 2;
-			else if (userInput.equals("left"))
-				return 3;
-			else if (userInput.equals("right"))
-				return 4;
-			else if (userInput.equals("accuse"))
-				return 5;
-			else
-				System.out.println("Please enter up, down, left or right");
-		}
-	}
-
-	/**
-	 * A simple method that waits for the user to enter 1
-	 * 
-	 * @param input
-	 */
-	public void waitForOne(Scanner input) {
-		String start = "";
-		while (!start.equals("1")) {
-			start = input.next();
-		}
 	}
 
 	/**
