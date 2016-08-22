@@ -154,7 +154,7 @@ public class Board {
 			}
 			scan.close();
 		} catch (FileNotFoundException e) {
-			System.out.println("File not found");
+			System.out.println("File not found. Make sure startBoard and pictures are in the project directory");
 		}
 	}
 

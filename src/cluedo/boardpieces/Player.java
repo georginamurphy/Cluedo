@@ -182,18 +182,6 @@ public class Player implements BoardPiece {
 	public void dealCard(Card card) {
 		this.cards.add(card);
 	}
-
-	/**
-	 * Prints the player's hand of cards
-	 */
-	public void printCards() {
-		System.out.println("----------------------------");
-		System.out.println(this.character.name + "'s cards are: ");
-		for (Card c : cards) {
-			System.out.println(c.toString());
-		}
-		System.out.println("----------------------------");
-	}
 	
 	/**
 	 * A simple method to update the Location for this player
@@ -233,54 +221,11 @@ public class Player implements BoardPiece {
 					desiredDoor = doorLocations.get(doorNumber - 1);
 				}
 			}
-			//game.printBoard();
 		} 
 		else { // The room doesn't have a free door, end their turn
 			return true;
 		}
 		return false;
-	}
-	
-	/**
-	 * 
-	 * @param validMove - True if a move needs to be applied in the given direction,
-	 * 					  false if the move was invalid and shouldn't be applied.
-	 * @param direction - The direction a validMove will be applied in
-	 * @param roll - An int representing how many moves a player has left to make
-	 * 
-	 * @return - How many moves the player has left after the application of the move.
-	 * 			 If the move was invalid, will return the same value that it was passed.
-	 *           If the move was valid, it will return the value passed, decremented by one.
-	 */
-	public int applyValidMove(boolean validMove, Game.Direction direction, int roll){
-		String invalid = "";
-		
-		// If validMove is true, we must apply the move to the board in the given direction
-		// Otherwise, set the invalid String to an appropriate message and print it to the player.
-		// Will decrement roll by one if a valid move was made.
-		if (validMove) {
-			if (direction != null) {
-				this.game.applyMove(this, direction);
-				
-				// If the player is now in a room, set the appropriate fields and call
-				// the makeSuggestions method.  This initiates the next 'phase' of a 
-				// players turn
-				if (this.game.isInRoom(this)) {
-					this.roomLastTurn = this.game.inRoom(this); 
-					game.makeSuggestionDecisions(this);
-					return 0; // The user made a suggestion or accusation, forfeiting their remaining moves
-				}
-			}
-			roll--;
-		} 
-		else {
-			invalid = "You made an invalid move, please try again.";
-		}
-		// Print the updated board, and the invalid String.
-		// 
-		game.printBoard();
-		System.out.println(invalid);
-		return roll;
 	}
 
 	/**
@@ -313,7 +258,6 @@ public class Player implements BoardPiece {
 			case YELLOW:
 				return new ImageIcon("yellow.png");
 			default:
-				System.out.println("MEGA ISSUE");
 				return new ImageIcon(); // Shouldn't happen
 		}
 		

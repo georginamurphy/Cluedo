@@ -268,15 +268,12 @@ public class CluedoController {
 				// Shift focus to the next player
 				setFocus(getNextPlayer() );
 				
-				if(focusPlayer == null){System.out.println("NEXT PLAYER WAS NULL???");} // shouldn't happen
+				if(game.isInRoom(focusPlayer) ){
+					GUI.updateLabelsLeavingRoom();
+					GUI.leaveRoom();
+				}
 				else{
-					if(game.isInRoom(focusPlayer) ){
-						GUI.updateLabelsLeavingRoom();
-						GUI.leaveRoom();
-					}
-					else{
-						GUI.takeTurn();
-					}
+					GUI.takeTurn();
 				}
 			}
 		}

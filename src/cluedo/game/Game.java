@@ -129,13 +129,6 @@ public class Game {
 	}
 
 	/**
-	 * Prints the board
-	 */
-	public void printBoard() {
-		System.out.println(this.board.toString());
-	}
-
-	/**
 	 * Takes 3 ArrayLists, one of each of the following types: Character, Weapon
 	 * and Room Will select one random Object from each Array and use it to form
 	 * the Solution for the game. Then stores that Solution in the private field
@@ -156,7 +149,6 @@ public class Game {
 		int roomIndex = (int) (Math.random() * rooms.size());
 
 		this.solution = new Solution(weapons.get(weaponIndex), chars.get(charIndex), rooms.get(roomIndex));
-		System.out.println(solution);
 		// Remove the cards from the ArrayLists so they are not dealt to players
 		chars.remove(charIndex);
 		weapons.remove(weaponIndex);
@@ -245,7 +237,6 @@ public class Game {
 			if (piece instanceof RoomTile) {
 				if (piece != null) {
 					if (((RoomTile) piece).getName().equals(player.getRoomLastTurn())) {
-						System.out.println("You can't enter that room! You were there during your last turn");
 						return false;
 					} else {
 						return isRoomDoor(player, direction);
@@ -269,7 +260,6 @@ public class Game {
 			if (piece instanceof RoomTile) {
 				if (piece != null) {
 					if (((RoomTile) piece).getName().equals(player.getRoomLastTurn())) {
-						System.out.println("You can't enter that room! You were there during your last turn");
 						return false;
 					} else {
 						return isRoomDoor(player, direction);
@@ -293,7 +283,6 @@ public class Game {
 			if (piece instanceof RoomTile) {
 				if (piece != null) {
 					if (((RoomTile) piece).getName().equals(player.getRoomLastTurn())) {
-						System.out.println("You can't enter that room! You were there during your last turn");
 						return false;
 					} else {
 						return isRoomDoor(player, direction);
@@ -317,7 +306,6 @@ public class Game {
 			if (piece instanceof RoomTile) {
 				if (piece != null) {
 					if (((RoomTile) piece).getName().equals(player.getRoomLastTurn())) {
-						System.out.println("You can't enter that room! You were there during your last turn");
 						return false;
 					} else {
 						return isRoomDoor(player, direction);
@@ -546,7 +534,6 @@ public class Game {
 		roomTileLists.add(loungeTiles);
 		roomTileLists.add(diningRoomTiles);
 
-		//System.out.println(p.getLocation().equals(new Location(2, 21) ) );
 		// Will return true if a player's location is equal to one of
 		// the 6 designated spots in each room for players to sit in.
 		for (ArrayList<Location> list : roomTileLists) {
@@ -881,41 +868,6 @@ public class Game {
 	}
 
 	/**
-	 * The initial method that starts the suggestion / accusation phase of a
-	 * player's turn.
-	 * 
-	 * @param p
-	 *            - The player who's turn it is currently
-	 */
-	public void makeSuggestionDecisions(Player p) {
-		Scanner input = new Scanner(System.in);
-		printBoard();
-		System.out.println("You have entered a room you can make either a suggestion or an accusation");
-		System.out.println("Press 1 for a suggestion or 2 for an accusation");
-
-		String number = "";
-		int userInput = getValidOneOrTwo(number, input);
-
-		switch (userInput) {
-		case 1:
-			p.printCards();
-			Solution guess = constructGuess(p, false);
-			Card c = makeSuggestion(p, guess);
-			if (c != null) {
-				System.out.println("");
-				System.out.println(p.getCharacter().name + " has the card \n" + "\n*******************\n* "
-						+ c.toString() + " *\n*******************\n");
-			} else {
-				System.out.println("\n   None of the other players had any of the cards in your suggestion\n");
-			}
-			break;
-		case 2:
-			makeAccusation(p, input);
-			break;
-		}
-	}
-
-	/**
 	 * Checks the users guess against all the other players cards and shows them
 	 * the first one it finds. If none of the cards are found the player is told
 	 * no matching cards were found
@@ -938,35 +890,6 @@ public class Game {
 	}
 
 	/**
-	 * Checks the users guess against the secret solution. If they are correct
-	 * the game is over if they are incorrect they are removed from the game
-	 * 
-	 * @param p
-	 *            - player making the accusation
-	 * @param input2
-	 */
-	public void makeAccusation(Player p, Scanner input) {
-		System.out.println("Are you sure you want to submit an accusation?\n"
-				+ "If you are incorrect you will be removed from the game\n"
-				+ "Press 1 to continue or press any other key to go back to game");
-
-		if (input.next().equals("1")) {
-			p.printCards();
-			Solution guess = constructGuess(p, true);
-			System.out.println("Guess:");
-			System.out.println(guess.toString());
-			System.out.println("Solution:");
-			System.out.println(solution.toString());
-
-			if (checkSolution(guess, p)) {
-				System.out.println("\n  Congratualtions " + p.getCharacter().name + " you solved the murder\n");
-			} else {
-				System.out.println("\n  Your guess was incorrect, you have been removed from the game\n");
-			}
-		}
-	}
-
-	/**
 	 * Checks a guess against this game's solution and returns the result Will
 	 * also set the gameEnd field to true if the solution was correct Will
 	 * remove the player from the game if their guess was incorrect
@@ -984,181 +907,16 @@ public class Game {
 			return false;
 		}
 	}
-
-	/**
-	 * Constructs a solution based on the users current room and their choice of
-	 * weapon and character
-	 * 
-	 * @param input
-	 * 
-	 * @param Player
-	 *            - the current player that is making the guess
-	 * @return Solution
-	 */
-	public Solution constructGuess(Player player, boolean accusation) {
-		/**
-		gui.makeGuess(player);
-		JFrame guessWindow = gui.makeGuess(player);
-		Room room;
-		if (accusation) {
-			room = gui.getRoom(guessWindow);
-
-		} else {
-			room = new Room(inRoom(player));
-		}
-
-		Character character = null;//gui.getCharacter(guessWindow);
-		Weapon weapon = null;//gui.getWeapon(guessWindow);
-
-		
-
-		for (Player p : players) {
-			if (p.getCharacter().equals(character)) {
-				Location newPlayerLocation = getRoomTile(room.name);
-				p.updateLocation(newPlayerLocation);
-				this.board.updateBoard(humanPlayers);
-			}
-		}
-
-		//System.out.println("Room: " + room.toString());
-		//System.out.println("Character: " + character.toString());
-		//System.out.println("Weapon:  1: Candlestick\n         2: Dagger\n"
-		//		+ "         3: Leadpipe\n         4: Rope\n         5: Spanner\n" + "         6: Revolver\n");
-
-		//System.out.println("Select a number for the weapon you are using");
-
-		//number = "";
-		//userInput = getValidOneToSix(number, input);
-		//Weapon weapon = new Weapon(getWeaponName(userInput));
-		return null ;//new Solution(weapon, character, room);
-		**/
-		return null;
-	}
 	
+	/**
+	 * Moves a player to a room
+	 * @param p - player to move
+	 * @param toMoveTo - room to move to
+	 */
 	public void movePlayerToRoom(Player p, Room.Name toMoveTo){
 		p.updateLocation(this.getRoomTile(toMoveTo) );
 		this.board.updateBoard(controller.getAllPlayers() );
 		
-	}
-
-	/**
-	 * Will repeatedly ask a user for an input until it is either 1 or 2
-	 * 
-	 * @param number
-	 * @param input
-	 * @return
-	 */
-	public int getValidOneOrTwo(String number, Scanner input) {
-		boolean countFound = false;
-		while (!countFound) {
-			if (number.equals("1")) {
-				return 1;
-			} else if (number.equals("2")) {
-				return 2;
-			} else {
-				System.out.println("Please enter either 1 or 2.");
-				number = input.next();
-			}
-		}
-		return 0; // Shouldnt happen
-	}
-
-	/**
-	 * Will repeatedly ask a user for an input until it is number from 1-6
-	 * 
-	 * @param number
-	 * @param input
-	 * @return
-	 */
-	public int getValidOneToSix(String number, Scanner input) {
-		boolean countFound = false;
-		while (!countFound) {
-			if (number.equals("1")) {
-				return 1;
-			} else if (number.equals("2")) {
-				return 2;
-			} else if (number.equals("3")) {
-				return 3;
-			} else if (number.equals("4")) {
-				return 4;
-			} else if (number.equals("5")) {
-				return 5;
-			} else if (number.equals("6")) {
-				return 6;
-			} else {
-				System.out.println("Please enter either 1, 2, 3, 4, 5 or 6.");
-				number = input.next();
-			}
-		}
-		return 0; // Shouldnt happen
-	}
-
-	/**
-	 * Will repeatedly ask a user for an input until it is a number from 1-9
-	 * 
-	 * @param number
-	 * @param input
-	 * @return
-	 */
-	public int getValidOneToNine(String number, Scanner input) {
-		boolean countFound = false;
-		while (!countFound) {
-			if (number.equals("1")) {
-				return 1;
-			} else if (number.equals("2")) {
-				return 2;
-			} else if (number.equals("3")) {
-				return 3;
-			} else if (number.equals("4")) {
-				return 4;
-			} else if (number.equals("5")) {
-				return 5;
-			} else if (number.equals("6")) {
-				return 6;
-			} else if (number.equals("7")) {
-				return 7;
-			} else if (number.equals("8")) {
-				return 8;
-			} else if (number.equals("9")) {
-				return 9;
-			} else {
-				System.out.println("Please enter either 1, 2, 3, 4, 5, 6, 7, 8 or 9.");
-				number = input.next();
-			}
-		}
-		return 0; // Shouldnt happen
-	}
-
-	/**
-	 * gets the users input from the console. expects a integer between the low
-	 * and high bounds (inclusive)
-	 * 
-	 * @param input
-	 *            - scanner
-	 * @param low
-	 *            - lowest valid number
-	 * @param high
-	 *            = highest valid number
-	 * @return the users valid input
-	 */
-	public int getUserInput(Scanner input, int low, int high) {
-		int userInput = 0;
-		boolean isValid = false;
-
-		while (!isValid) {
-			try {
-				userInput = input.nextInt();
-				if (userInput >= low && userInput <= high)
-					isValid = true;
-				else
-					System.out.println("Please enter a number from " + low + " to " + high);
-			} catch (InputMismatchException e) {
-				System.out.println("Please enter a number from " + low + " to " + high);
-				continue;
-			}
-
-		}
-		return userInput;
 	}
 
 	// ===================================================================================================================================================================

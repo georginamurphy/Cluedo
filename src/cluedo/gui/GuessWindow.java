@@ -243,7 +243,6 @@ public class GuessWindow extends JFrame{
 	 */
 	public void displaySuggestionResult(){
 		roomChoice = new Room(controller.getRoom() );
-		System.out.println(roomChoice);
 		
 		Solution suggestion = new Solution(weaponChoice, characterChoice, roomChoice);
 		Card result = controller.makeSuggestion(suggestion);
