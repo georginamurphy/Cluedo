@@ -2,10 +2,6 @@ package cluedo.game;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.InputMismatchException;
-import java.util.Scanner;
-
-import javax.swing.JFrame;
 
 import cluedo.boardpieces.BoardPiece;
 import cluedo.boardpieces.Hallway;

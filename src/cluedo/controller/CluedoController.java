@@ -3,6 +3,7 @@ package cluedo.controller;
 import java.util.ArrayList;
 
 import cluedo.boardpieces.Player;
+import cluedo.boardpieces.RoomTile;
 import cluedo.cards.Card;
 import cluedo.cards.Character;
 import cluedo.cards.Character.Colour;
@@ -135,6 +136,29 @@ public class CluedoController {
 		for(Player p : allPlayers){
 			p.updateLocation(p.getCharacter().getStartLoc() );
 		}
+	}
+	
+	/**
+	 * Returns true if the BoardPiece at [row][col] is part of the floor of a room, opposed
+	 * to a wall. The GUI will draw it with a different image if so.
+	 * 
+	 * @param row - y pos in our board
+	 * @param col - x pos in our board
+	 * @return
+	 */
+	public boolean isRoomFloor(int row, int col){
+		Board board = this.getBoard();
+		if(row + 1 < 0 || row + 1 > 24 || col - 1 < 0 || col + 1 > 24){return false;}
+		if(board.getBoard()[row][col + 1] instanceof RoomTile){
+			if(board.getBoard()[row][col - 1] instanceof RoomTile){
+				if(board.getBoard()[row + 1][col] instanceof RoomTile){
+					if(board.getBoard()[row - 1][col] instanceof RoomTile){
+						return true;
+					}
+				}
+			}
+		}
+		return false;
 	}
 	
 	/**

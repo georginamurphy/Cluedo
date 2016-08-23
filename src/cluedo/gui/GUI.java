@@ -5,7 +5,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
-import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -31,10 +30,7 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
-import cluedo.boardpieces.BoardPiece;
-import cluedo.boardpieces.Hallway;
-import cluedo.boardpieces.Player;
-import cluedo.boardpieces.RoomTile;
+import cluedo.boardpieces.*;
 import cluedo.cards.Card;
 import cluedo.cards.Character.Colour;
 import cluedo.controller.CluedoController;
@@ -42,7 +38,8 @@ import cluedo.game.Board;
 import cluedo.game.Game.Direction;
 
 public class GUI extends JFrame{
-	
+	private static final long serialVersionUID = 1L;
+
 	// The controller
 	CluedoController controller;
 	
@@ -231,7 +228,11 @@ public class GUI extends JFrame{
 				boardPanel.add(boardPanels[row][col].add(label));
 				if (boardObj.getBoard()[row][col] == null) {
 					label.setIcon(new ImageIcon("black.png"));
-				} else {
+				} 
+				else if(controller.isRoomFloor(row, col)) {
+					label.setIcon(new ImageIcon("woodFloor.png"));
+				} 
+				else{
 					label.setIcon(boardObj.getBoard()[row][col].getImageIcon());
 				}
 				label.setVisible(true);
@@ -853,7 +854,6 @@ public class GUI extends JFrame{
 
 		@Override
 		public void mouseClicked(MouseEvent e) {
-			Point clicked = e.getPoint();
 			int row = (e.getY() - 10 ) / 15;
 			int col = (e.getX()  - 10 ) / 15;
 			
