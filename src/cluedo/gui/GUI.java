@@ -535,9 +535,12 @@ public class GUI extends JFrame{
 		
 		suggest.setVisible(false);
 		accuse.setVisible(true);
+		
 		// Reset the decision panel
 		decisionPanel.removeAll();
 		decisionPanel.setLayout(new BorderLayout());
+		
+		// Add some user friendly information to the top of the decisionPanel
 		JLabel one = new JLabel(controller.getFocus().getName() +  " it is your turn.");
 		JLabel two = new JLabel(" Your character: " + controller.getFocus().getCharacter().name);
 		JLabel three = new JLabel(" Your characters colour: " + controller.getFocus().getCharacter().colour.toString());
@@ -558,6 +561,7 @@ public class GUI extends JFrame{
 		decisionPanel.validate();
 		decisionPanel.repaint();
 		
+		// Reset key listeners to things don't fire twice
 		for(KeyListener kl : boardPanel.getKeyListeners() ){
 			boardPanel.removeKeyListener(kl);
 		}
@@ -567,7 +571,6 @@ public class GUI extends JFrame{
 		boardPanel.addKeyListener(shortcut);
 		boardPanel.requestFocus();
 		
-
 		// Setup the instruction panel
 		instructionLabel.setText(controller.getFocus().getName() + " roll the dice");
 		instructionPanel.repaint();

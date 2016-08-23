@@ -216,8 +216,77 @@ public class CluedoController {
 	}
 	
 	/**
-	 * Returns the player whos turn should follow after the focusPlayer
-	 * @return
+	 * Returns true if the given player is in a room
+	 * 
+	 * @param p - the player in question
+	 * @return true if in a room, false otherwise
+	 */
+	public boolean isInRoom(Player p){
+		return game.isInRoom(p);
+	}
+	
+	/**
+	 * Gets the name of a room a player is in
+	 * @return - Name of room
+	 */
+	public Room.Name getRoom(){
+		return game.inRoom(focusPlayer);
+	}
+	
+	/**
+	 * Calls the GUI to draw the board again, used by Game
+	 */
+	public void drawBoard(){
+		GUI.drawBoard();
+	}
+	
+	/**
+	 * Prompts user input for which door they would like to exit a room from
+	 * 
+	 * @param numDoors - how many doors the room has
+	 * @return the number of the door they want to leave from
+	 */
+	public int getDoorNumber(int numDoors){
+		return GUI.getDoorNumber(numDoors);
+	}
+	
+	/**
+	 * Decrements moves left
+	 */
+	public void decMovesLeft(){
+		movesLeft--;
+	}
+	
+	/**
+	 * Gets moves left
+	 * @return moves left 
+	 */
+	public int getMovesLeft(){
+		return movesLeft;
+	}
+	
+	
+	public void startGame(){
+		game = new Game(board, humanPlayers, allPlayers, this);
+		makeCharacters();
+		makeWeapons();
+		makeRooms();
+		game.createSolution(characters, weapons, rooms);
+		game.dealCards(characters, weapons, rooms);
+		focusPlayer = humanPlayers.get(0);
+		GUI.takeTurn();
+	}
+	
+	/**
+	 * Rolls the dice for the player
+	 */
+	public void rollDice(){
+		movesLeft = game.rollDice();
+	}
+	
+	/**
+	 * Returns the player who's turn should follow after the focusPlayer
+	 * @return - The next player
 	 */
 	public Player getNextPlayer() {
 		int index = humanPlayers.indexOf(focusPlayer);
@@ -239,41 +308,11 @@ public class CluedoController {
 		return null; // shouldn't happen
 	}
 	
-	public void decMovesLeft(){
-		movesLeft--;
-	}
-	public int getMovesLeft(){
-		return movesLeft;
-	}
-	
-	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	public void startGame(){
-		game = new Game(board, humanPlayers, allPlayers, this);
-		makeCharacters();
-		makeWeapons();
-		makeRooms();
-		game.createSolution(characters, weapons, rooms);
-		game.dealCards(characters, weapons, rooms);
-		focusPlayer = humanPlayers.get(0);
-		GUI.takeTurn();
-	}
-	
-	public void rollDice(){
-		movesLeft = game.rollDice();
-	}
-	
 	/**
-	 * Calls the GUI to draw the board again, used by Game
+	 * Given a direction, it will try to move the focusPlayer in that direction on the board.
+	 * 
+	 * @param direction - the direction to move the player
 	 */
-	public void drawBoard(){
-		GUI.drawBoard();
-	}
-	
-	public int getDoorNumber(int numDoors){
-		return GUI.getDoorNumber(numDoors);
-	}
-	
 	public void doMoveIfValid(Direction direction){
 		if(game.checkValidMove(focusPlayer, direction) ){
 			// User made a valid move, apply to the board and update the GUI
@@ -286,8 +325,7 @@ public class CluedoController {
 			if(game.isInRoom(focusPlayer) ){
 				GUI.enteredRoom();
 			}
-			// Else have they ended their turn not in a room? Move onto next
-			// player
+			// Else have they ended their turn not in a room? Move onto next player
 			else if (movesLeft == 0 && !game.isInRoom(focusPlayer)) {
 				// Shift focus to the next player
 				setFocus(getNextPlayer() );
@@ -306,6 +344,9 @@ public class CluedoController {
 		}
 	}
 	
+	/**
+	 * Starts a player's turn if they are in a room by prompting them to exit
+	 */
 	public void startTurnInRoom(){
 		boolean cantLeaveRoom = focusPlayer.startTurnInRoom();
 		if(!cantLeaveRoom){
@@ -319,24 +360,41 @@ public class CluedoController {
 		}
 	}
 	
-	public boolean isInRoom(Player p){
-		return game.isInRoom(p);
-	}
-	
-	public Room.Name getRoom(){
-		return game.inRoom(focusPlayer);
-	}
-	
+	/**
+	 * Checks a player's suggestion 
+	 * 
+	 * @param suggestion - the suggestion of the player
+	 * @return The card revealed by another player if successful
+	 */
 	public Card makeSuggestion(Solution suggestion){
 		Card result = game.makeSuggestion(focusPlayer, suggestion);
 		return result;
 	}
 	
+	/**
+	 * Checks a player's accusation
+	 * 
+	 * @param guess - the focusPlayer's accusation
+	 * @return - true if successful accusation, false otherwise
+	 */
+	public boolean makeAccusation(Solution guess){
+		return this.game.checkSolution(guess, focusPlayer);
+	}
+	
+	/**
+	 * Advances the focusPlayer and calls their turn
+	 */
 	public void nextPlayerTurn(){
 		setFocus(getNextPlayer() );
 		GUI.takeTurn();
 	}
 	
+	/**
+	 * Moves a player to a room
+	 * 
+	 * @param toMove - The character a player must have to be moved
+	 * @param toMoveTo - The room name to move them to
+	 */
 	public void movePlayerToRoom(Character toMove, Room.Name toMoveTo){
 		for(Player p : allPlayers){
 			if(p.getCharacter().equals(toMove) ){
@@ -344,10 +402,6 @@ public class CluedoController {
 				break;
 			}
 		}
-	}
-	
-	public boolean makeAccusation(Solution guess){
-		return this.game.checkSolution(guess, focusPlayer);
 	}
 	
 	// ==================================================================================================================================
